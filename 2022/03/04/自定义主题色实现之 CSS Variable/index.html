@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="自定义主题色实现之 CSS Variable前言 需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。 兼容性问题：在 IE 中 var()报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色） 第三方 UI 库支持 CSS Variable，（&amp;#97;&amp;#110;&amp;#116;&amp;#100;&amp;#64;&amp;#x34;&amp;#46;&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="自定义主题色实现之 CSS Variable前言 需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。 兼容性问题：在 IE 中 var()报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色） 第三方 UI 库支持 CSS Variable，（&amp;#97;&amp;#110;&amp;#116;&amp;#100;&amp;#64;&amp;#x34;&amp;#46;&amp;#x">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-04T01:23:14.566Z">
+<meta property="article:modified_time" content="2022-03-04T01:23:14.567Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-自定义主题色实现之 CSS Variable" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/" class="article-date">
+  <time class="dt-published" datetime="2022-03-04T01:23:14.566Z" itemprop="datePublished">2022-03-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="自定义主题色实现之-CSS-Variable"><a href="#自定义主题色实现之-CSS-Variable" class="headerlink" title="自定义主题色实现之 CSS Variable"></a>自定义主题色实现之 CSS Variable</h2><h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+<li>需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。</li>
+<li>兼容性问题：在 IE 中 <code>var()</code>报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色）</li>
+<li>第三方 UI 库支持 CSS Variable，（<a href="mailto:&#97;&#110;&#116;&#100;&#64;&#x34;&#46;&#x31;&#55;&#46;&#x30;&#45;&#97;&#x6c;&#112;&#x68;&#x61;&#x2e;&#48;">&#97;&#110;&#116;&#100;&#64;&#x34;&#46;&#x31;&#55;&#46;&#x30;&#45;&#97;&#x6c;&#112;&#x68;&#x61;&#x2e;&#48;</a> 以上，<a href="mailto:&#x6d;&#x6b;&#117;&#x69;&#45;&#x66;&#100;&#x40;&#52;&#x2e;&#x31;&#46;&#56;&#x2d;&#98;&#x65;&#x74;&#x61;">&#x6d;&#x6b;&#117;&#x69;&#45;&#x66;&#100;&#x40;&#52;&#x2e;&#x31;&#46;&#56;&#x2d;&#98;&#x65;&#x74;&#x61;</a> 以上 ）</li>
+</ul>
+<h3 id="1-实现原理"><a href="#1-实现原理" class="headerlink" title="1. 实现原理"></a>1. 实现原理</h3><h5 id="1-1-自定义属性-–-CSS-变量"><a href="#1-1-自定义属性-–-CSS-变量" class="headerlink" title="1.1. 自定义属性 (–*): CSS 变量"></a>1.1. 自定义属性 (–*): CSS 变量</h5><p>带有前缀 – 的属性名，比如<code>--example--name</code>，表示的是带有值的自定义属性，其可以通过<code>var</code> 函数在全文档范围内复用的。</p>
+<p>CSS 自定义属性是可以级联的：每一个自定义属性可以多次出现，并且变量的值将会借助级联算法和自定义属性值运算出来。</p>
+<p>注意，规则集所指定的选择器定义了自定义属性的可见作用域。通常的最佳实践是定义在根伪类<code> :root</code> 下，这样就可以在 HTML 文档的任何地方访问到它。</p>
+<p><code>:root</code> 这个 CSS 伪类匹配文档树的根元素。对于 HTML 来说，<code>:root</code> 表示 <code>&lt;html&gt;</code> 元素，除了优先级更高之外，与 <code>html</code> 选择器相同。</p>
+<h5 id="1-2-ConfigProvider-config-config-provider-x2F-index-js"><a href="#1-2-ConfigProvider-config-config-provider-x2F-index-js" class="headerlink" title="1.2. ConfigProvider.config() (config-provider&#x2F;index.js)"></a>1.2. ConfigProvider.config() (config-provider&#x2F;index.js)</h5><pre><code>  ConfigProvider.config = setGlobalConfig;
+  var setGlobalConfig = function setGlobalConfig(_ref) &#123;
+  var prefixCls = _ref.prefixCls,
+        iconPrefixCls = _ref.iconPrefixCls,
+        theme = _ref.theme;
+
+  if (prefixCls !== undefined) &#123;
+     globalPrefixCls = prefixCls;
+  &#125;
+
+  if (iconPrefixCls !== undefined) &#123;
+     globalIconPrefixCls = iconPrefixCls;
+  &#125;
+
+  if (theme) &#123;
+     (0, _cssVariables.registerTheme)(getGlobalPrefixCls(), theme); // 更改主题色
+  &#125;
+</code></pre>
+<h5 id="1-3-registerTheme-node-modules-x2F-mkui-fd-x2F-config-provider-x2F-cssVariables-js"><a href="#1-3-registerTheme-node-modules-x2F-mkui-fd-x2F-config-provider-x2F-cssVariables-js" class="headerlink" title="1.3. registerTheme() (node_modules&#x2F;mkui-fd&#x2F;config-provider&#x2F;cssVariables.js)"></a>1.3. registerTheme() (node_modules&#x2F;mkui-fd&#x2F;config-provider&#x2F;cssVariables.js)</h5><p>创建所有 css 变量，可参考简易版 customCssVariable.js</p>
+<p><code>(0, _dynamicCSS.updateCSS)(&quot;\n :root &#123;\n &quot;.concat(cssList.join(&#39;\n&#39;), &quot;\n &#125;\n &quot;), &quot;&quot;.concat(dynamicStyleMark, &quot;-dynamic-theme&quot;));</code></p>
+<h5 id="1-4-updateCSS-node-modules-x2F-rc-util-x2F-lib-x2F-Dom-x2F-dynamicCSS-js"><a href="#1-4-updateCSS-node-modules-x2F-rc-util-x2F-lib-x2F-Dom-x2F-dynamicCSS-js" class="headerlink" title="1.4. updateCSS() (node_modules&#x2F;rc-util&#x2F;lib&#x2F;Dom&#x2F;dynamicCSS.js)"></a>1.4. updateCSS() (node_modules&#x2F;rc-util&#x2F;lib&#x2F;Dom&#x2F;dynamicCSS.js)</h5><p>创建 style 标签，值为 cssList，但是作为最后一个子元素插在 head 标签下</p>
+<pre><code> const styleNode = document.createElement(&#39;style&#39;);
+ styleNode.innerHTML = `\n :root &#123;\n --mkui-primary-color: #423CBB;&#125; \n`;
+ const head = document.querySelector(&#39;head&#39;);
+ head.appendChild(styleNode);
+</code></pre>
+<h5 id="1-5-动态改变颜色另外一种写法（我们项目中不推荐）"><a href="#1-5-动态改变颜色另外一种写法（我们项目中不推荐）" class="headerlink" title="1.5. 动态改变颜色另外一种写法（我们项目中不推荐）"></a>1.5. 动态改变颜色另外一种写法（我们项目中不推荐）</h5><p>在 body 标签中增加 style 属性，改变 body 中所有 –mkui-primary-color 使用值, 优先级高于 html</p>
+<pre><code>document.body.style.setProperty(&#39;--mkui-primary-color&#39;, &#39;#ffff00&#39;);
+
+        ↓ ↓ ↓ ↓ ↓ ↓
+
+&lt;body style=&quot;--mkui-primary-color:#ffff00;&quot;&gt;
+</code></pre>
+<h3 id="2-如何使用"><a href="#2-如何使用" class="headerlink" title="2. 如何使用"></a>2. 如何使用</h3><h5 id="2-1-替换当前项目引入样式文件为-CSS-Variable-版本，并在-babel-config-中去除-babel-plugin-import-配置。"><a href="#2-1-替换当前项目引入样式文件为-CSS-Variable-版本，并在-babel-config-中去除-babel-plugin-import-配置。" class="headerlink" title="2.1 替换当前项目引入样式文件为 CSS Variable 版本，并在 .babel.config 中去除 babel-plugin-import 配置。"></a>2.1 替换当前项目引入样式文件为 CSS Variable 版本，并在 .babel.config 中去除 babel-plugin-import 配置。</h5><p>{ “libraryName”: “antd” }</p>
+<pre><code>     import &#123; Button &#125; from &#39;antd&#39;;
+
+     ReactDOM.render(&lt;Button&gt;xxxx&lt;/Button&gt;);
+
+           ↓ ↓ ↓ ↓ ↓ ↓
+
+     var button = require(&#39;antd/lib/button&#39;);
+     ReactDOM.render(&lt;button&gt;xxxx&lt;/button&gt;);
+</code></pre>
+<p>{ “libraryName”: “antd”, style: “css” }</p>
+<pre><code>     import &#123; Button &#125; from &#39;antd&#39;;
+
+     ReactDOM.render(&lt;Button&gt;xxxx&lt;/Button&gt;);
+
+           ↓ ↓ ↓ ↓ ↓ ↓
+
+     var button = require(&#39;antd/lib/button&#39;);
+     require(&#39;antd/lib/button/style/css&#39;);
+     ReactDOM.render(&lt;button&gt;xxxx&lt;/button&gt;);
+</code></pre>
+<p>{ “libraryName”: “antd”, style: true }</p>
+<pre><code>     import &#123; Button &#125; from &#39;antd&#39;;
+
+     ReactDOM.render(&lt;Button&gt;xxxx&lt;/Button&gt;);
+
+           ↓ ↓ ↓ ↓ ↓ ↓
+
+     var button = require(&#39;antd/lib/button&#39;);
+     require(&#39;antd/lib/button/style&#39;);
+     ReactDOM.render(&lt;button&gt;xxxx&lt;/button&gt;);
+     
+</code></pre>
+<p> 注意: </p>
+<p> Antd 默认支持基于 ES modules 的 tree shaking，对于 js 部分，直接引入 <code>import &#123; Button &#125; from &#39;antd&#39;</code> 就会有按需加载的效果。</p>
+<p>如今webpack,rollup等构建工具都具备了摇树功能（Tree Shaking), 其原理是利用ESM模块的import语法的特性，通过AST语法树进行分析然后去除未使用到的代码。(todo)而要开启此功能必须确保引入的Antd es版本，在webpack上可通过resolve.mainFields来指定npm包的入口文件优先级，但tree shaking方式也只是处理了js部分，对于组件的css加载还需要手动引入.</p>
+<h5 id="2-2-引入包含css-变量的组件库-css-文件-app-js"><a href="#2-2-引入包含css-变量的组件库-css-文件-app-js" class="headerlink" title="2.2 引入包含css 变量的组件库 css 文件(app.js)"></a>2.2 引入包含css 变量的组件库 css 文件(app.js)</h5><pre><code>import &#39;mkui-fd/dist/mkui-fd.min.css&#39;;
+import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
+</code></pre>
+<h5 id="2-3-定义颜色变量（variables-less）"><a href="#2-3-定义颜色变量（variables-less）" class="headerlink" title="2.3.定义颜色变量（variables.less）"></a>2.3.定义颜色变量（variables.less）</h5><ol>
+<li>使用 mkui-fd 组件中已有变量</li>
+</ol>
+<p>:root 下已经默认生成了部分可全局使用的变量：<code>--mkui-primary-1, ... --mkui-primary-10</code></p>
+<p>使用 <code>var()</code> 插入 CSS 变量的值</p>
+<pre><code>     @theme-color: var(--mkui-primary-color, #1890ff); 
+
+     @theme-color-selected-bg: var(--mkui-primary-1, #f0f8ff);
+</code></pre>
+<ol start="2">
+<li><p>自定义创建可全局使用的 CSS 变量</p>
+<p>   &#x2F;&#x2F; color.less</p>
+<p>   为了兼容 IE 使用 css-vars-ponyfill, 必须使用:root 而不是 html</p>
+<p>   :root {<br>  –theme-color: #1890ff;<br>  –theme-color-selected-bg: #f0f8ff;<br>   }</p>
+<p>   &#x2F;&#x2F; variables.less</p>
+<p>   @theme-color: var(–theme-color);</p>
+<p>   @theme-color-selected-bg: var(–theme-color-selected-bg, #f0f8ff);</p>
+</li>
+</ol>
+<h5 id="4-调用配置方法"><a href="#4-调用配置方法" class="headerlink" title="4. 调用配置方法"></a>4. 调用配置方法</h5><p>4.1 调用 ConfigProvider 配置方法设置主题色(cssVariable.js)：</p>
+<pre><code>   ConfigProvider.config(&#123;
+     theme: &#123; primaryColor: themeColor &#125;,
+  &#125;);
+      
+</code></pre>
+<p>Note: primaryColor: 组件基本色，<code>successColor</code>，<code>warningColor</code>，<code>errorColor</code>，<code>infoColor</code>特定情况下的颜色。</p>
+<p>4.2 动态更改自定义变量颜色（customCssVariable.js）</p>
+<pre><code>setThemeColor(&#123; 
+    themeColor, 
+    varName: &#39;theme-color&#39; 
+&#125;)
+</code></pre>
+<h5 id="5-色值相关"><a href="#5-色值相关" class="headerlink" title="5. 色值相关"></a>5. 色值相关</h5><ul>
+<li>与主题色相关的颜色，设计图中会给一个主色(C6)，及对应的10个色阶阶梯的哪一阶</li>
+<li>mkui-ext 组件颜色使用 mkui-plugin.less 中颜色替换(优先级更高)</li>
+</ul>
+<h3 id="3-注意点"><a href="#3-注意点" class="headerlink" title="3. 注意点:"></a>3. 注意点:</h3><ol>
+<li><p>为什么是<code> :root</code> 而不是 <code>html</code></p>
+<ul>
+<li><p>CSS 不仅用于样式化 HTML 文档, 它也用于 XML 和 SVG 文件。对于 XML 和 SVG 文件，<code>:root</code> 不是选择 <code>html </code>元素，而是选择它们的根（例如 SVG 文件中的 svg 标签）。</p>
+</li>
+<li><p><code>:root</code> 选择器优先级更高</p>
+</li>
+<li><p>有助于将使用的 CSS 变量与项目中使用样式的选择器分开</p>
+</li>
+<li><p>css-vars-ponyfill 中要求：自定义属性声明支持仅限于<code> :root</code> 和 <code>:host</code> 规则集</p>
+</li>
+</ul>
+</li>
+<li><p><code>fade()，dark()</code>等函数不支持变量参数</p>
+<pre><code>  fade(&#39;1199ff&#39;, 90%);
+  fade(var(--theme-color), 90%); // 错误使用
+  
+</code></pre>
+</li>
+<li><p><code>mkui-fd</code>, <code>mkui-ext </code>以及项目中颜色相关样式，不要使用内联和 !important </p>
+</li>
+<li><p>IE 11下取色器组件 <code>react-color@2.19.3 </code>报错，降低<code>react-color@2.18.1 </code>组件版本<br> <code>SCRIPT438: Object doesn&#39;t support property or method &#39;contains&#39;</code></p>
+</li>
+<li><p>与设计人员达成色值统一，许多相近颜色的色值使用混乱</p>
+</li>
+</ol>
+<h3 id="4-其他扩展点"><a href="#4-其他扩展点" class="headerlink" title="4. 其他扩展点"></a>4. 其他扩展点</h3><h5 id="4-1-polyfill-和-ponyfill-的区别"><a href="#4-1-polyfill-和-ponyfill-的区别" class="headerlink" title="4.1 polyfill 和 ponyfill 的区别"></a>4.1 polyfill 和 ponyfill 的区别</h5><blockquote>
+<p>polyfill 在原有的墙壁上打补丁，ponyfill 的策略则是另起炉灶，不会在原有的墙壁上修补，而是重新建一面墙，保证原来的墙壁还是原始纯净无污染。</p>
+</blockquote>
+<p>例如:<code> Array.isArray()</code>, 此方法 IE8 浏览器并不支持</p>
+<p>polyfill 策略</p>
+<pre><code>  if (!Array.isArray) &#123;
+     Array.isArray = function(arg) &#123;
+        return Object.prototype.toString.call(arg) === &#39;[object Array]&#39;;
+     &#125;;
+  &#125;
+</code></pre>
+<p>ponyfill 策略</p>
+<pre><code>  // 避免使用原生 API
+  // 基本上，为了避免全局命名的污染，Ponyfill都是建议采用独立的模块化的方式开发与调用的
+  function isArray (arg) &#123;
+     return Object.prototype.toString.call(arg) === &#39;[object Array]&#39;;
+  &#125;
+</code></pre>
+<p>什么时候使用 Ponyfill?</p>
+<ol>
+<li>有些原生 API 完全没法模拟，此时只能使用 Ponyfill 策略，例如 IE9 浏览器无法模拟 indexDB 能力，<code>history.pushState()</code>方法</li>
+<li>有些原生 API 规范还没稳定，或者处于快速迭代中，或者是浏览器部分支持</li>
+</ol>
+<h5 id="4-2-css-vars-ponyfill-的使用"><a href="#4-2-css-vars-ponyfill-的使用" class="headerlink" title="4.2 css-vars-ponyfill 的使用"></a>4.2 css-vars-ponyfill 的使用</h5><p>作用：</p>
+<ul>
+<li>CSS 自定义属性到静态值的转换</li>
+<li>现代和旧版浏览器中运行时值的实时更新</li>
+<li>转换 <code>&lt;link&gt;</code>、<code>&lt;style&gt; </code>和<code> @import CSS</code></li>
+<li>将相对 <code>url() </code>路径转换为绝对 URL</li>
+<li>支持链式和嵌套的 <code>var() </code>函数<br>…</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>自定义属性声明支持仅限于 <code>:root</code> 和 <code>:host</code> 规则集<ul>
+<li><code>var()</code> 的使用仅限于属性值（根据 W3C 规范）</li>
+</ul>
+</li>
+</ul>
+<p>更新值：</p>
+<ul>
+<li>在旧版浏览器中，ponyfill 将确定哪些 <code>&lt;link&gt;</code> 和<code>&lt;style&gt;</code>中包含 css 变量，然后转换成与旧版兼容的 CSS，并附加到每个元素的 DOM。</li>
+<li>在支持 CSS 变量的现代浏览器中，ponyfill 将使用<code> style.setProperty()</code> 接口更新值。<br>请注意，当 <code>options.onlyLegacy</code> 为<code>false</code> 时，支持 CSS 变量的现代浏览器将被视为旧版浏览器。</li>
+</ul>
+<p>Note:<br><code>&#123; onlyLegacy: true &#125; </code>将此值设置为    <code>false</code>可以在现代浏览器中模仿旧版浏览器，进行测试和调试。</p>
+<h5 id="4-3-HSV-色相-hue-饱和度-saturation-亮度-Brightness"><a href="#4-3-HSV-色相-hue-饱和度-saturation-亮度-Brightness" class="headerlink" title="4.3 HSV (色相 hue, 饱和度 saturation, 亮度 Brightness)"></a>4.3 HSV (色相 hue, 饱和度 saturation, 亮度 Brightness)</h5><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/be40c662-8dc3-442e-a10b-bd399786d692#"><br>基于HSB模型构建色彩体系</a></p>
+</blockquote>
+<p>1.色相</p>
+<p>表示色彩的相貌，也就是我们常说的红、橙、黄、绿等颜色名称。色相值按位置度量，取值为0°～360°，在HSB色彩模型中红色为0°，黄色为60°，绿色为120°，青色为180°，蓝色为240°，品红色为300°。十二色相环每一色相间距30°，二十四色相环每一色相间距15°。</p>
+<p>2.饱和度</p>
+<p>表示色彩的纯度，取值范围0～100%，从色环中心向外递增。当饱和度为0时点在中心，则显示为灰、白、黑无彩色。当饱和度达到100%时，点则移动到色环边缘，会显示每个色相最纯的色光。如下图所示，在色相(H)、亮度(B)不变的情况下减少饱和度(S)颜色逐渐变淡最后变成白色。<strong>S控制混入白色的量。</strong></p>
+<p>3.亮度</p>
+<p>指色彩的明亮度，取值范围0～100%，沿着圆柱体底部向上递增。亮度为0时即黑色，点处于最底部。当达到100%时点上升到顶端，会显示色相最鲜明的状态。如下图所示，在色相(H)、饱和度(S)不变的情况下减少亮度(B)颜色逐渐变暗最后变成黑色。<strong>B控制混入黑色的量。</strong></p>
+<p>4.结论</p>
+<pre><code>1. 选取一个颜色作为主色(6 号色)；
+2. 判断减淡或加深，进行颜色混合
+    - 若减淡，则主色与纯白色(#fff)混合，根据色号，获取贝塞尔曲线上的对应值。
+    - 若加深，则主色与它对应的深色混合，根据色号，获取贝塞尔曲线上的对应比例值。加深时主色对应的深色进行了明度与色相的调整，其中对色相的调整也就是上述引用中说的“针对冷暖色的旋转”；
+3. 分别取1~9色号的色值，得到一条完整渐变色板。
+</code></pre>
+<p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://ant.design/docs/react/customize-theme-variable-cn">AntD 动态主题</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/be40c662-8dc3-442e-a10b-bd399786d692#">基于 HSB 模型构建色彩体系</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/32422584">Ant Design 色板生成算法演进之路</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhangxinxu.com/wordpress/2021/08/polyfill-ponyfill-prollyfill/">polyfill 和 ponyfill</a></p>
+<p><a target="_blank" rel="noopener" href="https://jhildenbiddle.github.io/css-vars-ponyfill/#/">css-vars-ponyfill 文档</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/" data-id="cl19azxo10000b1y12m853wb3" data-title="" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
