@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>吴文君的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.什么是 localForagelocalForage 是一个 JavaScript 库，通过简单类似 localStorage API 的异步存储来改进你的 Web 应用程序的离线体验。它能存储多种类型的数据，而不仅仅是字符串。 localForage 有一个优雅降级策略，若浏览器不支持 IndexedDB 或 WebSQL，则使用 localStorage。在所有主流浏览器中都可用：Chro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吴文君的博客">
+<meta property="og:url" content="http://wendyjw.github.io/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/index.html">
+<meta property="og:site_name" content="吴文君的博客">
+<meta property="og:description" content="1.什么是 localForagelocalForage 是一个 JavaScript 库，通过简单类似 localStorage API 的异步存储来改进你的 Web 应用程序的离线体验。它能存储多种类型的数据，而不仅仅是字符串。 localForage 有一个优雅降级策略，若浏览器不支持 IndexedDB 或 WebSQL，则使用 localStorage。在所有主流浏览器中都可用：Chro">
+<meta property="og:locale">
+<meta property="og:image" content="https://wendyjw.github.io/images/indexDB.png">
+<meta property="article:published_time" content="2022-01-16T09:34:25.000Z">
+<meta property="article:modified_time" content="2022-01-16T09:34:25.000Z">
+<meta property="article:author" content="吴文君">
+<meta property="article:tag" content="前端, JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wendyjw.github.io/images/indexDB.png">
+  
+    <link rel="alternate" href="/atom.xml" title="吴文君的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">吴文君的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wendyjw.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-改进版离线存储之 localForage" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/" class="article-date">
+  <time datetime="2022-01-16T09:34:25.000Z" itemprop="datePublished">2022-01-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-什么是-localForage"><a href="#1-什么是-localForage" class="headerlink" title="1.什么是 localForage"></a>1.什么是 localForage</h3><p>localForage 是一个 JavaScript 库，通过简单类似 localStorage API 的异步存储来改进你的 Web 应用程序的离线体验。它能存储多种类型的数据，而不仅仅是字符串。</p>
+<p>localForage 有一个优雅降级策略，若浏览器不支持 IndexedDB 或 WebSQL，则使用 localStorage。在所有主流浏览器中都可用：Chrome，Firefox，IE 和 Safari（包括 Safari Mobile)。</p>
+<h3 id="2-为什么要使用-localForage"><a href="#2-为什么要使用-localForage" class="headerlink" title="2.为什么要使用 localForage"></a>2.为什么要使用 localForage</h3><ul>
+<li>异步离线存储，以免阻塞应用程序</li>
+<li>用法上靠近 Promise, 方便执行回调</li>
+<li>写法简单，类似 Web Storage API</li>
+<li>支持存储多种类型数据:<br>Array<br>ArrayBuffer<br>Blob<br>Float32Array<br>Float64Array<br>Int8Array<br>Int16Array<br>Int32Array<br>Number<br>Object<br>Uint8Array<br>Uint8ClampedArray<br>Uint16Array<br>Uint32Array<br>String</li>
+<li>支持强制设置特定的驱动：IndexedDB、Web SQL、localStorage</li>
+<li>存在降级策略：若不支持 IndexedDB 或 Web SQL, 则使用 localStorage</li>
+<li>适合存储大量数据</li>
+</ul>
+<h3 id="3-如何使用-localForage"><a href="#3-如何使用-localForage" class="headerlink" title="3.如何使用 localForage"></a>3.如何使用 localForage</h3><h4 id="3-1-安装"><a href="#3-1-安装" class="headerlink" title="3.1 安装"></a>3.1 安装</h4><pre><code>npm install localforage
+</code></pre>
+<h4 id="3-2-API-使用"><a href="#3-2-API-使用" class="headerlink" title="3.2 API 使用"></a>3.2 API 使用</h4><p>localForage 提供回调 API 同时也支持 ES6 Promises API.</p>
+<p>回调 API 形式</p>
+<pre><code>localforage.setItem(&#39;key&#39;, &#39;value&#39;, function (err) &#123;
+  // if err is non-null, we got an error
+  localforage.getItem(&#39;key&#39;, function (err, value) &#123;
+    // if err is non-null, we got an error. otherwise, value is the value
+  &#125;);
+</code></pre>
+<p>});</p>
+<p>ES6 Promises 形式</p>
+<pre><code>localforage.setItem(&#39;key&#39;, &#39;value&#39;).then(function () &#123;
+  return localforage.getItem(&#39;key&#39;);
+  &#125;).then(function (value) &#123;
+    // we got our value
+  &#125;).catch(function (err) &#123;
+    console.log(err);
+&#125;);
+</code></pre>
+<p>或使用 async &#x2F; await 形式</p>
+<pre><code>try &#123;
+    const value = await localforage.getItem(&#39;somekey&#39;);
+    console.log(value);
+&#125; catch (err) &#123;
+    console.log(err);
+&#125;
+</code></pre>
+<h4 id="3-3-多个实例"><a href="#3-3-多个实例" class="headerlink" title="3.3 多个实例"></a>3.3 多个实例</h4><p>createInstance 创建并返回一个 localForage 的新实例。每个实例对象都有独立的数据库，而不会影响到其他实例</p>
+<pre><code>var store = localforage.createInstance(&#123;
+  name: &quot;nameHere&quot;
+&#125;);
+
+var otherStore = localforage.createInstance(&#123;
+  name: &quot;otherName&quot;
+&#125;);
+
+// 设置某个数据仓库 key 的值不会影响到另一个å数据仓库
+store.setItem(&quot;key1&quot;, &quot;value1&quot;);
+otherStore.setItem(&quot;key2&quot;, &quot;value2&quot;);
+</code></pre>
+<p><img src="https://wendyjw.github.io/images/indexDB.png" alt="图片"></p>
+<h3 id="4-常用浏览器存储方案对比"><a href="#4-常用浏览器存储方案对比" class="headerlink" title="4.常用浏览器存储方案对比"></a>4.常用浏览器存储方案对比</h3><h4 id="4-1-Cookie"><a href="#4-1-Cookie" class="headerlink" title="4.1 Cookie"></a>4.1 Cookie</h4><p>存储 cookie 是浏览器的功能，浏览器下有一个 cookie 文件夹专门存放各个域下设置的 cookie<br>缺点：</p>
+<ol>
+<li>存储空间有限: 约 4K</li>
+<li>每次向服务器发请求都会被携带，增加 Web 请求大小</li>
+<li>只能存储字符串</li>
+</ol>
+<h4 id="4-2-Web-Storage"><a href="#4-2-Web-Storage" class="headerlink" title="4.2 Web Storage"></a>4.2 Web Storage</h4><p>localStorage - 用于长久保存整个网站的数据，保存的数据没有过期时间，直到手动去除。</p>
+<p>sessionStorage - 用于临时保存同一窗口(或标签页)的数据，在关闭窗口或标签页之后将会删除这些数据。</p>
+<p>缺点:</p>
+<ol>
+<li>操作过程是同步的会阻塞主线程</li>
+<li>存储大小约 5MB(不同浏览器，限制值不一样)</li>
+<li>只能存储字符串</li>
+</ol>
+<h4 id="4-3-WebSQL-使用较少，暂不介绍"><a href="#4-3-WebSQL-使用较少，暂不介绍" class="headerlink" title="4.3 WebSQL(使用较少，暂不介绍)"></a>4.3 WebSQL(使用较少，暂不介绍)</h4><h4 id="4-4-IndexedDB"><a href="#4-4-IndexedDB" class="headerlink" title="4.4 IndexedDB"></a>4.4 IndexedDB</h4><p>浏览器提供的本地数据库，它可以被网页脚本创建和操作。IndexedDB 允许储存大量数据，提供查找接口，还能建立索引。</p>
+<p>就数据库类型而言，IndexedDB 不属于关系型数据库（不支持 SQL 查询语句），更接近 NoSQL 数据库。</p>
+<p>特点：</p>
+<ol>
+<li><p>键值对存储： 内部采用对象仓库（Object store）存放数据。所有类型数据都可以直接存入。对象仓库中，数据以”键值对“形式保存，每个数据记录都有对应的主键</p>
+</li>
+<li><p>异步：防止大量数据的读写，拖慢网页的展现</p>
+</li>
+<li><p>支持事务：意味着一系列操作步骤中，只要有异步失败，整个事务就都取消，数据库回滚到事务发生之前的记录，不存在只改写部分数据的情况</p>
+</li>
+<li><p>同源限制：每个数据库对应创建他的域名，网页只能访问自身域名下的数据库，而不能访问跨域数据库</p>
+</li>
+<li><p>存储空间大： 取决于硬件。</p>
+<ul>
+<li>Chrome 允许浏览器使用多达 80% 的总磁盘空间。一个源最多可以使用总磁盘空间的 60%。</li>
+<li>IE 10 及以上最多可存储 250MB</li>
+<li>Firefox 允许浏览器使用多达 50% 的可用磁盘空间</li>
+<li>Safari 允许大约 1GB</li>
+</ul>
+</li>
+<li><p>支持二进制存储</p>
+</li>
+</ol>
+<p>缺点:<br>与大多数现代基于 Promise 的 API 不同，它是基于事件的，在使用前需要学习相关 API 进行设置，增加学习成本。</p>
+<p>参考文章：</p>
+<p>1.<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2018/07/indexeddb.html">IndexedDB 入门教程</a></p>
+<p>2.<a target="_blank" rel="noopener" href="https://localforage.docschina.org/#localforage">localForage 中文文档</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/" data-id="cl1ptieq50001zxy1e7g879yv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/12/03/NodeJs%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/03/NodeJs%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 吴文君<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
