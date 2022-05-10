@@ -5,17 +5,17 @@
   
 
   
-  <title>吴文君的博客</title>
+  <title>自定义主题色实现之 CSS Variable | 吴文君的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="自定义主题色实现之 CSS Variable前言 需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。 兼容性问题：在 IE 中 var()报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色） 第三方 UI 库支持 CSS Variable，（&amp;#x61;&amp;#x6e;&amp;#x74;&amp;#x64;&amp;#x40;&amp;#52;&amp;#46;&amp;#">
+  <meta name="description" content="前言 需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。 兼容性问题：在 IE 中 var()报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色） 第三方 UI 库支持 CSS Variable，（&amp;#97;&amp;#x6e;&amp;#116;&amp;#100;&amp;#64;&amp;#x34;&amp;#46;&amp;#49;&amp;#55;&amp;#46;&amp;#x30;&amp;#45">
 <meta property="og:type" content="article">
-<meta property="og:title" content="吴文君的博客">
+<meta property="og:title" content="自定义主题色实现之 CSS Variable">
 <meta property="og:url" content="http://wendyjw.github.io/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/index.html">
 <meta property="og:site_name" content="吴文君的博客">
-<meta property="og:description" content="自定义主题色实现之 CSS Variable前言 需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。 兼容性问题：在 IE 中 var()报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色） 第三方 UI 库支持 CSS Variable，（&amp;#x61;&amp;#x6e;&amp;#x74;&amp;#x64;&amp;#x40;&amp;#52;&amp;#46;&amp;#">
+<meta property="og:description" content="前言 需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。 兼容性问题：在 IE 中 var()报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色） 第三方 UI 库支持 CSS Variable，（&amp;#97;&amp;#x6e;&amp;#116;&amp;#100;&amp;#64;&amp;#x34;&amp;#46;&amp;#49;&amp;#55;&amp;#46;&amp;#x30;&amp;#45">
 <meta property="og:locale">
-<meta property="article:published_time" content="2022-03-04T01:23:14.566Z">
-<meta property="article:modified_time" content="2022-03-04T01:23:14.567Z">
+<meta property="article:published_time" content="2022-03-04T02:55:52.000Z">
+<meta property="article:modified_time" content="2022-05-10T03:00:51.014Z">
 <meta property="article:author" content="吴文君">
 <meta property="article:tag" content="前端, JavaScript">
 <meta name="twitter:card" content="summary">
@@ -70,19 +70,29 @@
         <section id="main"><article id="post-自定义主题色实现之 CSS Variable" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/" class="article-date">
-  <time datetime="2022-03-04T01:23:14.566Z" itemprop="datePublished">2022-03-04</time>
+  <time datetime="2022-03-04T02:55:52.000Z" itemprop="datePublished">2022-03-04</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      自定义主题色实现之 CSS Variable
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="自定义主题色实现之-CSS-Variable"><a href="#自定义主题色实现之-CSS-Variable" class="headerlink" title="自定义主题色实现之 CSS Variable"></a>自定义主题色实现之 CSS Variable</h2><h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
 <li>需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。</li>
 <li>兼容性问题：在 IE 中 <code>var()</code>报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，使页面展示一个默认色）</li>
-<li>第三方 UI 库支持 CSS Variable，（<a href="mailto:&#x61;&#x6e;&#x74;&#x64;&#x40;&#52;&#46;&#x31;&#x37;&#x2e;&#48;&#x2d;&#x61;&#x6c;&#x70;&#104;&#97;&#x2e;&#x30;">&#x61;&#x6e;&#x74;&#x64;&#x40;&#52;&#46;&#x31;&#x37;&#x2e;&#48;&#x2d;&#x61;&#x6c;&#x70;&#104;&#97;&#x2e;&#x30;</a> 以上，<a href="mailto:&#x6d;&#107;&#x75;&#x69;&#x2d;&#x66;&#100;&#64;&#52;&#46;&#49;&#x2e;&#x38;&#x2d;&#98;&#x65;&#x74;&#x61;">&#x6d;&#107;&#x75;&#x69;&#x2d;&#x66;&#100;&#64;&#52;&#46;&#49;&#x2e;&#x38;&#x2d;&#98;&#x65;&#x74;&#x61;</a> 以上 ）</li>
+<li>第三方 UI 库支持 CSS Variable，（<a href="mailto:&#97;&#x6e;&#116;&#100;&#64;&#x34;&#46;&#49;&#55;&#46;&#x30;&#45;&#x61;&#x6c;&#112;&#x68;&#x61;&#x2e;&#x30;">&#97;&#x6e;&#116;&#100;&#64;&#x34;&#46;&#49;&#55;&#46;&#x30;&#45;&#x61;&#x6c;&#112;&#x68;&#x61;&#x2e;&#x30;</a> 以上，<a href="mailto:&#109;&#107;&#117;&#x69;&#45;&#x66;&#100;&#x40;&#52;&#x2e;&#49;&#46;&#56;&#45;&#x62;&#x65;&#x74;&#x61;">&#109;&#107;&#117;&#x69;&#45;&#x66;&#100;&#x40;&#52;&#x2e;&#49;&#46;&#56;&#45;&#x62;&#x65;&#x74;&#x61;</a> 以上 ）</li>
 </ul>
 <h3 id="1-实现原理"><a href="#1-实现原理" class="headerlink" title="1. 实现原理"></a>1. 实现原理</h3><h5 id="1-1-自定义属性-–-CSS-变量"><a href="#1-1-自定义属性-–-CSS-变量" class="headerlink" title="1.1. 自定义属性 (–*): CSS 变量"></a>1.1. 自定义属性 (–*): CSS 变量</h5><p>带有前缀 – 的属性名，比如<code>--example--name</code>，表示的是带有值的自定义属性，其可以通过<code>var</code> 函数在全文档范围内复用的。</p>
 <p>CSS 自定义属性是可以级联的：每一个自定义属性可以多次出现，并且变量的值将会借助级联算法和自定义属性值运算出来。</p>
@@ -152,12 +162,11 @@
      var button = require(&#39;antd/lib/button&#39;);
      require(&#39;antd/lib/button/style&#39;);
      ReactDOM.render(&lt;button&gt;xxxx&lt;/button&gt;);
-     
 </code></pre>
-<p> 注意: </p>
-<p> Antd 默认支持基于 ES modules 的 tree shaking，对于 js 部分，直接引入 <code>import &#123; Button &#125; from &#39;antd&#39;</code> 就会有按需加载的效果。</p>
-<p>如今webpack,rollup等构建工具都具备了摇树功能（Tree Shaking), 其原理是利用ESM模块的import语法的特性，通过AST语法树进行分析然后去除未使用到的代码。(todo)而要开启此功能必须确保引入的Antd es版本，在webpack上可通过resolve.mainFields来指定npm包的入口文件优先级，但tree shaking方式也只是处理了js部分，对于组件的css加载还需要手动引入.</p>
-<h5 id="2-2-引入包含css-变量的组件库-css-文件-app-js"><a href="#2-2-引入包含css-变量的组件库-css-文件-app-js" class="headerlink" title="2.2 引入包含css 变量的组件库 css 文件(app.js)"></a>2.2 引入包含css 变量的组件库 css 文件(app.js)</h5><pre><code>import &#39;mkui-fd/dist/mkui-fd.min.css&#39;;
+<p>注意:</p>
+<p>Antd 默认支持基于 ES modules 的 tree shaking，对于 js 部分，直接引入 <code>import &#123; Button &#125; from &#39;antd&#39;</code> 就会有按需加载的效果。</p>
+<p>如今 webpack,rollup 等构建工具都具备了摇树功能（Tree Shaking), 其原理是利用 ESM 模块的 import 语法的特性，通过 AST 语法树进行分析然后去除未使用到的代码。(todo)而要开启此功能必须确保引入的 Antd es 版本，在 webpack 上可通过 resolve.mainFields 来指定 npm 包的入口文件优先级，但 tree shaking 方式也只是处理了 js 部分，对于组件的 css 加载还需要手动引入.</p>
+<h5 id="2-2-引入包含-css-变量的组件库-css-文件-app-js"><a href="#2-2-引入包含-css-变量的组件库-css-文件-app-js" class="headerlink" title="2.2 引入包含 css 变量的组件库 css 文件(app.js)"></a>2.2 引入包含 css 变量的组件库 css 文件(app.js)</h5><pre><code>import &#39;mkui-fd/dist/mkui-fd.min.css&#39;;
 import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
 </code></pre>
 <h5 id="2-3-定义颜色变量（variables-less）"><a href="#2-3-定义颜色变量（variables-less）" class="headerlink" title="2.3.定义颜色变量（variables.less）"></a>2.3.定义颜色变量（variables.less）</h5><ol>
@@ -165,35 +174,29 @@ import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
 </ol>
 <p>:root 下已经默认生成了部分可全局使用的变量：<code>--mkui-primary-1, ... --mkui-primary-10</code></p>
 <p>使用 <code>var()</code> 插入 CSS 变量的值</p>
-<pre><code>     @theme-color: var(--mkui-primary-color, #1890ff); 
+<pre><code>     @theme-color: var(--mkui-primary-color, #1890ff);
 
      @theme-color-selected-bg: var(--mkui-primary-1, #f0f8ff);
 </code></pre>
 <ol start="2">
 <li><p>自定义创建可全局使用的 CSS 变量</p>
-<p>   &#x2F;&#x2F; color.less</p>
-<p>   为了兼容 IE 使用 css-vars-ponyfill, 必须使用:root 而不是 html</p>
-<p>   :root {<br>  –theme-color: #1890ff;<br>  –theme-color-selected-bg: #f0f8ff;<br>   }</p>
-<p>   &#x2F;&#x2F; variables.less</p>
-<p>   @theme-color: var(–theme-color);</p>
-<p>   @theme-color-selected-bg: var(–theme-color-selected-bg, #f0f8ff);</p>
+<p>&#x2F;&#x2F; color.less</p>
+<p>为了兼容 IE 使用 css-vars-ponyfill, 必须使用:root 而不是 html</p>
+<p>:root {<br>–theme-color: #1890ff;<br>–theme-color-selected-bg: #f0f8ff;<br>}</p>
+<p>&#x2F;&#x2F; variables.less</p>
+<p>@theme-color: var(–theme-color);</p>
+<p>@theme-color-selected-bg: var(–theme-color-selected-bg, #f0f8ff);</p>
 </li>
 </ol>
 <h5 id="4-调用配置方法"><a href="#4-调用配置方法" class="headerlink" title="4. 调用配置方法"></a>4. 调用配置方法</h5><p>4.1 调用 ConfigProvider 配置方法设置主题色(cssVariable.js)：</p>
 <pre><code>   ConfigProvider.config(&#123;
      theme: &#123; primaryColor: themeColor &#125;,
   &#125;);
-      
 </code></pre>
 <p>Note: primaryColor: 组件基本色，<code>successColor</code>，<code>warningColor</code>，<code>errorColor</code>，<code>infoColor</code>特定情况下的颜色。</p>
-<p>4.2 动态更改自定义变量颜色（customCssVariable.js）</p>
-<pre><code>setThemeColor(&#123; 
-    themeColor, 
-    varName: &#39;theme-color&#39; 
-&#125;)
-</code></pre>
+<p>4.2 动态更改自定义变量颜色（customCssVariable.js）<br>setThemeColor({<br>themeColor,<br>varName: ‘theme-color’<br>})</p>
 <h5 id="5-色值相关"><a href="#5-色值相关" class="headerlink" title="5. 色值相关"></a>5. 色值相关</h5><ul>
-<li>与主题色相关的颜色，设计图中会给一个主色(C6)，及对应的10个色阶阶梯的哪一阶</li>
+<li>与主题色相关的颜色，设计图中会给一个主色(C6)，及对应的 10 个色阶阶梯的哪一阶</li>
 <li>mkui-ext 组件颜色使用 mkui-plugin.less 中颜色替换(优先级更高)</li>
 </ul>
 <h3 id="3-注意点"><a href="#3-注意点" class="headerlink" title="3. 注意点:"></a>3. 注意点:</h3><ol>
@@ -210,14 +213,13 @@ import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
 </ul>
 </li>
 <li><p><code>fade()，dark()</code>等函数不支持变量参数</p>
-<pre><code>  fade(&#39;1199ff&#39;, 90%);
-  fade(var(--theme-color), 90%); // 错误使用
-  
+<pre><code> fade(&#39;1199ff&#39;, 90%);
+ fade(var(--theme-color), 90%); // 错误使用
 </code></pre>
 </li>
-<li><p><code>mkui-fd</code>, <code>mkui-ext </code>以及项目中颜色相关样式，不要使用内联和 !important </p>
+<li><p><code>mkui-fd</code>, <code>mkui-ext </code>以及项目中颜色相关样式，不要使用内联和 !important</p>
 </li>
-<li><p>IE 11下取色器组件 <code>react-color@2.19.3 </code>报错，降低<code>react-color@2.18.1 </code>组件版本<br> <code>SCRIPT438: Object doesn&#39;t support property or method &#39;contains&#39;</code></p>
+<li><p>IE 11 下取色器组件 <code>react-color@2.19.3 </code>报错，降低<code>react-color@2.18.1 </code>组件版本<br><code>SCRIPT438: Object doesn&#39;t support property or method &#39;contains&#39;</code></p>
 </li>
 <li><p>与设计人员达成色值统一，许多相近颜色的色值使用混乱</p>
 </li>
@@ -265,16 +267,16 @@ import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
 <li>在旧版浏览器中，ponyfill 将确定哪些 <code>&lt;link&gt;</code> 和<code>&lt;style&gt;</code>中包含 css 变量，然后转换成与旧版兼容的 CSS，并附加到每个元素的 DOM。</li>
 <li>在支持 CSS 变量的现代浏览器中，ponyfill 将使用<code> style.setProperty()</code> 接口更新值。<br>请注意，当 <code>options.onlyLegacy</code> 为<code>false</code> 时，支持 CSS 变量的现代浏览器将被视为旧版浏览器。</li>
 </ul>
-<p>Note:<br><code>&#123; onlyLegacy: true &#125; </code>将此值设置为    <code>false</code>可以在现代浏览器中模仿旧版浏览器，进行测试和调试。</p>
+<p>Note:<br><code>&#123; onlyLegacy: true &#125; </code>将此值设置为 <code>false</code>可以在现代浏览器中模仿旧版浏览器，进行测试和调试。</p>
 <h5 id="4-3-HSV-色相-hue-饱和度-saturation-亮度-Brightness"><a href="#4-3-HSV-色相-hue-饱和度-saturation-亮度-Brightness" class="headerlink" title="4.3 HSV (色相 hue, 饱和度 saturation, 亮度 Brightness)"></a>4.3 HSV (色相 hue, 饱和度 saturation, 亮度 Brightness)</h5><blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/be40c662-8dc3-442e-a10b-bd399786d692#"><br>基于HSB模型构建色彩体系</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/be40c662-8dc3-442e-a10b-bd399786d692#"><br>基于 HSB 模型构建色彩体系</a></p>
 </blockquote>
 <p>1.色相</p>
-<p>表示色彩的相貌，也就是我们常说的红、橙、黄、绿等颜色名称。色相值按位置度量，取值为0°～360°，在HSB色彩模型中红色为0°，黄色为60°，绿色为120°，青色为180°，蓝色为240°，品红色为300°。十二色相环每一色相间距30°，二十四色相环每一色相间距15°。</p>
+<p>表示色彩的相貌，也就是我们常说的红、橙、黄、绿等颜色名称。色相值按位置度量，取值为 0° ～ 360°，在 HSB 色彩模型中红色为 0°，黄色为 60°，绿色为 120°，青色为 180°，蓝色为 240°，品红色为 300°。十二色相环每一色相间距 30°，二十四色相环每一色相间距 15°。</p>
 <p>2.饱和度</p>
-<p>表示色彩的纯度，取值范围0～100%，从色环中心向外递增。当饱和度为0时点在中心，则显示为灰、白、黑无彩色。当饱和度达到100%时，点则移动到色环边缘，会显示每个色相最纯的色光。如下图所示，在色相(H)、亮度(B)不变的情况下减少饱和度(S)颜色逐渐变淡最后变成白色。<strong>S控制混入白色的量。</strong></p>
+<p>表示色彩的纯度，取值范围 0 ～ 100%，从色环中心向外递增。当饱和度为 0 时点在中心，则显示为灰、白、黑无彩色。当饱和度达到 100%时，点则移动到色环边缘，会显示每个色相最纯的色光。如下图所示，在色相(H)、亮度(B)不变的情况下减少饱和度(S)颜色逐渐变淡最后变成白色。<strong>S 控制混入白色的量。</strong></p>
 <p>3.亮度</p>
-<p>指色彩的明亮度，取值范围0～100%，沿着圆柱体底部向上递增。亮度为0时即黑色，点处于最底部。当达到100%时点上升到顶端，会显示色相最鲜明的状态。如下图所示，在色相(H)、饱和度(S)不变的情况下减少亮度(B)颜色逐渐变暗最后变成黑色。<strong>B控制混入黑色的量。</strong></p>
+<p>指色彩的明亮度，取值范围 0 ～ 100%，沿着圆柱体底部向上递增。亮度为 0 时即黑色，点处于最底部。当达到 100%时点上升到顶端，会显示色相最鲜明的状态。如下图所示，在色相(H)、饱和度(S)不变的情况下减少亮度(B)颜色逐渐变暗最后变成黑色。<strong>B 控制混入黑色的量。</strong></p>
 <p>4.结论</p>
 <pre><code>1. 选取一个颜色作为主色(6 号色)；
 2. 判断减淡或加深，进行颜色混合
@@ -301,10 +303,19 @@ import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
     
 <nav id="article-nav">
   
+    <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          浅谈字符串长度
+        
+      </div>
+    </a>
+  
   
     <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title"></div>
+      <div class="article-nav-title">什么是 localForage</div>
     </a>
   
 </nav>
@@ -328,7 +339,7 @@ import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
     </div>
   </div>
 
@@ -341,19 +352,23 @@ import &#39;mkui-fd/dist/mkui-fd.variable.min.css&#39;;
       <ul>
         
           <li>
-            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">(no title)</a>
+            <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/">浅谈字符串长度</a>
           </li>
         
           <li>
-            <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/">(no title)</a>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">自定义主题色实现之 CSS Variable</a>
           </li>
         
           <li>
-            <a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86%E4%B9%8Baxios%20Cancel%20Token%20/">(no title)</a>
+            <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/">什么是 localForage</a>
           </li>
         
           <li>
-            <a href="/2020/12/03/NodeJs%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/">(no title)</a>
+            <a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86%E4%B9%8Baxios%20Cancel%20Token%20/">请求竞态处理</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/03/NodeJs%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/">Module 加载原理</a>
           </li>
         
       </ul>

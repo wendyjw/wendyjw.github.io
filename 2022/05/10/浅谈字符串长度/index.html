@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>浅谈字符串长度 | 吴文君的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言：日常开发表单校验长度时，发现字符 length 可能和我们预期的不太一致，导致校验结果与预期有出入。这篇文章浅谈下 字符串长度， 首先从 UTF 编码说起。 ECMAScript 字符串使用的是 UTF-16 编码 Unicode 表包含了 1114112 个码点，即从 000000（十六进制） - 10FFFF（十六进制）,Unicode 将码空间划分为 17 个平面，从 00 - 10">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈字符串长度">
+<meta property="og:url" content="http://wendyjw.github.io/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/index.html">
+<meta property="og:site_name" content="吴文君的博客">
+<meta property="og:description" content="前言：日常开发表单校验长度时，发现字符 length 可能和我们预期的不太一致，导致校验结果与预期有出入。这篇文章浅谈下 字符串长度， 首先从 UTF 编码说起。 ECMAScript 字符串使用的是 UTF-16 编码 Unicode 表包含了 1114112 个码点，即从 000000（十六进制） - 10FFFF（十六进制）,Unicode 将码空间划分为 17 个平面，从 00 - 10">
+<meta property="og:locale">
+<meta property="og:image" content="https://wendyjw.github.io/images/unicode%E8%BD%ACutf-16%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="article:published_time" content="2022-05-10T02:55:52.000Z">
+<meta property="article:modified_time" content="2022-05-10T03:06:33.144Z">
+<meta property="article:author" content="吴文君">
+<meta property="article:tag" content="前端, JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wendyjw.github.io/images/unicode%E8%BD%ACutf-16%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+  
+    <link rel="alternate" href="/atom.xml" title="吴文君的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">吴文君的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wendyjw.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-浅谈字符串长度" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/" class="article-date">
+  <time datetime="2022-05-10T02:55:52.000Z" itemprop="datePublished">2022-05-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      浅谈字符串长度
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前言：日常开发表单校验长度时，发现字符 <code>length</code> 可能和我们预期的不太一致，导致校验结果与预期有出入。这篇文章浅谈下 字符串长度， 首先从 UTF 编码说起。</p>
+<p>ECMAScript 字符串使用的是 UTF-16 编码</p>
+<p>Unicode 表包含了 1114112 个码点，即从 000000（十六进制） - 10FFFF（十六进制）,<br>Unicode 将码空间划分为 17 个平面，从 00 - 10 （十六进制，最高两位），即从 0 - 16 （十进制），每个平面有 65536 个码点（2^16),<br>其中最重要的是第一个 Unicode 平面（码位从 0000 - FFFF），包含了最常用的字符，该 pigment 被称为 基本多语言平面 （BMP）, 其他平面为辅助平面。</p>
+<p>Unicode 只是一个符号集，只规定了字符对应的码点，并没有指定使用何种编码方案进行存储。编码方案主要：UCS 和 UTF（Unicode Transformation Format）。</p>
+<p>其中 UTF 中主要有 UTF-8，UTF-16, UTF-32， 是 Unicode 一种具体的编码实现。</p>
+<h3 id="1-UTF-8"><a href="#1-UTF-8" class="headerlink" title="1. UTF-8"></a>1. UTF-8</h3><p>UTF-8 是变长编码方式，使用 1-4 个字节进行编码。 UTF-8 完全兼容 ASCII，对于 ASCII 中的字符，UTF-8 采用的编码值和 ASCII 完全一致。</p>
+<p>优点：节约网络流量（因为是变长编码而不是统一长度编码）</p>
+<table>
+<thead>
+<tr>
+<th>Unicode 符号范围　 (十六进制) (十进制)</th>
+<th>UTF-8 编码方式 （二进制）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0000 0000-0000 007F (0-127)</td>
+<td>0xxxxxxx</td>
+</tr>
+<tr>
+<td>0000 0080-0000 07FF (128-2047)</td>
+<td>110xxxxx 10xxxxxx</td>
+</tr>
+<tr>
+<td>0000 0800-0000 FFFF (2048-65535)</td>
+<td>1110xxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+<tr>
+<td>0001 0000-0010 FFFF (65536-1114111)</td>
+<td>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+</tbody></table>
+<p>由上述编码规则可知，0000 0000 - 0000 FFFF（第一行到第三行）为 Unicode 第一个平面（基本多语言平面），而 0001 0000 - 10 FFFF（第四行）为 Unicode 其他平面（辅助平面）。在基本多语言平面对应了绝大多数常用的字符。对于大于 65535（十进制）的码点，即在辅助平面上的码点，需要使用 4 个字节来进行 UTF-8 编码。</p>
+<h3 id="2-UTF-16"><a href="#2-UTF-16" class="headerlink" title="2. UTF-16"></a>2. UTF-16</h3><p>UTF-8 是不定长的编码，使用 1、2、3、4 个字节编码，而 UTF-16 则只使用 2 或 4 个字节编码，关于 Unicode 如何转化为 UTf-16 编码规则如下：<br>若 Unicode 码点在第一平面（BPM）中，则使用 2 个字节进行编码；<br>若 Unicode 码点在其他平面（辅助平面），则使用 4 个字节进行编码。<br>Unicode 转 UTF-16 规则流程图如下：</p>
+<p><img src="https://wendyjw.github.io/images/unicode%E8%BD%ACutf-16%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="Unicode 转 UTF-16 "></p>
+<p>例如：</p>
+<pre><code>&#39;\u0041&#39; // A
+&#39;A&#39; === &#39;\u0041&#39; // true
+</code></pre>
+<p>而字符 💩 的码点是 U+1f4a9，处于补充平面的字符, 计算得到 2 个码元</p>
+<pre><code> &#39;💩&#39;.charCodeAt(0)  // 55357 =&gt; 16进制：d83d
+ &#39;💩&#39;.charCodeAt(1)  //56489 =&gt; 16进制：dca9
+
+  Javascript 中 \u 表示 Unicode 的转义字符，后面跟着一个十六进制数
+  &#39;💩&#39; === &#39;\ud83d\udca9&#39; // true
+</code></pre>
+<p>由于 Javascript 字符串使用 utf-16 编码，所以可以正确将代理对 <code>\ud83d\udca9</code> 解码得到码点 <code>U+1f4a9</code>。</p>
+<pre><code>&#39;\ud83d\udca9&#39; === &#39;\u&#123;1f4a9&#125;&#39;   // -&gt; true
+</code></pre>
+<h3 id="3-为什么-length-判断有问题"><a href="#3-为什么-length-判断有问题" class="headerlink" title="3. 为什么 length 判断有问题"></a>3. 为什么 length 判断有问题</h3><blockquote>
+<p>Where ECMAScript operations interpret String values, each element is interpreted as a single UTF-16 code unit （每个元素都被解释为单个 UTF-16 代码单元）</p>
+</blockquote>
+<p><strong><em>这里’💩’字符时机占用了两个 UTF-16 的码元，也就是 2 个元素，所以他的 length 属性为 2</em></strong></p>
+<p>Antd Form 表单使用的 async-validator 包中可以看到下面这段<a target="_blank" rel="noopener" href="https://github.com/yiminghe/async-validator/blob/e5ca7cfd912837d1dd1910fb584b8c7c7ed5b3e9/src/rule/range.ts#L33">代码</a>,<br>当需要进行字符串长度的判断时，会将码点范围在补充平面的字符全部替换为下划线，这样长度判断就和实际显示的一致了</p>
+<pre><code>const spRegexp = /[\uD800-\uDBFF][\udc00-\udfff]/g;
+
+if (str) &#123;
+  val = value.replace(spRegexp, &#39;_&#39;).length;
+&#125;
+</code></pre>
+<h3 id="4-ES6-对-Unicode-的支持"><a href="#4-ES6-对-Unicode-的支持" class="headerlink" title="4. ES6 对 Unicode 的支持"></a>4. ES6 对 Unicode 的支持</h3><p>下面的内容将介绍部分存在异常的 API 以及在 ES6 中如何正确处理这些问题。</p>
+<h4 id="4-1-for-vs-for-of"><a href="#4-1-for-vs-for-of" class="headerlink" title="4.1 for vs for of"></a>4.1 for vs for of</h4><p>例如使用 for 循环打印字符串，字符串会按照 JS 理解的每个“元素”遍历，辅助平面的字符将会被识别成两个“元素”，于是出现“乱码”。</p>
+<pre><code>var str = &#39;👻yo𠮷&#39;;
+for (var i = 0; i &lt; str.length; i ++) &#123;
+  console.log(str[i])
+&#125;
+// -&gt; �
+// -&gt; �
+// -&gt; y
+// -&gt; o
+// -&gt; �
+// -&gt; �
+</code></pre>
+<p>而使用 ES6 的 for of 语法就不会</p>
+<pre><code>var str = &#39;👻yo𠮷&#39;;
+for (const char of str) &#123;
+  console.log(char)
+&#125;
+
+// -&gt; 👻
+// -&gt; y
+// -&gt; o
+// -&gt; 𠮷
+</code></pre>
+<h4 id="4-2-展开语法-Spread-syntax"><a href="#4-2-展开语法-Spread-syntax" class="headerlink" title="4.2 展开语法(Spread syntax)"></a>4.2 展开语法(Spread syntax)</h4><p>前面提到了使用正则表达式，将辅助平面的字符替换的方式来统计字符长度。使用展开语法也可以得到同样的效果。</p>
+<pre><code>[...&#39;💩&#39;].length
+// -&gt; 1
+</code></pre>
+<h4 id="4-3-正则表达式-u"><a href="#4-3-正则表达式-u" class="headerlink" title="4.3 正则表达式 u"></a>4.3 正则表达式 u</h4><p>ES6 中还针对 Unicode 字符增加了 u 描述符。</p>
+<pre><code>/^.$/.test(&#39;👻&#39;)
+// -&gt; false
+
+/^.$/u.test(&#39;👻&#39;)
+// -&gt; true
+</code></pre>
+<h4 id="4-4-charCodeAt-x2F-codePointAt"><a href="#4-4-charCodeAt-x2F-codePointAt" class="headerlink" title="4.4 charCodeAt&#x2F;codePointAt"></a>4.4 charCodeAt&#x2F;codePointAt</h4><p>对于字符串，我们还常用 charCodeAt 来获取 Code Point，对于 BMP 平面的字符是可以适用的，<br>但是如果字符是辅助平面字符 charCodeAt 返回结果就只会是编码后第一个码元对于的数字。</p>
+<p>而使用 codePointAt 则可以将字符正确识别，并返回正确的码点。</p>
+<pre><code>  &#39;羽&#39;.charCodeAt(0)
+  // -&gt; 32701
+  &#39;羽&#39;.codePointAt(0)
+  // -&gt; 32701
+
+  &#39;😸&#39;.charCodeAt(0)
+  // -&gt; 55357
+  &#39;😸&#39;.codePointAt(0)
+  // -&gt; 128568
+</code></pre>
+<blockquote>
+<p>The codePointAt(pos) method returns a non-negative integer that is the Unicode code point value.( 返回一个非负整数，它是 Unicode 代码点值)</p>
+</blockquote>
+<blockquote>
+<p>The charCodeAt(index) method returns an integer between 0 and 65535 representing the UTF-16 code unit at the given index (返回一个介于 0 和 65535 之间的整数，表示给定索引处的 UTF-16 代码单元)</p>
+</blockquote>
+<p>codePointAt: 如果在指定的位置(pos)没有元素则返回 undefined 。如果在索引处开始没有 UTF-16 代理对，将直接返回在那个索引处的编码单元。</p>
+<p>Surrogate Pair 是 UTF-16 中用于扩展字符而使用的编码方式，是一种采用四个字节(两个 UTF-16 编码)来表示一个字符，称作代理对。</p>
+<pre><code>&#39;ABC&#39;.codePointAt(1);          // 66
+&#39;\uD800\uDC00&#39;.codePointAt(0); // 65536
+
+&#39;XYZ&#39;.codePointAt(42); // undefined
+</code></pre>
+<p>str.charCodeAt(index): 指定 index 处字符的 UTF-16 代码单元值的一个数字；如果 index 超出范围，charCodeAt() 返回 NaN</p>
+<pre><code>&quot;ABC&quot;.charCodeAt(0) // returns 65:&quot;A&quot;
+
+&quot;ABC&quot;.charCodeAt(1) // returns 66:&quot;B&quot;
+
+&quot;ABC&quot;.charCodeAt(2) // returns 67:&quot;C&quot;
+
+&quot;ABC&quot;.charCodeAt(3) // returns NaN
+</code></pre>
+<h4 id="4-5-String-prototype-normalize"><a href="#4-5-String-prototype-normalize" class="headerlink" title="4.5 String.prototype.normalize()"></a>4.5 String.prototype.normalize()</h4><p>由于 JS 中将字符串理解成一串两个字节的码元序列，判断是否相等是根据序列的值来判断的。所以可能存在一些字符串看起来长得一模一样，但是字符串相等判断结果确是 false。</p>
+<pre><code>&#39;café&#39; === &#39;café&#39;
+// -&gt; false
+</code></pre>
+<p>上面代码中第一个 café 是有 cafe 加上一个缩进的音标字符<code>\u0301</code>组成的，而第二个 café 则是由一个 caf + é 字符组成的。所以两者虽然看上去一样，但码点不一样，所以 JS 相等判断结果为 false。</p>
+<pre><code>&#39;cafe\u0301&#39;
+// -&gt; &#39;café&#39;
+
+&#39;cafe\u0301&#39;.length
+// -&gt; 5
+
+&#39;café&#39;.length
+// -&gt; 4
+</code></pre>
+<p>为了能正确识别这种码点不一样，但是语意一样的字符串判断，ES6 增加了 <code>String.prototype.normalize</code> 方法。</p>
+<pre><code>&#39;cafe\u0301&#39;.normalize() === &#39;café&#39;.normalize()
+
+// -&gt; true
+
+&#39;cafe\u0301&#39;.normalize().length
+// -&gt; 4
+</code></pre>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7025400771982131236">为什么 “𠮷𠮷𠮷”.length !&#x3D;&#x3D; 3</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/" data-id="cl2zjtnxi0000quy13pymh79x" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">自定义主题色实现之 CSS Variable</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/">浅谈字符串长度</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">自定义主题色实现之 CSS Variable</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/">什么是 localForage</a>
+          </li>
+        
+          <li>
+            <a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86%E4%B9%8Baxios%20Cancel%20Token%20/">请求竞态处理</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/03/NodeJs%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/">Module 加载原理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 吴文君<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
