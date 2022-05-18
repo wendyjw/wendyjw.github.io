@@ -65,6 +65,339 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-NodeJs 模仿SIP话机注册" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/21/NodeJs%20%E6%A8%A1%E4%BB%BFSIP%E8%AF%9D%E6%9C%BA%E6%B3%A8%E5%86%8C/" class="article-date">
+  <time datetime="2019-06-21T02:49:08.000Z" itemprop="datePublished">2019-06-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/21/NodeJs%20%E6%A8%A1%E4%BB%BFSIP%E8%AF%9D%E6%9C%BA%E6%B3%A8%E5%86%8C/">NodeJs 模仿 SIP 话机注册</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本项目需要对应的后端接口、信令环境才能正常运行，本文章只涉及前端内容。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/wendyjw/SIP-register-with-NodeJs">https://github.com/wendyjw/SIP-register-with-NodeJs</a></p>
+<h3 id="项目依赖模块："><a href="#项目依赖模块：" class="headerlink" title="项目依赖模块："></a>项目依赖模块：</h3><ul>
+<li>NodeJs</li>
+<li>readline：命令行输入</li>
+<li>ws：与服务端建立 websocket 连接</li>
+<li>superagent：与服务端建立请求连接，效果类似 ajax 请求</li>
+<li>tsk_md5：项目登录密码使用 MD5 加密</li>
+</ul>
+<h3 id="项目需求"><a href="#项目需求" class="headerlink" title="项目需求"></a>项目需求</h3><p>模拟 SIP 话机频繁向服务器发起注册请求，以得到服务器最大 SIP 注册数</p>
+<h3 id="项目实现概述"><a href="#项目实现概述" class="headerlink" title="项目实现概述"></a>项目实现概述</h3><ol>
+<li>终端输入连续注册分机的开始分机号和结束分机号</li>
+<li>终端输入统一的 SIP 注册密码</li>
+<li>终端输入服务器地址</li>
+<li>先进行用户登录鉴权，用户登录鉴权通过后再发起 SIP 注册</li>
+</ol>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><blockquote>
+<p>引入项目所需模块</p>
+</blockquote>
+<pre><code>var WebSocket = require(&#39;ws&#39;),
+superagent = require(&#39;superagent&#39;),
+tskMD5 = require(&#39;./tsk_md5&#39;)
+const readline = require(&#39;readline&#39;);
+</code></pre>
+<blockquote>
+<p>创建 readline 接口实例</p>
+</blockquote>
+<pre><code>const rl = readline.createInterface(&#123;
+            input: process.stdin,
+            output: process.stdout,
+            prompt: &#39;OHAI&gt; &#39;
+&#125;);
+</code></pre>
+<blockquote>
+<p>定义所需变量</p>
+</blockquote>
+<pre><code>var obj = &#123;&#125;, httpHeader = &#123;&#125;, baseUrl =&#39;&#39;, pass = &#39;&#39;, ip = &#39;&#39;, websocketUrl = &#39;&#39;
+var keepWsAlive, readyState
+</code></pre>
+<blockquote>
+<p>读取 readline 输入信息函数</p>
+</blockquote>
+<pre><code>function getReadline() &#123;
+    const lines = [];    // 用于保存所有输入信息。
+    console.log(&#39;Please input the range of extensions(eg: 1001,1010):\n&#39;)
+    rl.on(&quot;line&quot;, function(line) &#123;
+        if (line ===&#39;&#39;) &#123;
+            console.log(&#39;The input is empty, please input again:\n&#39;)
+        &#125; else &#123;
+            lines.push(line);
+            if (lines.length === 1) &#123;
+                obj.extensionsArr = line.split(&#39;,&#39;);
+                console.log(&#39;Please input the password(eg:1234aa):\n&#39;)
+            &#125; else if (lines.length === 2) &#123;
+                obj.password = line;
+                pass = line;
+                console.log(&#39;Please input the ip(eg:192.168.124.125):\n&#39;)
+            &#125; else if (lines.length === 3) &#123;
+                websocketUrl = &#39;ws://&#39; + line + &#39;:8089/ws&#39;;
+                obj.websocketUrl = websocketUrl;
+                obj.ip = line;
+                ip = line;
+                console.log(&#39;Starting register...\n&#39;);
+                // 开始注册事件
+                loopRegister(obj)
+            &#125;
+        &#125;
+    &#125;);
+
+    // close事件监听
+    rl.on(&quot;close&quot;, function()&#123;
+       // 结束程序
+        process.exit(0);
+    &#125;);
+&#125;
+</code></pre>
+<p>效果图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-51b0c98cdcf453f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="readline"></p>
+<blockquote>
+<p>注册事件中包含几个动作</p>
+</blockquote>
+<ol>
+<li><p>设置 httpHeader：浏览器与服务器 ajax 请求有固定的请求头信息，此处模拟浏览器的请求头信息</p>
+<pre><code>function setHttpHeader(username) &#123;
+    httpHeader = &#123;
+        Accept:&#39;application/json, text/javascript, */*; q=0.01&#39;,
+        &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;,
+        &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9,en;q=0.8,pt;q=0.7&#39;,
+        &#39;Cache-Control&#39;: &#39;no-cache&#39;,
+        Connection: &#39;keep-alive&#39;,
+        &#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded; charset=UTF-8&#39;,
+        Cookie: &#39;TRACKID=&#39;+trackid+&#39;; session-identify=sid121076289-1520217430; username=admin; user_id=0&#39;,
+        Host: ip +&#39;:8089&#39;,
+        Origin: &#39;http://&#39;+ip+&#39;:8089&#39;,
+        Pragma: &#39;no-cache&#39;,
+        Referer: &#39;http://&#39;+ip+&#39;:8089/gswave/&#39;,
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36 SE 2.X MetaSr 1.0&#39;,
+        &#39;X-Requested-With&#39;:&#39;XMLHttpRequest&#39;
+    &#125;
+    var accountData = &#123;
+        action:&#39;challenge&#39;,
+        user:username
+    &#125;
+    baseUrl = &#39;http://&#39;+ip+&#39;:8089/webrtccgi?&#39;;
+    getChanllenge(accountData, username) // 用户鉴权函数
+&#125;
+</code></pre>
+</li>
+<li><p>用户登录鉴权(本项目中与服务器交互需要使用，具体使用看服务器端设置)</p>
+<!--用户名账号密码鉴权-->
+
+<pre><code>function getChanllenge(accountData, username) &#123;
+  console.log(&#39;start getChangllenge&#39;)
+  var challenge = &#39;&#39;
+  //获取 challenge
+  superagent
+  .post(baseUrl)
+  .set(httpHeader)
+  .type(&#39;form&#39;)
+  .send(accountData)
+  .redirects(0)
+  .end(function(err, result) &#123;
+    if (typeof(result) == &#39;undefined&#39;) &#123;
+      console.error(&quot;get challenge is error, result is undefined&quot;);
+    &#125; else &#123;
+      var responce = result.body
+      if(responce &amp;&amp; responce.status === 0) &#123;
+      challenge = responce.response.challenge
+      getCookie(challenge, username)
+    &#125; else &#123;
+      console.error(&#39;get challenge is error, result.body.status is not 0&#39;)
+    &#125;
+    &#125;
+  &#125;);
+&#125;
+</code></pre>
+<!--cookie 鉴权-->
+
+<pre><code>function getCookie(challenge, username) &#123;
+  var md5key = tskMD5.MD5.hexdigest(challenge + pass) // MD5 加密用户登录密码
+  var subData=&#123;
+  token: md5key,
+  action: &#39;login&#39;,
+  user: username
+&#125;
+// 开始请求进行用户登录密码鉴权，类似 ajax 请求
+superagent
+.post(baseUrl)
+.set(httpHeader)
+.type(&#39;form&#39;)
+.send(subData)
+.redirects(0)
+.end(function(err, res) &#123;
+  if (typeof(res) == &#39;undefined&#39;) &#123;
+    console.log(&quot;get cookie is error, result is undefined&quot;);
+  &#125; else &#123;
+    var responce = res.body
+    if(responce &amp;&amp; responce.status === 0) &#123;
+      // 登录鉴权通过，开始执行 SIP 注册
+      var cookie = responce.response.cookie
+      // 注册函数
+      startSocket(username)
+    &#125; else &#123;
+      console.log(&#39;get cookie is error, result.body.status is not 0&#39;)
+    &#125;
+  &#125;
+  &#125;)
+&#125;
+</code></pre>
+</li>
+<li><p>与服务器建立 websocket 连接</p>
+<p>项目中信令交互信息均通过 websocket 发送</p>
+<pre><code>var ws = new WebSocket(websocketUrl, &quot;sip&quot;); # 注意建立的是 sip 类型的 websocket
+
+ws.on(&#39;open&#39;, function open() &#123;
+  console.log(&#39;ws open message1&#39; + message1)
+  readyState = WebSocket.OPEN
+  // 发送相关信息
+  ws.send(message);
+&#125;);
+
+ws.on(&#39;message&#39;, function incoming(data) &#123;
+  a++;
+  var dataArr = data.split(&#39;\r\n&#39;)
+  if (dataArr[0].indexOf(&#39;401&#39;) &gt; -1 &amp;&amp; a === 1) &#123;
+    // 发送注册信令函数（其中发送信令信息，均参考浏览器的发送头进行拼接）
+    startRegister(ws, dataArr, username)
+  &#125; else if (dataArr[0].indexOf(&#39;200&#39;)) &#123;
+    // ws.close()
+    // console.log(&#39;register sucess...&#39;)
+  &#125; else &#123;
+  &#125;
+&#125;);
+</code></pre>
+</li>
+</ol>
+<p>项目效果图</p>
+<p>表格第一列 status 为 Idle, 验证注册分机成功，注册 IP 为本地电脑 IP</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-f7a9892131857713.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="register result"></p>
+<h3 id="注意项"><a href="#注意项" class="headerlink" title="注意项"></a>注意项</h3><ol>
+<li>本项目使用自主拼接的接口和信令信息均只对与之对应的接口，信令环境生效。</li>
+<li>建立 websocket 必须指定 sip 类型，否则信息交互不成功</li>
+<li>项目中需要 websocket 保活（ping&#x2F;pong）机制,防止长时间没有信息交互会自动关闭 websocket 连接</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2019/06/21/NodeJs%20%E6%A8%A1%E4%BB%BFSIP%E8%AF%9D%E6%9C%BA%E6%B3%A8%E5%86%8C/" data-id="cl39r6mbm0001k5y1gi8hem5w" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Ruby on Rails 环境搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/04/Ruby%20on%20Rails%20%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="article-date">
+  <time datetime="2017-05-04T09:49:08.000Z" itemprop="datePublished">2017-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/04/Ruby%20on%20Rails%20%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">Ruby on Rails 环境搭建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="安装准备"><a href="#安装准备" class="headerlink" title="安装准备"></a>安装准备</h3><h4 id="安装-git、rbenv"><a href="#安装-git、rbenv" class="headerlink" title="安装 git、rbenv"></a>安装 git、rbenv</h4><p>首先安装 git，已安装跳过此步</p>
+<pre><code>yum install git
+</code></pre>
+<p>安装 rbenv 到~&#x2F;.rbenv 目录</p>
+<pre><code>git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
+</code></pre>
+<h4 id="安装-rbenv-的插件"><a href="#安装-rbenv-的插件" class="headerlink" title="安装 rbenv 的插件"></a>安装 rbenv 的插件</h4><h5 id="1-用来编译安装-ruby"><a href="#1-用来编译安装-ruby" class="headerlink" title="1.用来编译安装 ruby"></a>1.用来编译安装 ruby</h5><pre><code>git clone git://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+</code></pre>
+<h5 id="2-用来管理-gemset-可选-因为有-bundler-也没什么必要"><a href="#2-用来管理-gemset-可选-因为有-bundler-也没什么必要" class="headerlink" title="2.用来管理 gemset, 可选, 因为有 bundler 也没什么必要"></a>2.用来管理 gemset, 可选, 因为有 bundler 也没什么必要</h5><pre><code>git clone git://github.com/jamis/rbenv-gemset.git  ~/.rbenv/plugins/rbenv-gemset
+</code></pre>
+<h5 id="3-通过-gem-命令安装完-gem-后无需手动输入-rbenv-rehash-命令-推荐"><a href="#3-通过-gem-命令安装完-gem-后无需手动输入-rbenv-rehash-命令-推荐" class="headerlink" title="3.通过 gem 命令安装完 gem 后无需手动输入 rbenv rehash 命令, 推荐"></a>3.通过 gem 命令安装完 gem 后无需手动输入 rbenv rehash 命令, 推荐</h5><pre><code>git clone git://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash
+</code></pre>
+<h5 id="4-通过-rbenv-update-命令来更新-rbenv-以及所有插件-推荐"><a href="#4-通过-rbenv-update-命令来更新-rbenv-以及所有插件-推荐" class="headerlink" title="4.通过 rbenv update 命令来更新 rbenv 以及所有插件, 推荐"></a>4.通过 rbenv update 命令来更新 rbenv 以及所有插件, 推荐</h5><pre><code>git clone git://github.com/rkh/rbenv-update.git ~/.rbenv/plugins/rbenv-update
+</code></pre>
+<h5 id="5-使用-Ruby-China-的镜像安装-Ruby-国内用户推荐"><a href="#5-使用-Ruby-China-的镜像安装-Ruby-国内用户推荐" class="headerlink" title="5.使用 Ruby China 的镜像安装 Ruby, 国内用户推荐"></a>5.使用 Ruby China 的镜像安装 Ruby, 国内用户推荐</h5><pre><code>git clone git://github.com/AndorChen/rbenv-china-mirror.git ~/.rbenv/plugins/rbenv-china-mirror
+</code></pre>
+<p>然后需要将下面两句代码放在 bash 的配置文件中：</p>
+<pre><code>export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;
+eval &quot;$(rbenv init -)&quot;
+</code></pre>
+<p>位置是在~&#x2F;.bashrc 中<br>修改完成后，执行下面的命令使其生效</p>
+<pre><code>source ~/.bashrc
+</code></pre>
+<h2 id="安装-ruby"><a href="#安装-ruby" class="headerlink" title="安装 ruby"></a>安装 ruby</h2><pre><code>rbenv install --list  # 列出所有 ruby 版本
+rbenv install 2.3.3   #安装2.3.3版本Ruby
+</code></pre>
+<p>设置使用的 ruby 版本</p>
+<pre><code>rbenv global 2.3.3      # 默认使用2.3.3，此步骤不能省略
+ruby –v                 #查看安装的Ruby版本
+</code></pre>
+<h2 id="安装-rails"><a href="#安装-rails" class="headerlink" title="安装 rails"></a>安装 rails</h2><p>设置 ruby 版本后，安装 rails（指定 rails 版本）：</p>
+<h4 id="1-在当前的-ruby-版本中安装-rails"><a href="#1-在当前的-ruby-版本中安装-rails" class="headerlink" title="1.在当前的 ruby 版本中安装 rails"></a>1.在当前的 ruby 版本中安装 rails</h4><pre><code>gem install rails -v 4.1.4   #指定版本
+</code></pre>
+<p>####2.查看 rails 安装版本<br>rails –v</p>
+<h4 id="3-修改-bundle-的源地址"><a href="#3-修改-bundle-的源地址" class="headerlink" title="3.修改 bundle 的源地址"></a>3.修改 bundle 的源地址</h4><pre><code>bundle config mirror.https://rubygems.org https://gems.ruby-china.org
+</code></pre>
+<h2 id="执行-bundle-install"><a href="#执行-bundle-install" class="headerlink" title="执行 bundle install"></a>执行 bundle install</h2><p>在项目根目录执行 bundle install</p>
+<pre><code>bundle install
+</code></pre>
+<p>####配置 RubyGems 镜像<br>gem 是 ruby 管理依赖包的工具，而 RubyGems 的默认地址因为万恶的墙的关系很难访问到，因此需要配置 RubyGems 镜像。这里使用的是 Ruby China 的镜像地址<br>命令行输入</p>
+<pre><code>gem sources --add http://gems.ruby-china.org/ --remove https://rubygems.org/
+# 注意这里是https还是http
+</code></pre>
+<p>可以通过下面这个命令查看设置的结果是不是<a href="https://gems.ruby-china.org：">https://gems.ruby-china.org：</a><br>gem sources -l<br>##AFQ</p>
+<h4 id="1-若安装-Ruby-时遇到如下问题"><a href="#1-若安装-Ruby-时遇到如下问题" class="headerlink" title="1.若安装 Ruby 时遇到如下问题"></a>1.若安装 Ruby 时遇到如下问题</h4><p><img src="http://upload-images.jianshu.io/upload_images/4946810-c899d3f18371cf57.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4946810-55bb7e942137d867.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>yum install -y readline-devel #安装依赖库<br>yum install –y openssl-devel readline-devel #安装依赖库<br>rbenv install 2.3.3 # 重新安装 Ruby，再执行前面第 2 步余下操作</p>
+<h4 id="2-执行-bundle-install-时遇到如下问题"><a href="#2-执行-bundle-install-时遇到如下问题" class="headerlink" title="2.执行 bundle install 时遇到如下问题"></a>2.执行 bundle install 时遇到如下问题</h4><p><img src="http://upload-images.jianshu.io/upload_images/4946810-fcf53db96c8b21af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<pre><code># 安装所有依赖包
+</code></pre>
+<p>yum -y install gcc<br>yum install flex autoconf zlib curl zlib-devel curl-devel bzip2 bzip2-devel ncurses-devel libjpeg-devel libpng-devel libtiff-devel freetype-devel pam-devel gcc+ gcc-c++ libxml2 libxml2-devel libxslt libxslt-devel # 再执行 bundle install<br>bundle install</p>
+<p>####3.若安装 rails 时 openssl 问题还没有解决</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4946810-5884b516b6775c2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>建议使用另外一种方法：<br>使用 rvm 安装。先安装 OpenSSL，再重新安装 Ruby 以及 rails<br>(rvm 自行安装，详见博客<a target="_blank" rel="noopener" href="http://ruby-china.org/wiki/install_ruby_guide">http://ruby-china.org/wiki/install_ruby_guide</a>)<br>rvm pkg install openssl<br>rvm reinstall ruby-2.2.2 –with-openssl-dir&#x3D;$rvm_path&#x2F;usr</p>
+<h4 id="4-若执行-bundle-install-提示-gem-install-pg-v-‘0-18-2’-安装，安装失败时，建议使用-brew-工具进行安装"><a href="#4-若执行-bundle-install-提示-gem-install-pg-v-‘0-18-2’-安装，安装失败时，建议使用-brew-工具进行安装" class="headerlink" title="4.若执行 bundle install 提示 gem install pg -v ‘0.18.2’ 安装，安装失败时，建议使用 brew 工具进行安装"></a>4.若执行 bundle install 提示 gem install pg -v ‘0.18.2’ 安装，安装失败时，建议使用 brew 工具进行安装</h4><p>安装 brew 参考地址：<a target="_blank" rel="noopener" href="http://blog.csdn.net/jiejinquanil/article/details/49225925">http://blog.csdn.net/jiejinquanil/article/details/49225925</a><br>ruby -e “$(curl -fsSL <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)%E2%80%9D">https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)”</a></p>
+<p>安装好 brew 工具后安装 pg</p>
+<p>brew install postgresql<br> gem install pg – –with-pg-config&#x3D;&#x2F;Applications&#x2F;Postgres.app&#x2F;Contents&#x2F;Versions&#x2F;9.4&#x2F;bin&#x2F;pg_config</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2017/05/04/Ruby%20on%20Rails%20%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" data-id="cl39r6mbo0002k5y17m3taohb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-cookie 、localStorage 、sessionStorage 以及H5缓存" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/08/cookie%20%E3%80%81localStorage%20%E3%80%81sessionStorage%20%E4%BB%A5%E5%8F%8AH5%E7%BC%93%E5%AD%98/" class="article-date">
@@ -246,15 +579,15 @@ FALLBACK:
           </li>
         
           <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8Bless%20%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E7%BC%96%E8%AF%91/">自定义主题色实现之 less 浏览器端编译</a>
+          </li>
+        
+          <li>
             <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/">什么是 localForage</a>
           </li>
         
           <li>
-            <a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86%E4%B9%8Baxios%20Cancel%20Token%20/">请求竞态处理</a>
-          </li>
-        
-          <li>
-            <a href="/2020/12/03/Module%20%E5%8A%A0%E8%BD%BD%E5%8E%9F%E7%90%86/">Module 加载原理</a>
+            <a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">私有 npm 仓库使用手册</a>
           </li>
         
       </ul>
