@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>前端大文件上传技术方案 | 吴文君的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前端大文件上传技术方案 20220109整体思路 前端使用 Blob 的 slice 方法 来对某个大文件进行切割，切成多个切片。  通过 Http 可并发性，把一个大文件 变成 同时上传多个小的文件切片。  并发的传输 传到服务器可能发生变化，所以要给切片记录顺序。  服务端接收切片，那什么时候合并切片、如何合并切片（后端工作，前端如果是 node 使用 nodejs 的 读写流将所有的切片的流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端大文件上传技术方案">
+<meta property="og:url" content="http://wendyjw.github.io/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:site_name" content="吴文君的博客">
+<meta property="og:description" content="前端大文件上传技术方案 20220109整体思路 前端使用 Blob 的 slice 方法 来对某个大文件进行切割，切成多个切片。  通过 Http 可并发性，把一个大文件 变成 同时上传多个小的文件切片。  并发的传输 传到服务器可能发生变化，所以要给切片记录顺序。  服务端接收切片，那什么时候合并切片、如何合并切片（后端工作，前端如果是 node 使用 nodejs 的 读写流将所有的切片的流">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-12-03T02:55:52.000Z">
+<meta property="article:modified_time" content="2022-05-18T06:12:33.490Z">
+<meta property="article:author" content="吴文君">
+<meta property="article:tag" content="前端, JavaScript">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="吴文君的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">吴文君的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wendyjw.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-前端大文件上传技术方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" class="article-date">
+  <time datetime="2021-12-03T02:55:52.000Z" itemprop="datePublished">2021-12-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      前端大文件上传技术方案
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="前端大文件上传技术方案-20220109"><a href="#前端大文件上传技术方案-20220109" class="headerlink" title="前端大文件上传技术方案 20220109"></a>前端大文件上传技术方案 20220109</h4><h4 id="整体思路"><a href="#整体思路" class="headerlink" title="整体思路"></a>整体思路</h4><ul>
+<li><p>前端使用 Blob 的 slice 方法 来对某个大文件进行切割，切成多个切片。</p>
+</li>
+<li><p>通过 Http 可并发性，把一个大文件 变成 同时上传多个小的文件切片。</p>
+</li>
+<li><p>并发的传输 传到服务器可能发生变化，所以要给切片记录顺序。</p>
+</li>
+<li><p>服务端接收切片，那什么时候合并切片、如何合并切片（后端工作，前端如果是 node 使用 nodejs 的 读写流将所有的切片的流写到最终文件的流里面。）？</p>
+</li>
+</ul>
+<p>什么时候合并切片需要前端配合，请求信息里面要告诉后端有多少切片。</p>
+<p><strong>方案一 是后端通过接收到数量阈值后、自己自动合并</strong></p>
+<p><strong>方案二 前端发一个额外的请求 主动通知合并</strong></p>
+<h4 id="上传切片"><a href="#上传切片" class="headerlink" title="上传切片"></a>上传切片</h4><ul>
+<li>对文件进行切片</li>
+<li>将切片传输给服务端</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成文件切片</span></span><br><span class="line"><span class="title function_">createFileChunk</span>(<span class="params">file, size = SIZE</span>) &#123;</span><br><span class="line">     <span class="keyword">const</span> fileChunkList = [];</span><br><span class="line">      <span class="keyword">let</span> cur = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">while</span> (cur &lt; file.<span class="property">size</span>) &#123;</span><br><span class="line">        fileChunkList.<span class="title function_">push</span>(&#123; <span class="attr">file</span>: file.<span class="title function_">slice</span>(cur, cur + size) &#125;);</span><br><span class="line">        cur += size;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> fileChunkList;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">//</span></span><br><span class="line"><span class="keyword">const</span> fileList = chunks.<span class="title function_">map</span>(<span class="function">(<span class="params">&#123; file &#125;, index</span>) =&gt;</span> &#123;</span><br><span class="line">   <span class="attr">chunk</span>: file,</span><br><span class="line">   <span class="attr">hash</span>: file.<span class="property">name</span> + <span class="string">&#x27;-&#x27;</span> + index,</span><br><span class="line"> &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组装数据 开始准备上传</span></span><br><span class="line"><span class="keyword">const</span> resultList = fileList.<span class="title function_">map</span>(<span class="function"><span class="params">c</span> =&gt;</span> &#123;</span><br><span class="line">   <span class="keyword">const</span> &#123; hash &#125; = c;</span><br><span class="line">   <span class="keyword">let</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line"></span><br><span class="line">   formData.<span class="title function_">append</span>(<span class="string">&#x27;chunk&#x27;</span>, chunk); <span class="comment">// 切片文件</span></span><br><span class="line">   formData.<span class="title function_">append</span>(<span class="string">&#x27;hash&#x27;</span>, hash); <span class="comment">// 上传 合并需要的参数</span></span><br><span class="line">   formData.<span class="title function_">append</span>(<span class="string">&#x27;filename&#x27;</span>, files.<span class="property">name</span>); <span class="comment">// 文件名称</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> &#123; formData &#125;;</span><br><span class="line"> &#125;).<span class="title function_">map</span>(<span class="function">(<span class="params">&#123; formData &#125;</span>) =&gt;</span> <span class="title function_">upload</span>(formData));</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 并发上传</span></span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">all</span>(resultList).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">const</span> data = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; <span class="attr">filename</span>: files.<span class="property">name</span> &#125;);</span><br><span class="line">     <span class="title function_">mergeRequest</span>(data);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>调用 <code>createFileChunk</code> 将文件切片，切片数量通过文件大小控制，这里设置 10MB，也就是说 100 MB 的文件会被分成 10 个切片</p>
+<p>createFileChunk 内使用 while 循环和 slice 方法将切片放入 <code>fileChunkList</code> 数组中返回</p>
+<p>在生成文件切片时，需要给每个切片一个标识作为 hash，这里暂时使用<code>文件名 + 下标</code>，这样后端可以知道当前切片是第几个切片，用于之后的合并切片</p>
+<p>随后调用 <code>uploadChunks</code> 上传所有的文件切片，将文件切片，切片 hash，以及文件名放入 FormData 中，再调用上一步的 <code>request</code> 函数返回一个 proimise，最后调用 Promise.all 并发上传所有的切片。</p>
+<h4 id="HTTP-参数"><a href="#HTTP-参数" class="headerlink" title="HTTP 参数"></a>HTTP 参数</h4><p>这一块的内容封装的比较好，主要是 rfc 标准、Buffer、流以及 内存 CPU DMAC 硬盘的读写 对文件的处理。以后单独抽时间来简单讨论。</p>
+<p>请求报文这里，可以简单粗暴的理解为，只要是文件上传，<code>Content-Type</code> 必须为 <code>multipart/form-data</code>。</p>
+<p>看一下 <code>Content-Type</code> 字段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ContentType: multipart/form-data; boundary=----WebKitFormBoundaryGBVZwk1PFwCSPfCh</span><br></pre></td></tr></table></figure>
+
+<p><code>boundary=----WebKitFormBoundaryGBVZwk1PFwCSPfCh</code> 代表分隔符，用来分隔多个表单项。我们这里上传数据用的是 <code>FormData</code>，其本质还是构造了一个表单数据。每次 <code>formData.apend(key, value)</code>，就是构建一个表单项的数据结构，每个表单项都用<code>boundary</code>分割。具体字段 需要自己去下面查看</p>
+<p>**<a target="_blank" rel="noopener" href="https://www.ietf.org/rfc/rfc1867.txt">rfc 1867 文档的定义</a>**。</p>
+<p>简单案例演示：xxxx</p>
+<h4 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h4><p>后端合并切片，主要就是接收 请求参数，读写流的过程。</p>
+<p>**这边使用 Node 的 multiparty 包处理 FormData。 **</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> fse = <span class="built_in">require</span>(<span class="string">&quot;fs-extra&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> multiparty = <span class="built_in">require</span>(<span class="string">&quot;multiparty&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.<span class="title function_">createServer</span>();</span><br><span class="line">+ <span class="keyword">const</span> <span class="variable constant_">UPLOAD_DIR</span> = path.<span class="title function_">resolve</span>(__dirname, <span class="string">&quot;..&quot;</span>, <span class="string">&quot;target&quot;</span>); <span class="comment">// 大文件存储目录</span></span><br><span class="line"></span><br><span class="line">server.<span class="title function_">on</span>(<span class="string">&quot;request&quot;</span>, <span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  res.<span class="title function_">setHeader</span>(<span class="string">&quot;Access-Control-Allow-Origin&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line">  res.<span class="title function_">setHeader</span>(<span class="string">&quot;Access-Control-Allow-Headers&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (req.<span class="property">method</span> === <span class="string">&quot;OPTIONS&quot;</span>) &#123;</span><br><span class="line">    res.<span class="property">status</span> = <span class="number">200</span>;</span><br><span class="line">    res.<span class="title function_">end</span>();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> multipart = <span class="keyword">new</span> multiparty.<span class="title class_">Form</span>();</span><br><span class="line"></span><br><span class="line">  multipart.<span class="title function_">parse</span>(req, <span class="keyword">async</span> (err, fields, files) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> [chunk] = files.<span class="property">chunk</span>;</span><br><span class="line">    <span class="keyword">const</span> [hash] = fields.<span class="property">hash</span>;</span><br><span class="line">    <span class="keyword">const</span> [filename] = fields.<span class="property">filename</span>;</span><br><span class="line">    <span class="keyword">const</span> chunkDir = path.<span class="title function_">resolve</span>(<span class="variable constant_">UPLOAD_DIR</span>, filename);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 切片目录不存在，创建切片目录</span></span><br><span class="line">    <span class="keyword">if</span> (!fse.<span class="title function_">existsSync</span>(chunkDir)) &#123;</span><br><span class="line">      <span class="keyword">await</span> fse.<span class="title function_">mkdirs</span>(chunkDir);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// fs-extra 专用方法，类似 fs.rename 并且跨平台</span></span><br><span class="line">      <span class="comment">// fs-extra 的 rename 方法 windows 平台会有权限问题</span></span><br><span class="line">      <span class="comment">// https://github.com/meteor/meteor/issues/7852#issuecomment-255767835</span></span><br><span class="line">      <span class="keyword">await</span> fse.<span class="title function_">move</span>(chunk.<span class="property">path</span>, <span class="string">`<span class="subst">$&#123;chunkDir&#125;</span>/<span class="subst">$&#123;hash&#125;</span>`</span>);</span><br><span class="line">    res.<span class="title function_">end</span>(<span class="string">&quot;received file chunk&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>查看 multiparty 处理后的 chunk 对象，path 是存储临时文件的路径，size 是临时文件大小，在 multiparty 文档中提到可以使用 fs.rename 移动临时文件，即移动文件切片, 在接受文件切片时，需要先创建存储切片的文件夹，由于前端在发送每个切片时额外携带了唯一值 hash，所以以 hash 作为文件名，将切片从临时路径移动切片文件夹中</p>
+<h4 id="合并-1"><a href="#合并-1" class="headerlink" title="合并"></a>合并</h4><p>由于前端在发送合并请求时会携带文件名，服务端根据文件名可以找到上一步创建的切片文件夹接着使用 fs.createWriteStream 创建一个可写流，可写流文件名就是<strong>切片文件夹名 + 后缀名</strong>组合而成 随后遍历整个切片文件夹，将切片通过 fs.createReadStream 创建可读流，传输合并到目标文件中，值得注意的是每次可读流都会传输到可写流的指定位置，这是通过 createWriteStream 的第二个参数 start&#x2F;end 控制的，目的是能够并发合并多个可读流到可写流中，这样即使流的顺序不同也能传输到正确的位置，所以这里还需要让前端在请求的时候多提供一个 size 参数。</p>
+<h1 id="断点续传"><a href="#断点续传" class="headerlink" title="断点续传"></a>断点续传</h1><p>断点续传的原理在于前端&#x2F;服务端需要<code>记住</code>已上传的切片，这样下次上传就可以跳过之前已上传的部分，有两种方案实现记忆的功能</p>
+<ul>
+<li>前端使用 localStorage 记录已上传的切片 hash</li>
+<li>服务端保存已上传的切片 hash，前端每次上传前向服务端获取已上传的切片</li>
+</ul>
+<h2 id="文件秒传"><a href="#文件秒传" class="headerlink" title="文件秒传"></a>文件秒传</h2><p>所谓的文件秒传，即在服务端已经存在了上传的资源，所以当用户<code>再次上传</code>时会直接提示上传成功</p>
+<p>文件秒传需要依赖上一步生成的 hash，即在<code>上传前</code>，先计算出文件 hash，并把 hash 发送给服务端进行验证，由于 hash 的唯一性，所以一旦服务端能找到 hash 相同的文件，则直接返回上传成功的信息即可。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>大文件上传的基本思路大致是这样，不同的业务场景下 对 hash 的生成、切片的存储记录方式有所差别。网上也有一些比较好的案例。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" data-id="cl3b6trb10000lay12unhe1dy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          私有 npm 仓库使用手册
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86%E4%B9%8Baxios%20Cancel%20Token%20/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">请求竞态处理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/">浅谈字符串长度</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">自定义主题色实现之 CSS Variable</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8Bless%20%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E7%BC%96%E8%AF%91/">自定义主题色实现之 less 浏览器端编译</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/">什么是 localForage</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">私有 npm 仓库使用手册</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 吴文君<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
