@@ -1,0 +1,11 @@
+# Don't check auto-generated stuff into git
+build
+node_modules
+
+# Cruft
+npm-debug.log
+.idea
+.vscode
+.scannerwork
+.history
+
