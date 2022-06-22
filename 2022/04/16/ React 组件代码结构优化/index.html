@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>React 组件代码结构优化 | 吴文君的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="参考：https:&#x2F;&#x2F;andreipfeiffer.dev&#x2F;blog&#x2F;2021&#x2F;react-components-anatomy译文：https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;FPupefVg4zphOfIERZOvHQ  1. 导入依赖项 外部依赖：第三方依赖，从 node_modules 中导入 内部依赖：位于组件文件夹之外的可重用组件或模块。可以将这一类组件进一步分离：UI 组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React 组件代码结构优化">
+<meta property="og:url" content="http://wendyjw.github.io/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="吴文君的博客">
+<meta property="og:description" content="参考：https:&#x2F;&#x2F;andreipfeiffer.dev&#x2F;blog&#x2F;2021&#x2F;react-components-anatomy译文：https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;FPupefVg4zphOfIERZOvHQ  1. 导入依赖项 外部依赖：第三方依赖，从 node_modules 中导入 内部依赖：位于组件文件夹之外的可重用组件或模块。可以将这一类组件进一步分离：UI 组">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-04-16T02:55:52.000Z">
+<meta property="article:modified_time" content="2022-05-24T09:35:53.570Z">
+<meta property="article:author" content="吴文君">
+<meta property="article:tag" content="前端, JavaScript">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="吴文君的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">吴文君的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wendyjw.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post- React 组件代码结构优化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/" class="article-date">
+  <time datetime="2022-04-16T02:55:52.000Z" itemprop="datePublished">2022-04-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React 组件代码结构优化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://andreipfeiffer.dev/blog/2021/react-components-anatomy">https://andreipfeiffer.dev/blog/2021/react-components-anatomy</a><br>译文：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/FPupefVg4zphOfIERZOvHQ">https://mp.weixin.qq.com/s/FPupefVg4zphOfIERZOvHQ</a></p>
+</blockquote>
+<h4 id="1-导入依赖项"><a href="#1-导入依赖项" class="headerlink" title="1. 导入依赖项"></a>1. 导入依赖项</h4><ol>
+<li>外部依赖：第三方依赖，从 <code>node_modules</code> 中导入</li>
+<li>内部依赖：位于组件文件夹之外的可重用组件或模块。可以将这一类组件进一步分离：UI 组件，数据相关的导入，<code>services</code>等。</li>
+<li>本地依赖：与组件位于同一文件夹中的依赖项或子组件，路径以 <code>./</code>开头。</li>
+<li>样式：样式文件</li>
+</ol>
+<p>例如：</p>
+<pre><code>    // 外部依赖
+    import React from &quot;react&quot;;
+    import &#123; useRouter &#125; from &quot;next/router&quot;;
+
+    // 内部依赖
+    import &#123; Button &#125; from &quot;../src/components/button&quot;;
+
+    // 本地依赖
+    import &#123; Tag &#125; from &quot;./tag&quot;;
+    import &#123; Subscribe &#125; from &quot;./subscribe&quot;;
+
+    // 样式
+    import styles from &quot;./article.module.scss&quot;;
+</code></pre>
+<h4 id="2-静态定义"><a href="#2-静态定义" class="headerlink" title="2.静态定义"></a>2.静态定义</h4><ol>
+<li>常量定义</li>
+</ol>
+<p>组件中常量值，应该放在组件之外，文件的顶部，依赖项的下方。如果放在组件中会在每次重新渲染时重新创建。</p>
+<p>对于更复杂的静态数据结构，可以将其提取到一个单独的文件中，以保持组件代码整洁。</p>
+<ol start="2">
+<li>类型定义</li>
+</ol>
+<p>例如使用 TypeScript 声明的组件 <code>props</code> 的类型：</p>
+<pre><code>  interface Props &#123;
+    id: number;
+    name: string;
+    title: string;
+    meta: Metadata;
+  &#125;
+</code></pre>
+<h4 id="3-组件定义"><a href="#3-组件定义" class="headerlink" title="3. 组件定义"></a>3. 组件定义</h4><p>定义函数方式：函数声明和箭头函数，推荐使用函数声明，官方文档示例中 置灰在必须使用 <code>forwardRef</code>时使用箭头函数。</p>
+<pre><code>  const Article = React.forwardRef&lt;HTMLArticleElement, Props&gt;(
+    (props, ref) =&gt; &#123;
+      /**/
+    &#125;
+  );
+</code></pre>
+<h4 id="4-变量声明"><a href="#4-变量声明" class="headerlink" title="4. 变量声明"></a>4. 变量声明</h4><ul>
+<li>Hooks: 框架内置 Hooks, 自定义 hook, 例如 <code>useState</code>,<code>useReducer</code>,<code>useRef</code>,<code>useCallback</code>或<code>useMemo</code></li>
+<li>解构数据：通常来自<code>props</code>, 数据<code>store</code>或者组件的 <code>state</code></li>
+<li>在整个组件中使用的由函数计算得出的已处理数据</li>
+</ul>
+<h4 id="5-Effects"><a href="#5-Effects" class="headerlink" title="5. Effects"></a>5. Effects</h4><p>Effects 通常写在变量声明之后</p>
+<h4 id="6-渲染内容"><a href="#6-渲染内容" class="headerlink" title="6. 渲染内容"></a>6. 渲染内容</h4><p>组件的核心就是它的内容，React 组件的内容使用 JSX 语法定义并在浏览器中呈现为 HTML。<br>所以，推荐将函数组件的 return 语句尽可能靠近文件的顶部。其他一切都只是细节，它们应该放在文件较下的位置。</p>
+<pre><code>function Article(props: Props) &#123;
+  // 变量声明
+  // effects
+
+  return /* content */;
+
+  // ✅ 自定义的函数建议放在 return 部分的后面
+  function getInitials() &#123;
+    /*...*/
+  &#125;
+&#125;
+
+export default Article;
+</code></pre>
+<p>对于常规函数，肯定是要将 return 放在最后的。然而，React 组件并不是简单的函数，它们通常包含具有各种用途的嵌套函数，例如事件处理程序。</p>
+<p>最后的 return 语句以及前面的一堆其他函数，实际上阻碍了代码的阅读，使得很难找到组件渲染的内容：</p>
+<ul>
+<li>很难搜索该 return 语句，因为可能有来自其他嵌套函数的多个 return 语句；</li>
+<li>在文件末尾滚动查找 return 语句并不能很容易找到它，因为返回的 JSX 块可能非常大。</li>
+</ul>
+<h4 id="7-部分渲染"><a href="#7-部分渲染" class="headerlink" title="7.部分渲染"></a>7.部分渲染</h4><p>在处理大型 JSX 代码时，将某些内容块提取为单独的函数来渲染组件的一部分是很有帮助的，类似于将大型函数分解为多个较小的函数。</p>
+<pre><code>  function Article(props: Props) &#123;
+    // ...
+
+    return (
+      &lt;article&gt;
+        &lt;h1&gt;&#123;props.title&#125;&lt;/h1&gt;
+        &#123;renderBody()&#125;
+        &#123;renderFooter()&#125;
+      &lt;/article&gt;
+    );
+
+    function renderBody() &#123;
+      return /* article body JSX */;
+    &#125;
+
+    function renderFooter() &#123;
+      return /* article footer JSX */;
+    &#125;
+  &#125;
+
+  export default Article;
+</code></pre>
+<ul>
+<li>可以给这些拆分出来的函数前面加上 render 前缀，以将它们与其他不返回 JSX 的函数区分开；</li>
+<li>可以将这些函数放在 return 语句之后，以便将与内容相关的所有内容组合在一起；</li>
+<li>无需向这些函数传递任何参数，因为它们可以访问 props 和组件定义的所有变量；</li>
+</ul>
+<h4 id="8-局部函数"><a href="#8-局部函数" class="headerlink" title="8. 局部函数"></a>8. 局部函数</h4><ul>
+<li>通常会使用函数声明而不是函数表达式来声明函数，因为函数是存在提升的，这允许我们在使用它们之后定义它们。这样就可以将它们放在组件函数的末尾，return 语句之后；</li>
+<li>如果一个函数中嵌套了另外一个函数，那么建议将调用者放在被调用者之前；</li>
+<li>将这些函数按使用顺序排列。</li>
+</ul>
+<h4 id="9-纯函数"><a href="#9-纯函数" class="headerlink" title="9. 纯函数"></a>9. 纯函数</h4><p>将它们放在组件文件的底部，在 React 组件之外。</p>
+<p>纯函数没有依赖项，如 props、状态或局部变量，它们接收所有依赖项作为参数。 这意味着可以将它们放在任何地方。</p>
+<p>但是，将它们放在组件之外还有其他原因：</p>
+<ul>
+<li><p>它向任何阅读代码的开发人员发出信号，表示它们是纯粹的；</p>
+</li>
+<li><p>它们很容易测试，只需要将要测试的函数导出并导入到测试文件中即可；</p>
+</li>
+<li><p>如果需要提取和重用它们，可以很容易将它们很移动到其他文件。</p>
+<pre><code>function Article(props: Props) &#123;
+// ...
+&#125;
+
+// ✅ 纯函数应该放在组件之外
+function getInitials(str: string) &#123;&#125;
+
+export default Article;
+</code></pre>
+</li>
+</ul>
+<h3 id="完整示例"><a href="#完整示例" class="headerlink" title="完整示例"></a>完整示例</h3><pre><code>      // 1️⃣ 导入依赖项
+      import React from &quot;react&quot;;
+      import &#123; Tag &#125; from &quot;./tag&quot;;
+      import styles from &quot;./article.module.scss&quot;;
+
+      // 2️⃣ 静态定义
+      const MAX_READING_TIME = 10;
+
+      interface Props &#123;
+        id: number;
+        name: string;
+        title: string;
+        meta: Metadata;
+      &#125;
+
+      // 3️⃣ 组件定义
+      function Article(props: Props) &#123;
+
+        // 4️⃣ 变量定义
+        const router = useRouter();
+        const theme = useTheme();
+
+        const &#123; id, title, content, onSubscribe &#125; = props;
+        const &#123; image, author, date &#125; = meta;
+
+        const [email, setEmail] = React.useState(&quot;&quot;);
+        const [showMenu, toggleMenu] = React.useState(false);
+
+        const summary = React.useMemo(() =&gt; getSummary(content), [content]);
+
+        const initials = getInitials(author);
+        const formattedDate = getDate(date);
+
+        // 5️⃣ effects
+        React.useEffect(() =&gt; &#123;
+          // ...
+        &#125;, []);
+
+        // 6️⃣ 渲染内容
+        return (
+          &lt;article&gt;
+            &lt;h1&gt;&#123;title&#125;&lt;/h1&gt;
+
+            &#123;renderBody()&#125;
+
+            &lt;form onSubmit=&#123;subscribe&#125;&gt;
+              &#123;renderSubscribe()&#125;
+            &lt;/form&gt;
+          &lt;/article&gt;
+        );
+
+        // 7️⃣ 部分渲染
+        function renderBody() &#123; /*...*/ &#125;
+
+        function renderSubscribe() &#123; /*...*/ &#125;
+
+        // 8️⃣ 局部函数
+        function subscribe() &#123; /*...*/ &#125;
+      &#125;
+
+      // 9️⃣ 纯函数
+      function getInitials(str: string) &#123; /*...*/ &#125;
+
+      export default Article;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/" data-id="cl4p03gwg0000zay1f7rh00n6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          浅谈字符串长度
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">自定义主题色实现之 CSS Variable</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/05/13/CSS%E5%AE%9E%E7%8E%B0%E7%BB%98%E5%88%B6%E5%B0%8F%E5%9B%BE%E6%A0%87/">绘制三角形</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/">浅谈字符串长度</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/">React 组件代码结构优化</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">自定义主题色实现之 CSS Variable</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8Bless%20%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E7%BC%96%E8%AF%91/">自定义主题色实现之 less 浏览器端编译</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 吴文君<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

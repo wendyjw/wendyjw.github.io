@@ -65,6 +65,206 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-元素垂直水平居中" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/06/%E5%85%83%E7%B4%A0%E5%9E%82%E7%9B%B4%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/" class="article-date">
+  <time datetime="2020-01-06T02:55:52.000Z" itemprop="datePublished">2020-01-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/06/%E5%85%83%E7%B4%A0%E5%9E%82%E7%9B%B4%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/">元素垂直水平居中</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h4><pre><code>&lt;div className=&quot;parent&quot;&gt;
+    &lt;div className=&quot;child&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h4 id="Css"><a href="#Css" class="headerlink" title="Css"></a>Css</h4><p><strong>1. 元素具有固定的宽高</strong></p>
+<pre><code>1.1 使用绝对定位和负边距
+
+    .parent &#123;
+        position: relative;
+
+        .child &#123;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -50px;
+            margin-top: -50px;
+        &#125;
+    &#125;
+
+1.2 绝对定位和margin： 无需知道元素的宽高
+
+    .parent &#123;
+        position: relative;
+
+        .child &#123;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        &#125;
+    &#125;
+</code></pre>
+<p><strong>2. 未知高度和宽度的元素</strong></p>
+<p>2.1 元素为 inline 或者 inline-block 属性</p>
+<pre><code>    .parent &#123;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        .child &#123;
+            display: inline-block;
+        &#125;
+    &#125;
+</code></pre>
+<p>2.2 Css 3 的 transform 属性</p>
+<p>translate：设置元素在 X 轴，Y 轴上正方向的平移变换</p>
+<pre><code>.parent &#123;
+    position: relative;
+    .child &#123;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); // 相对自己往左往上平移50%的距离
+   &#125;
+&#125;
+</code></pre>
+<p>2.3 flex 布局</p>
+<pre><code>.parent &#123;
+    display: flex;
+    display: -webkit-flex; //Safari仍旧需要使用特定的浏览器前缀
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+&#125;
+
+或者
+
+.parent &#123;
+    display: flex;
+    .child &#123;
+        margin: 0;
+   &#125;
+&#125;
+</code></pre>
+<p>2.4 Gird 布局</p>
+<p>但是 Grid 更适合在两个维度（包括行和列）中创建整个栅格化布局</p>
+<pre><code>.parent &#123;
+    display: grid;
+    .child &#123;
+        justify-self: center;
+        align-self: center;
+   &#125;
+&#125;
+</code></pre>
+<p>2.5 伪元素辅助布局</p>
+<pre><code>.parent &#123;
+   text-align: center;
+   &amp;::before &#123;
+       content: &#39;&#39;
+       height: 100%;
+       display: inline-block;
+       vertical-align: middle;
+   &#125;
+    .child &#123;
+      display: inline-block;
+      vertical-align: middle;
+   &#125;
+&#125;
+</code></pre>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>Grid 和 Flex 都有浏览器兼容性问题</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2020/01/06/%E5%85%83%E7%B4%A0%E5%9E%82%E7%9B%B4%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/" data-id="cl39r6mbp0004k5y14p6tggoy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-XSS and CSRF" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/03/XSS%20and%20CSRF/" class="article-date">
+  <time datetime="2020-01-03T02:55:52.000Z" itemprop="datePublished">2020-01-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/03/XSS%20and%20CSRF/">XSS and CSRF</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="XSS-Cross-Site-Script-跨站脚本攻击"><a href="#XSS-Cross-Site-Script-跨站脚本攻击" class="headerlink" title="XSS(Cross Site Script)跨站脚本攻击"></a>XSS(Cross Site Script)跨站脚本攻击</h4><p>XSS 攻击指的是攻击者在网站上注入恶意客户端代码，通过恶意脚本对客户端网页进行篡改，从而在用户浏览网页时，对用户浏览器进行控制或者获取用户隐私数据的一种攻击方式</p>
+<p>攻击者对客户端网页注入的恶意脚本一般包括 JavaScript,又是也会包含 HTML 和 Flash.</p>
+<p>XSS 攻击的共同点：将一些隐私数据比如 cookie,session 发送给攻击者，将受害者重定向到一个由攻击者控制的网址，在受害者机器上进行一些恶意操作。</p>
+<h4 id="XSS-攻击分-3-类"><a href="#XSS-攻击分-3-类" class="headerlink" title="XSS 攻击分 3 类"></a>XSS 攻击分 3 类</h4><p><strong>1. 反射型</strong></p>
+<p>简单地把用户输入的数据“反射”给浏览器，这种攻击方式往往需要攻击者诱导用户点击一个恶意链接，或者提交一个表单，或者进入一个恶意网站时，注入脚本进入被攻击者的网站。注入脚本可能是恶作剧脚本或者是注入能获取隐私数据的脚本</p>
+<p><strong>2.存储型</strong><br>会把用户输入的数据提交“存储”在服务器端，当浏览器请求数据时，脚本从服务器上返回到浏览器器页面并执行。<br>常见场景：论坛中写下一篇包含恶意 JavaScript 代码的文章或评论发表后，所有访问改文章或评论的用户，都会在他们的浏览器中执行这段恶意 js 代码。</p>
+<p><strong>3. 基于 DOM</strong><br>通过恶意脚本修改页面 DOM 结构，纯粹发生在客户端的攻击。<br>场景：用户页面操作后，在当前页出现一个链接，其地址为用户输入的内容，当用户点击链接，就会执行相应的脚本</p>
+<h4 id="防范-XSS-攻击"><a href="#防范-XSS-攻击" class="headerlink" title="防范 XSS 攻击"></a>防范 XSS 攻击</h4><p><strong>1. HttpOnly 防止劫取 Cookie</strong></p>
+<p>实质是阻止 XSS 攻击后的 cookie 劫持攻击</p>
+<p><strong>2. 客户端输入检查</strong></p>
+<p>不要相信用户的任何输入：对用户的任何输入都要检查、过滤或转义，建立可信赖的 HTML 标签白名称，对不在白名单之列的字符或者标签进行过滤或者编码。</p>
+<p><strong>3. 服务器端输出检查</strong></p>
+<h3 id="CSRF（Cross-Site-Request-Forgery）-跨站请求伪造"><a href="#CSRF（Cross-Site-Request-Forgery）-跨站请求伪造" class="headerlink" title="CSRF（Cross Site Request Forgery） 跨站请求伪造"></a>CSRF（Cross Site Request Forgery） 跨站请求伪造</h3><p>劫持受信任用户向服务器发送非预期请求的攻击方式</p>
+<p>通常情况下，CSRF 攻击是攻击者借助受害者的 cookie 骗去服务器的信任，在受害者毫不知情的情况下，已受害者名义伪造请求发送给受攻击服务器，从而在未授权的情况下执行在权限保护之内的操作</p>
+<h4 id="CSRF-攻击方式"><a href="#CSRF-攻击方式" class="headerlink" title="CSRF 攻击方式"></a>CSRF 攻击方式</h4><p><strong>1. 通过 Cookie 进行 CSRF 攻击</strong><br>由于 cookie 中包含了用户的认证信息，当用户访问攻击者准备的攻击环境时，攻击者就可以对服务器发起 CSRF 攻击。在攻击过程中，攻击者借助受害者的 cookie 骗去服务器信任，当并不能拿到 cookie 也看不到 cookie 内容，而对于服务器返回的结果，由于浏览器同源策略的限制，攻击者也无法进行解析。因此。攻击者无法从返回结果中得到任何东西，<strong>他所能做的就是给服务器发送请求，以执行请求中所描述的命令，在服务器端直接改变数据的值，而非窃取服务器中的数据。</strong></p>
+<p>但是，如果 CSRF 攻击的目标并不需要 cookie，也不必考虑浏览器的 cookie 策略</p>
+<h4 id="CSRF-攻击的防范"><a href="#CSRF-攻击的防范" class="headerlink" title="CSRF 攻击的防范"></a>CSRF 攻击的防范</h4><p><strong>1. 验证码</strong></p>
+<p>验证码强制用户必须与应用进行交互，才能完成请求。避免用户在不知情的情况下构造了网络请求</p>
+<p><strong>2.Referer Check</strong></p>
+<p>根据 HTTP 协议，在 HTTP 头中有个 Referer 字段，记录了该 HTTP 请求的来源地址。通过 Referer Check，可以检查请求是否来气合法的“源”</p>
+<p><strong>3.添加 token 验证</strong></p>
+<p>CSRF 攻击之所以能成功，是因为攻击者可以完全伪造用户的请求，改请求中所有用户验证信息都存在 cookie 中，因此攻击者可在不知道这些验证信息的情况下直接利用用户自己的 cookie 来通过安全验证。所以关键在于在请求中放入攻击者所不能伪造的信息，并且该信息不存在在 cookie 中。</p>
+<p>可以在请求中已参数的情诗加入一个随机产生的 token，并在服务器建立一个拦截器验证这个 token，如果请求中没有 token 或者 token 内容不正确，则认为可能是 CSRF 攻击额拒绝请求</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2020/01/03/XSS%20and%20CSRF/" data-id="cl39r6mbv0006k5y10b372hso" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-网络基础知识" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/10/03/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="article-date">
@@ -687,7 +887,7 @@ FALLBACK:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
     </div>
   </div>
 
@@ -700,7 +900,15 @@ FALLBACK:
       <ul>
         
           <li>
+            <a href="/2022/05/13/CSS%E5%AE%9E%E7%8E%B0%E7%BB%98%E5%88%B6%E5%B0%8F%E5%9B%BE%E6%A0%87/">绘制三角形</a>
+          </li>
+        
+          <li>
             <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/">浅谈字符串长度</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/">React 组件代码结构优化</a>
           </li>
         
           <li>
@@ -709,14 +917,6 @@ FALLBACK:
         
           <li>
             <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8Bless%20%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E7%BC%96%E8%AF%91/">自定义主题色实现之 less 浏览器端编译</a>
-          </li>
-        
-          <li>
-            <a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/">什么是 localForage</a>
-          </li>
-        
-          <li>
-            <a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">私有 npm 仓库使用手册</a>
           </li>
         
       </ul>
