@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>记录 React 18 升级变更 | 吴文君的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="React 18 放弃了对 IE11 的支持 1. createRoot1.1 React 18 提供 2 个根 API： Legacy Root API 和 New Root API  legacy root API: 即 ReactDom.render 工作原理与 React 17 一样 New Root API: 即 createRoot，创建一个在 React 18 中运行的 root,添">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录 React 18 升级变更">
+<meta property="og:url" content="http://wendyjw.github.io/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/index.html">
+<meta property="og:site_name" content="吴文君的博客">
+<meta property="og:description" content="React 18 放弃了对 IE11 的支持 1. createRoot1.1 React 18 提供 2 个根 API： Legacy Root API 和 New Root API  legacy root API: 即 ReactDom.render 工作原理与 React 17 一样 New Root API: 即 createRoot，创建一个在 React 18 中运行的 root,添">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-06-27T02:55:52.000Z">
+<meta property="article:modified_time" content="2022-06-27T06:33:17.639Z">
+<meta property="article:author" content="吴文君">
+<meta property="article:tag" content="前端, JavaScript">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="吴文君的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">吴文君的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wendyjw.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-记录 React 18 升级变更" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/" class="article-date">
+  <time datetime="2022-06-27T02:55:52.000Z" itemprop="datePublished">2022-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      记录 React 18 升级变更
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>React 18 放弃了对 IE11 的支持</p>
+<h3 id="1-createRoot"><a href="#1-createRoot" class="headerlink" title="1. createRoot"></a>1. createRoot</h3><p>1.1 React 18 提供 2 个根 API： Legacy Root API 和 New Root API</p>
+<ul>
+<li>legacy root API: 即 ReactDom.render 工作原理与 React 17 一样</li>
+<li>New Root API: 即 createRoot，创建一个在 React 18 中运行的 root,添加了 18 所有<br>改进并允许使用并发的功能</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// React 17</span></span><br><span class="line"><span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;app&#x27;</span>);</span><br><span class="line"><span class="comment">// 装载</span></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>, container);</span><br><span class="line"><span class="comment">// 卸载</span></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">unmountComponentAtNode</span>(container);</span><br><span class="line"></span><br><span class="line"><span class="comment">// React 18</span></span><br><span class="line"><span class="keyword">import</span> &#123; createRoot &#125; <span class="keyword">from</span> <span class="string">&#x27;react-dom/client&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;app&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> root = <span class="title function_">createRoot</span>(container);</span><br><span class="line"><span class="comment">// 装载</span></span><br><span class="line">root.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>);</span><br><span class="line"><span class="comment">// 卸载</span></span><br><span class="line">root.<span class="title function_">unmount</span>();</span><br></pre></td></tr></table></figure>
+
+<p>1.2 为什么 React 18 用 createRoot 替换 render</p>
+<p>在 React 中，<code>root</code> 是一个指向顶层数据结构的指针，当运行<code>ReactDOM.render(rootElement, &lt;App /&gt;);</code>时，<br>React 会创建一个顶级的根节点，即 FiberRoot ，这个根节点是绑定到 <code>rootElement</code> 这个 DOM 节点上。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// container 对应的就是 `ReactDOM.render` 的第一个参数</span></span><br><span class="line">container.<span class="property">_reactRootContainer</span> = <span class="title function_">legacyCreateRootFromDOMContainer</span>(</span><br><span class="line">  container,</span><br><span class="line">  forceHydrate,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>如果想重新渲染整个应用，就算我们没有改变 DOM 根节点 rootElement ,也要重新传递 rootElement。<br>而且， React 应用的根节点对使用者来说是不透明的，我们无法渠道这个值，只能取到对应的 DOM 节点<br><code>const container = document.getElementById(&#39;app&#39;);</code></p>
+<p>当使用 <code>createRoot</code> 后，只需要在第一次的时候传入 <code>rootElement</code> 节点</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> root = <span class="title class_">ReactDOM</span>.<span class="title function_">createRoot</span>(rootElement);</span><br></pre></td></tr></table></figure>
+
+<p>后续渲染时调用 render 方法就好了，</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">App</span> /&gt;</span></span>);</span><br></pre></td></tr></table></figure>
+
+<p>React 向我们暴露了应用的根节点，就不需要把他隐式的绑定到对应的 DOM 节点上了</p>
+<h3 id="2-服务端渲染-hydrateRoot"><a href="#2-服务端渲染-hydrateRoot" class="headerlink" title="2. 服务端渲染-hydrateRoot"></a>2. 服务端渲染-hydrateRoot</h3><p>如果的应用使用带注水的服务端渲染，请升级 hydrate 到 hydrateRoot</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> root = <span class="title function_">hydrateRoot</span>(container, <span class="language-xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>);</span><br><span class="line"><span class="comment">// 这里无需执行 root.render</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-批量处理，setState-同步-x2F-异步"><a href="#3-批量处理，setState-同步-x2F-异步" class="headerlink" title="3. 批量处理，setState 同步&#x2F;异步"></a>3. 批量处理，setState 同步&#x2F;异步</h3><p>React 18 之前，React 只能在组件的生命周期函数或合成事件函数中进行批处理（多个状态更新合并为一次重新渲染），<br>默认情况下，<code>Promise</code>，<code>setTimeout</code>以及 原生事件中不会进行批处理。如果需要批处理，可以使用 <code>unstable_batchedUpdates</code>实现</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">setCount</span>(<span class="number">1</span>);</span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">true</span>);</span><br><span class="line">  <span class="comment">// 批处理：会合并为一次 render</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setCount</span>(<span class="number">2</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">// 同步模式：会执行两次 render</span></span><br><span class="line">  <span class="comment">// 并且在 setCount 后，在 setFlag 之前能通过 Ref 获取到最新的 count 值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>React 18 上第二个例子只会一次<code>render</code>,因为所有的更新都自动批处理。<br>不过一下例子在 react 18 执行 2 次 <code>render</code>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">setCount</span>(<span class="number">2</span>);</span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">// React 18：会执行两次 render</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-flushSync"><a href="#3-flushSync" class="headerlink" title="3. flushSync"></a>3. flushSync</h3><p>如果需要在 React 18 中退出批处理可以使用 API <code>flushSync</code></p>
+<p><code>flushSync&lt;R&gt;(fn: () =&gt; R):R</code>,接收一个函数作为参数，并允许有返回值</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">flushSync</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setCount</span>(<span class="number">3</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 会在 setCount 并 render 之后再执行 setFlag</span></span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：<code>flushSync</code> 会以函数为作用域，函数内部的多个 <code>setState</code>仍然为批量更新，这样可以精准控制哪些不需要的批量更新：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">flushSync</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setCount</span>(<span class="number">3</span>);</span><br><span class="line">    <span class="title function_">setFlag</span>(<span class="literal">true</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// setCount 和 setFlag 为批量更新，结束后</span></span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">// 此方法会触发两次 render</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Concurrent（并发）-模式"><a href="#4-Concurrent（并发）-模式" class="headerlink" title="4. Concurrent（并发） 模式"></a>4. Concurrent（并发） 模式</h3><p>并发模式通过使渲染可中断来修复阻塞渲染限制，在 Concurrent 模式中，React 可以同事更新多个状态。</p>
+<p>4.1 Transition</p>
+<p>在 React 18 中，为了能在大量任务下也能保持 UI 响应，引入新的 API <code>startTransition</code>,<br>这个 API 可以通过将特定场景，更新标记为 “过渡” 来显著改善用户交互。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; startTransition &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 紧急：显示输入的内容</span></span><br><span class="line"><span class="title function_">setInputValue</span>(input);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 标记回调函数内的更新标记为非紧急更新，这些渲染可能被其他紧急渲染所抢占</span></span><br><span class="line"><span class="title function_">startTransition</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">setSearchQuery</span>(input);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>用户场景示例：</p>
+<p>提供一个带有 <code>isPending</code> 转换标志的 <code>useTransition</code>, React 在状态转换期间提供视觉返回，并在转换发生是保持浏览器响应。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useTransition &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> [isPending, startTransition] = <span class="title function_">useTransition</span>();</span><br><span class="line"><span class="keyword">const</span> [value, setValue] = <span class="title function_">useState</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> atRangeChange = <span class="title class_">React</span>.<span class="title function_">useCallback</span>(</span><br><span class="line">  <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setValue</span>(e.<span class="property">target</span>.<span class="property">value</span>);</span><br><span class="line">    <span class="title function_">startTransition</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setRenderValue</span>(e.<span class="property">target</span>.<span class="property">value</span> / <span class="number">1</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  [startTransition],</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      value:</span></span><br><span class="line"><span class="language-xml">      &#123;value&#125;</span></span><br><span class="line"><span class="language-xml">      renderValue:</span></span><br><span class="line"><span class="language-xml">      &#123;renderValue&#125; &#123;isPending ? &#x27; Loading...&#x27; : null&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">input</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">type</span>=<span class="string">&quot;range&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">min</span>=<span class="string">&quot;0&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">max</span>=<span class="string">&quot;600&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">step</span>=<span class="string">&quot;1&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">value</span>=<span class="string">&#123;value&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">onChange</span>=<span class="string">&#123;atRangeChange&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    /&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>可以使用 <code>startTransition</code>包装任何可移至后台的更新，通常，这些类型的更新分为两类：</p>
+<ol>
+<li>渲染缓慢：React 需要执行大量工作才能转换 UI 以显示结果</li>
+<li>网络慢：React 正在等待网络回应中的数据，这个方式与<code>Suspense</code>紧密集成</li>
+</ol>
+<p>4.2 把 <code>Transition</code> 融合到应用的设计系统</p>
+<p>很多交互都需要使用 <code>useTransition</code>,建议把 <code>useTransition</code> 融合到应用的设计系统组件中。<br>例如，把该逻辑抽取到<code>button</code>组件中</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">button</span>(<span class="params">&#123; children, onClick &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [isPending, startTransition] = <span class="title function_">useTransition</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">startTransition</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">onClick</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;handleClick&#125;</span> <span class="attr">disabled</span>=<span class="string">&#123;isPending&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;children&#125;</span></span><br><span class="line"><span class="language-xml">      &#123;isPending ? &#x27;加载中&#x27; : null&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.3 useDeferredValue</p>
+<p>返回一个延迟响应的值，这通常用于在具有基于用户输入立即渲染的内容，以及需要等待数据获取的内容时，保持接口的可响应性。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useDeferredValue &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> deferredValue = <span class="title function_">useDeferredValue</span>(value);</span><br></pre></td></tr></table></figure>
+
+<p><code>useDeferredValue</code> 与 <code>useTransition</code> 的相同不同处：</p>
+<ul>
+<li>相同：本质上都是标记成，延迟更新任务</li>
+<li>不同：<code>useTransition</code> 是把更新任务变成延迟更新任务，<code>useDeferredValue</code> 是产生一个新的值，这个值作为延迟状态</li>
+</ul>
+<p><code>useDeferredValue</code> 与 <code>debounce</code> 的差异：</p>
+<ul>
+<li><code>debounce</code> 即 <code>setTimeout</code>, 总是会有一个固定的延迟，而 <code>useDeferredValue</code> 的值只会在渲染耗费的时间下滞后，在性能好的机器上，延迟会变少，反之则变长。</li>
+</ul>
+<p>参考文章: <a target="_blank" rel="noopener" href="https://juejin.cn/post/7078511027091931167#heading-2">https://juejin.cn/post/7078511027091931167#heading-2</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/" data-id="cl8nvqp400000pky1051l3byz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          安卓自适应应用图标
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/05/13/CSS%E5%AE%9E%E7%8E%B0%E7%BB%98%E5%88%B6%E5%B0%8F%E5%9B%BE%E6%A0%87/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">绘制三角形</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/">安卓自适应应用图标</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/">记录 React 18 升级变更</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/13/CSS%E5%AE%9E%E7%8E%B0%E7%BB%98%E5%88%B6%E5%B0%8F%E5%9B%BE%E6%A0%87/">绘制三角形</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/">浅谈字符串长度</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/">React 组件代码结构优化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 吴文君<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
