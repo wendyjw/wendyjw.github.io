@@ -65,6 +65,615 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-请求竞态处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86/" class="article-date">
+  <time datetime="2021-11-18T02:55:52.000Z" itemprop="datePublished">2021-11-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86/">请求竞态处理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-使用-useEffect-执行机制"><a href="#1-使用-useEffect-执行机制" class="headerlink" title="1. 使用 useEffect 执行机制"></a>1. 使用 useEffect 执行机制</h4><figure class="highlight jsx"><figcaption><span>useArticlesLoading.jsx</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useEffct</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> didCancel = <span class="literal">false</span>;</span><br><span class="line">  <span class="title function_">fetch</span>(<span class="string">`https://get.a.article.com/articles/<span class="subst">$&#123;articleId&#125;</span>`</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (response.<span class="property">ok</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> response.<span class="title function_">json</span>();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>();</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">fetchedArticle: Article</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!didCancel) &#123;</span><br><span class="line">        <span class="title function_">setArticle</span>(fetchedArticle);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">finally</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setIsLoading</span>(<span class="literal">false</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    didCancel = <span class="literal">true</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;, [articleId]);</span><br></pre></td></tr></table></figure>
+
+<p>缺点：浏览器依然等待请求完成，但是忽略的他结果，仍然占用资源</p>
+<h4 id="2-使用-AbortController-取消请求"><a href="#2-使用-AbortController-取消请求" class="headerlink" title="2. 使用 AbortController 取消请求"></a>2. 使用 AbortController 取消请求</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> abortController = <span class="keyword">new</span> <span class="title class_">AbortController</span>();</span><br><span class="line"></span><br><span class="line">  <span class="title function_">setIsLoading</span>(<span class="literal">true</span>);</span><br><span class="line">  <span class="title function_">fetch</span>(<span class="string">`https://get.a.rticle.com/articles/<span class="subst">$&#123;articleId&#125;</span>`</span>, &#123;</span><br><span class="line">    <span class="attr">signal</span>: abortController.<span class="property">signal</span>,</span><br><span class="line">  &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (response.<span class="property">ok</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> response.<span class="title function_">json</span>();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>();</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">fetchedArticle: Article</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setArticle</span>(fetchedArticle);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 调用 abortController.abort () 有一个问题，就是其会导致 promise 被拒绝，可能会导致未捕获的错误</span></span><br><span class="line">      <span class="comment">// 增加错误捕获处理</span></span><br><span class="line">      <span class="keyword">if</span> (abortController.<span class="property">signal</span>.<span class="property">aborted</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;The user aborted the request&#x27;</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;The request failed&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">finally</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setIsLoading</span>(<span class="literal">false</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    通过传递 <span class="string">`abortController.signal`</span>，使用<span class="string">`abortController.abort()`</span>终止请求</span><br><span class="line">    abortController.<span class="title function_">abort</span>();</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;, [articleId]);</span><br></pre></td></tr></table></figure>
+
+<p>缺点：每个涉及到需要处理竞态处理的文件都需要处理</p>
+<h4 id="3-使用-cancel-token-取消请求"><a href="#3-使用-cancel-token-取消请求" class="headerlink" title="3. 使用 cancel token 取消请求"></a>3. 使用 cancel token 取消请求</h4><p><img src="https://wendyjw.github.io/images/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%AE%9E%E7%8E%B0.jpg" alt="请求竞态实现步骤"></p>
+<p>通过传递一个执行函数到 CancelToken 的构造函数来创建一个 cancel token:</p>
+<pre><code>const CancelToken = axios.CancelToken;
+let cancel;
+
+axios.get(&#39;/user/12345&#39;, &#123;
+  cancelToken: new CancelToken(function executor(c) &#123;
+    // executor 函数接收一个 cancel 函数作为参数
+    cancel = c;
+  &#125;)
+&#125;);
+
+// 取消请求
+cancel();
+</code></pre>
+<h4 id="项目使用落实（使用-cancel-token-取消请求）"><a href="#项目使用落实（使用-cancel-token-取消请求）" class="headerlink" title="项目使用落实（使用 cancel token 取消请求）"></a>项目使用落实（使用 cancel token 取消请求）</h4><ol>
+<li><p>项目中请求接口传入是否需要启用取消请求功能的字段“autoCancel”， 默认不启用该功能。</p>
+ <!-- api.js -->
+
+<pre><code>export function search(data) &#123;
+  return post(&#39;voucher/search&#39;, data, &#123;autoCancel: true&#125;).then(res =&gt; res.data);
+&#125;
+</code></pre>
+</li>
+<li><p>在 axios 配置中统一处理</p>
+<pre><code>axios.interceptors.request.use(
+  config =&gt; &#123;
+    // 外层调用请求 API 传入 autoCancel 代表要启用 autoCancel 功能
+    if (config?.autoCancel) &#123;
+        // 先存储记录当前请求
+        addPendingRequest(config);
+    &#125;
+    return config;
+  &#125;,
+  error =&gt; Promise.reject(error),
+);
+
+axios.interceptors.response.use(
+  response =&gt; &#123;
+    const &#123; data, status, config &#125; = response;
+    if (config?.autoCancel) &#123;
+      // 如果启用 autoCancel 功能,则取消该次请求
+      removePendingRequest(config);
+    &#125;
+  &#125;,
+  error =&gt; &#123;
+    // 已取消的请求会在 error 中
+    if (!axios.isCancel(error)) &#123;
+      const err = error.response;
+    // 根据 err 处理请求错误
+    &#125; else &#123;
+      console.log(`已取消的重复请求：$&#123;error.message&#125;`);
+    &#125;
+    return Promise.reject(error);
+  &#125;,
+);
+</code></pre>
+</li>
+<li><p>维护一个 Map, 记录取消请求 cancel 函数对应其 cancel token</p>
+<pre><code>  import axios from &#39;axios&#39;;
+
+  const pendingRequest = new Map();
+
+  // 根据请求url和method生成key，后续可考虑加入params
+  function generateReqKey(config) &#123;
+    const &#123; method, url &#125; = config;
+    return [method, url].join(&#39;&amp;&#39;);
+  &#125;
+
+  // 从pendingRequest对象中移除请求
+  export function removePendingRequest(config) &#123;
+    const requestKey = generateReqKey(config);
+    if (pendingRequest.has(requestKey)) &#123;
+      pendingRequest.delete(requestKey);
+    &#125;
+  &#125;
+
+  // 检查是否存在重复请求，若存在则取消已发的请求
+  function cancelRequest(config) &#123;
+    const requestKey = generateReqKey(config);
+    if (pendingRequest.has(requestKey)) &#123;
+      const cancel = pendingRequest.get(requestKey);
+      cancel(requestKey);
+      pendingRequest.delete(requestKey);
+    &#125;
+  &#125;
+
+  // 把当前请求添加到pendingRequest对象中
+  export function addPendingRequest(config) &#123;
+    cancelRequest(config);
+    const requestKey = generateReqKey(config);
+    config.cancelToken =
+      new axios.CancelToken(cancel =&gt; &#123;
+        if (!pendingRequest.has(requestKey)) &#123;
+          pendingRequest.set(requestKey, cancel);
+        &#125;
+      &#125;);
+  &#125;
+</code></pre>
+</li>
+</ol>
+<p><img src="https://wendyjw.github.io/images/axiosCancelRequest.png" alt="取消上次请求"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86/" data-id="cl4p03gwr0002zay159uq8t2u" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Module 加载原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/12/03/Module%20%E5%8A%A0%E8%BD%BD%E5%8E%9F%E7%90%86/" class="article-date">
+  <time datetime="2020-12-03T02:55:52.000Z" itemprop="datePublished">2020-12-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/03/Module%20%E5%8A%A0%E8%BD%BD%E5%8E%9F%E7%90%86/">Module 加载原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-浏览器中加载"><a href="#1-浏览器中加载" class="headerlink" title="1. 浏览器中加载"></a>1. 浏览器中加载</h3><h4 id="1-1-传统加载：使用-script-标签"><a href="#1-1-传统加载：使用-script-标签" class="headerlink" title="1.1 传统加载：使用 script 标签"></a>1.1 传统加载：使用 script 标签</h4><pre><code>    // 浏览器默认脚本语音是Js,所以这里的type 可以省略
+    &lt;script src=&#39;xxx.js&#39; type=&#39;application/javascript&#39;&gt;&lt;/script&gt;
+</code></pre>
+<p>异步加载脚本: defer &#x2F; async<br>当浏览器渲染引擎遇到这句，就会开始下载外部脚本，但是不会等他下载和执行,而是继续下面的语句。</p>
+<script src='xxx.js' defer></script>
+<script src='xxx.js' async></script>
+
+<p>区别：</p>
+<ul>
+<li>defer 等到页面渲染完成（DOM 结构完全生成，以及其它脚本全部执行完），再执行</li>
+<li>async 只要脚本下载完，中断渲染马上执行脚本，执行完毕后再渲染</li>
+</ul>
+<p>总结：defer 先渲染在执行，async 下载完就执行再渲染</p>
+<h4 id="1-2-模块加载规则"><a href="#1-2-模块加载规则" class="headerlink" title="1.2 模块加载规则"></a>1.2 模块加载规则</h4><p>浏览器加载 ES6 模块也使用 script 标签，但是要带上 type&#x3D;’module’</p>
+<pre><code>1. 浏览器对于 type=&#39;module&#39; 的 script 标签加载，采用异步加载，先渲染再执行，类似defer 效果
+
+&lt;script type=&quot;module&quot; src=&quot;./foo.js&quot;&gt;&lt;/script&gt;
+
+
+2. 可以添加async 属性，实现先执行后渲染
+
+&lt;script type=&quot;module&quot; src=&quot;./foo.js&quot; async&gt;&lt;/script&gt;
+
+3. 也可以使用内部加载
+
+&lt;script type=&#39;module&#39;&gt;
+    import Foo from &#39;./foo.js&#39;
+
+    ...
+&lt;/script&gt;
+</code></pre>
+<p>注意：</p>
+<ol>
+<li><p>模块顶层 this 不是 window,而是 undefined,可以利用顶层 this 是不是 undefined 来判断当前模块是不是 ES6 模块</p>
+<p>const isEs6Module &#x3D; this &#x3D;&#x3D;&#x3D; undefined</p>
+</li>
+</ol>
+<h3 id="ES6-模块-与-CommonJs-模块差异"><a href="#ES6-模块-与-CommonJs-模块差异" class="headerlink" title="ES6 模块 与 CommonJs 模块差异"></a>ES6 模块 与 CommonJs 模块差异</h3><ol>
+<li>ES6 模块是对值的引用，commonJs 模块是对值的拷贝</li>
+<li>ES6 模块在编译时加载，commonJs 模块在代码执行时加载</li>
+<li>ES6 模块 import 命令是异步加载，有一个独立的模块依赖解析阶段，commonJs 模块 require() 命令是同步加载</li>
+</ol>
+<h3 id="2-NodeJs-中加载"><a href="#2-NodeJs-中加载" class="headerlink" title="2. NodeJs 中加载"></a>2. NodeJs 中加载</h3><p><a target="_blank" rel="noopener" href="http://note.youdao.com/s/YZ4tQ3z5">http://note.youdao.com/s/YZ4tQ3z5</a><br>js 现在有两种模块，分别是 ES6 模块简称 ESM， CommonJs 模块简称 CJS。<br>CommonJs 模块是 nodeJs 专用的，与 ES6 模块不兼容。<br>NodeJS 要求 ES6 模块使用 .mjs 后缀名 ，或者 package.json 中添加 type</p>
+<pre><code>&#123;
+    type: &#39;module&#39;
+&#125;
+</code></pre>
+<p>总结：.mjs 文件总是以 ES6 模块加载， .cjs 文件总是以 CommonJs 模块加载。<br>.js 文件取决于项目的 package.json 中 type 字段，如果没有 type,或者 type 为 ‘commonjs’，以 CommonJs 模块加载。</p>
+<h4 id="2-1-package-json"><a href="#2-1-package-json" class="headerlink" title="2.1 package.json"></a>2.1 package.json</h4><p>package.json 中有两个字段可以指名入口文件，main 和 exports</p>
+<ol>
+<li><p>main 指定模块加载的入口文件</p>
+<pre><code>// ./node_modules/es-module-package/package.json
+&#123;
+  &quot;type&quot;: &quot;module&quot;,
+  &quot;main&quot;: &quot;./src/index.js&quot; // 如果这里没有指名入口文件，默认使用./node_modules/es-module-package/index.js 文件作为入口
+&#125;
+
+// import 文件引入
+// ./my-app.mjs
+
+import &#123; something &#125; from &#39;es-module-package&#39;;
+// 实际加载的是 ./node_modules/es-module-package/src/index.js
+</code></pre>
+</li>
+<li><p>exports ： 优先级高于 main 字段，只有支持 ES6 的新版本 nodeJs 才有的字段</p>
+</li>
+</ol>
+<p>2.1 子目录别名<br>指定 src&#x2F;submodule.js 的别名为 submodule</p>
+<pre><code>// ./node_modules/es-module-package/package.json
+&#123;
+  &quot;exports&quot;: &#123;
+    &quot;./submodule&quot;: &quot;./src/submodule.js&quot;
+  &#125;
+&#125;
+
+加载模块：
+import submodule from &#39;es-module-package/submodule&#39;;
+// 加载 ./node_modules/es-module-package/src/submodule.js
+
+如果没有指定别名，不能用 模块 + 脚本名 形式加载脚本
+
+
+    // 报错
+    import submodule from &#39;es-module-package/sub-module.js&#39;
+
+    // 不报错
+    import submodule from &#39;./node_modules.es-module-package/sub-module.js&#39;
+</code></pre>
+<p>2.2 main 的别名</p>
+<p>exports 字段别名 如果是 . ,代表的是模块主入口，优先级高于 main 字段</p>
+<pre><code>    &#123;
+      &quot;exports&quot;: &#123;
+        &quot;.&quot;: &quot;./main-dev.js&quot;
+      &#125;
+    &#125;
+
+    // 等同于
+    &#123;
+      &quot;exports&quot;: &quot;./main-dev.js&quot;
+    &#125;
+</code></pre>
+<p>2.3 条件加载<br>利用. 别名，为 CommonJs 模块 和 ES6 模块指定不同的入口</p>
+<pre><code>&#123;
+    &quot;type&quot;: &quot;module&quot;,
+    &quot;exports&quot;: &#123;
+        &quot;.&quot;: &#123;
+            &quot;require&quot;: &quot;./xxx.cjs&quot;, // CommonJs
+            &quot;default&quot;: &quot;./xxx.mjs&quot; // ES6
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="3-CommonJs-中加载-ES6"><a href="#3-CommonJs-中加载-ES6" class="headerlink" title="3. CommonJs 中加载 ES6"></a>3. CommonJs 中加载 ES6</h3><p>require() 命令是同步的所以不能加载 ES6，只能使用 import 加载。</p>
+<pre><code>    // 可以在CommonJs 中运行
+    (async () =&gt; &#123;
+        await(import(&#39;./my-app.js&#39;))
+    &#125;)
+</code></pre>
+<h3 id="4-ES6-中加载-CommonJs"><a href="#4-ES6-中加载-CommonJs" class="headerlink" title="4. ES6 中加载 CommonJs"></a>4. ES6 中加载 CommonJs</h3><p>ES6 中可以加载 CommonJs，但是只能加载整体，不能加载其中单一输出项</p>
+<pre><code>    // 正常
+    import MyApp from &#39;commonjs-package&#39;
+
+    // 报错
+    import &#123; Method &#125; from &#39;commonjs-package&#39;
+</code></pre>
+<p>因为 ES6 模块需要支持静态代码分析，而 CommonJs 模块输出是 module.exports 是一个对象，无法被静态分析，只能当做一个整体</p>
+<h3 id="5-NodeJs-加载路径"><a href="#5-NodeJs-加载路径" class="headerlink" title="5. NodeJs 加载路径"></a>5. NodeJs 加载路径</h3><p>ES6 模块的加载路径必须给出完整的路径及脚本后缀名，import 命令 或者 package.json 中的 main 字段省略脚本后缀名会报错</p>
+<pre><code>    // 报错
+    import &#123; ModulePackage &#125; from &#39;./module-package&#39;
+
+    // 正常
+    import &#123; ModulePackage &#125; from &#39;./module-package.mjs&#39;
+</code></pre>
+<p>为了于浏览器 import 加载规则相同，nodeJs 加载 .mjs 支持 URL</p>
+<pre><code>    // 加载 ./foo 传入参数 ?query=1
+    import &#39;./foo.mjs?query=1&#39;;
+</code></pre>
+<p>NodeJs 脚本路径只支持相对路径，不支持绝对路径</p>
+<h3 id="6-循环加载"><a href="#6-循环加载" class="headerlink" title="6. 循环加载"></a>6. 循环加载</h3><h4 id="6-1-CommonJs"><a href="#6-1-CommonJs" class="headerlink" title="6.1 CommonJs"></a>6.1 CommonJs</h4><p>模块加载原理： require 第一次加载脚本，会执行脚本，并在内存中生成一个对象</p>
+<pre><code>&#123;
+    id: &#39;&#39;,
+    exports: &#123;...&#125;,
+    loaded: true,
+    ...
+&#125;
+</code></pre>
+<p>以后用到这个模块就会从 exports 中取值，即使后续再 require 文件，也不会执行该模块，而是从缓存中取值.</p>
+<p>CommonJs 的循环加载：</p>
+<ol>
+<li>返回的是当前已经执行的部分的值，而不是代码执行后全部的值</li>
+<li>再次加载某个文件时，从缓存中读取值而不是摘执行该文件</li>
+<li>输入值是对输出值的拷贝，而不是引用</li>
+</ol>
+<h4 id="6-2-ES6"><a href="#6-2-ES6" class="headerlink" title="6.2 ES6"></a>6.2 ES6</h4><p>加载原理：ES6 模块是动态引用，使用 import 从模块中加载变量时，那些变量不会被缓存，而是成为一个指向被加载变量的引用。</p>
+<p>执行步骤为右侧数字：<br>&#x2F;&#x2F; a.mjs<br>import {bar} from ‘.&#x2F;b’; 1：加载 b 模块，优先执行 b.mjs<br>console.log(‘a.mjs’);<br>console.log(bar);<br>export let foo &#x3D; ‘foo’;<br>&#x2F;&#x2F; b.mjs<br>import {foo} from ‘.&#x2F;a’; 2：需要引入 a.mjs 中的 foo 变量，但不会执行 a.mjs, 而是认为该变量已经存在<br>console.log(‘b.mjs’); 3：打印 b.mjs<br>console.log(foo); 4: 报错：foo is not defined, 因为此时 a.mjs 还没输出 foo 变量<br>export let bar &#x3D; ‘bar’<br>解决方法：利用函数声明提前，将 foo 改些写成函数<br>&#x2F;&#x2F; a.mjs<br>import {bar} from ‘.&#x2F;b’;<br> console.log(‘a.mjs’);<br>console.log(bar());<br>function foo() {<br>return ‘foo’<br>}<br>export { foo }’<br>&#x2F;&#x2F; b.mjs<br>import {foo} from ‘.&#x2F;a’;<br>console.log(‘b.mjs’);<br>console.log(foo());<br>function bar() {<br>return ‘bar’<br>}<br>export { bar }</p>
+<h3 id="NodeJs-中模块加载"><a href="#NodeJs-中模块加载" class="headerlink" title="NodeJs 中模块加载"></a>NodeJs 中模块加载</h3><h4 id="1-模块分类"><a href="#1-模块分类" class="headerlink" title="1. 模块分类"></a>1. 模块分类</h4><ul>
+<li><p>原生(核心)模块：node 提供的模块</p>
+<p>1）内建模块：NodeJs 原生提供的模块中由 C &#x2F; C++ 编写的成为内建模块 2) 全局模块：nodeJs 启动时，会生成一个全局变量 process 3) 除了上面两种，可以用 require 引入的原生模块</p>
+</li>
+<li><p>文件模块：用户编写的模块</p>
+<p>1）普通文件模块：node_modules 下的可引入模块或者用户自己编写的文件内容<br>2）C++ 扩展模块：用户自己编写的 C++ 模块或第三方 C++扩展模块</p>
+</li>
+</ul>
+<p>实现简单的 require 步骤</p>
+<h5 id="1-模拟-Module-模块"><a href="#1-模拟-Module-模块" class="headerlink" title="1. 模拟 Module 模块"></a>1. 模拟 Module 模块</h5><p>Node.js 模块加载的主流程在 Module 类中，以 KolaModule 模拟</p>
+<pre><code>function KolaModule (id = &#39;&#39;) &#123;
+    this.id = id; // id 是require 的路径
+    this.path = path.dirname(id); // path 是Node.js 内置模块，用它来获取传入参数对应的文件夹路径
+    this.exports = &#123;&#125;; // 放置导出的东西，初始化为空对象
+    this.filename = null; // 模块对应的文件名
+    this.loaded = false; // loaded 用来标识当前模块是否已经加载
+&#125;
+KolaModule._cache = Object.create(null); // 创建一个空的缓存对象
+KolaModule._extensions = Object.create(null); //一个空的函数对象，用来存储文件扩展名(后缀)类型
+</code></pre>
+<p>Node.js 源码中 require 函数</p>
+<pre><code>Module.prototype.require = function (id) &#123;
+    return Module._load(id, this, /* isMain */ false);
+&#125;
+</code></pre>
+<p>实现 KolaModule 简易版 _load 函数</p>
+<pre><code>    // 1.request 是传入的路径参数
+    KolaModule._load = function (request) &#123;
+
+        // 2. 路径分析并定位到文件
+        const finename = KolaModule._resolveFilename(request);
+
+        // 3. 判断模块是否加载过(缓存判断)
+        const cacheModule = KolaModule._cache[filename];
+
+        if (cacheModule !== undefined) &#123;
+            // 已经加载过，则直接返回缓存中的模块
+            return cacheModule.exports
+        &#125;
+
+        // 4. 去加载 node 原生模块
+
+        /*
+
+        const mod = loadNativeModule(filename, request);
+
+        if (mod &amp;&amp; mod.canBeRequiredByUsers) return mod.exports;
+
+        */
+
+        // 5. 如果缓存不存在，自行加载模块，new 一个 KolaModule 实例
+        // 加载完成直接返回module.exports
+
+        const mudule = new KolaModule(filename);
+
+        // 6. load加载之前，将模块加入缓存，这也是，不会造成循环引用问题的原因。但是循环引用，这个缓存里面的exports 可能还没有或者不完整
+
+        KolaModule._cache[filename] = module;
+
+        // 7. module.load 正在去加载代码
+
+        module.load(filename);
+
+        // 8. 返回模块的module.exports
+
+        return module.exports;
+    &#125;
+</code></pre>
+<h5 id="2-路径分析并定位到文件"><a href="#2-路径分析并定位到文件" class="headerlink" title="2. 路径分析并定位到文件"></a>2. 路径分析并定位到文件</h5><p>源码 _resolveFilename 函数：通过用户传入的 require 参数， 来解析找到真正的文件地址</p>
+<p>require 传递过来的值支持多重参数：内置模块，相对路径，绝对路径，文件夹和第三方模块等。</p>
+<p>如果是文件夹或第三方模块，需要解析里面的 package.json 和 index.js.</p>
+<p>下面简单实现通过相对路径和绝对路径来查找文件，并支持判断文件 js 和 json 后缀名</p>
+<pre><code>    KolaModule._resolveFilename = function (request) &#123;
+
+        // 获取传入参数对应的绝对路径
+        const filename = path.resolve(request);
+
+        // 获取文件后缀名
+        const extname = path.extname(request);
+
+        // 如果么有文件后缀，判断是否可以添加.js 和 .json
+
+        if (!extname) &#123;
+            const exts = Object.keys(KolaModule._extensions);
+            for (let i = 0; i &lt; exts.length; i++) &#123;
+                const currentPath = `$&#123;filename&#125;$&#123;exts[i]&#125;`;
+
+                // 如果拼接后的文件存在，返回拼接的路径
+
+                if (fs.existsSync(currentPath)) &#123;
+                    return currentPath;
+                &#125;
+            &#125;
+        &#125;
+        return filename；
+    &#125;
+</code></pre>
+<h5 id="3-判断模块是否加载过-缓存判断"><a href="#3-判断模块是否加载过-缓存判断" class="headerlink" title="3. 判断模块是否加载过(缓存判断)"></a>3. 判断模块是否加载过(缓存判断)</h5><p>如果缓存过，直接返回 cacheModule.exports</p>
+<pre><code>    const cacheModule = KolaModule._cache[filename]
+
+    if (cacheModule !== undefined) &#123;
+        return cacheModule.exports;
+    &#125;
+</code></pre>
+<h5 id="4-去加载-node-原生模块"><a href="#4-去加载-node-原生模块" class="headerlink" title="4. 去加载 node 原生模块"></a>4. 去加载 node 原生模块</h5><p>如果没有缓存过，会调用一个加载原生模块的函数。<br>如何调用到 Node.js 原生模块？</p>
+<pre><code>    源码：
+    const mod = loadNativeModule(filename, request);
+
+    if (mod &amp;&amp; mod.canBeRequiredByUsers) return mod.exports;
+
+    ...
+    loadNativeModule 函数
+
+    function loadNativeModule (filename, request) &#123;
+        // 判断是否再原生js模块中，NativeModule 在 bootstrap / loader.js 中定义
+
+        const mod = NativeModule.map.get(filename);
+        if (mod) &#123;
+            mod.compileForPublicLoader();
+            return mod;
+        &#125;
+    &#125;
+
+    mod 是一个 NativeModule 对象，在 node 启动一个文件时也会用到。
+
+    核心部分
+
+    compileForPublicLoader() &#123;
+        this.compileForInternalLoader();
+        return this.exports;
+    &#125;
+    compileForInternalLoader() &#123;
+        if (this.loaded || this.loading) &#123;
+            return this.exports;
+        &#125;
+
+        // id 即我们要加载的模块，比如net
+        const id = this.id
+        this.loading = true;
+
+        try &#123;
+            const fn = compileFunction(id);
+            fn(this.expots, nativeModuleRequire, this, process, internalBinding, primordials);
+            this.loaded = true;
+        &#125; finally &#123;
+            this.loading = false;
+        &#125;
+        return this.exports;
+    &#125;
+
+    compileFunction 是 C++ 导出的函数。
+
+    Node.js 为了提高效率，把原生js 模块的源码字符串直接转成 ascii 码存到 内存 中，在加载这些模块时，不需要硬盘 io,直接从内存中读取。
+</code></pre>
+<p>结论: Node.js 在启动时直接从内存中读取内容，我们通过 require 加载 net 原生模块时， 通过 NativeModule 的 compileForInternalLoader，会在 _source 中找到对应的源码字符串，然后编译成一个函数，然后执行这个函数，执行函数的时候传递 nativeModuleRequire 和 internalBinding 函数， internalBinding 用于加载纯 C++ 编写的 内置模块， nativeModuleRequire 用于加载 原生 js 模块。</p>
+<h5 id="5-创建-KolaModule-实例"><a href="#5-创建-KolaModule-实例" class="headerlink" title="5. 创建 KolaModule 实例"></a>5. 创建 KolaModule 实例</h5><p>不是原生 node 模块，就当做普通文件模块加载</p>
+<pre><code>    const module = new KolaModule(filename);
+</code></pre>
+<h5 id="6-添加缓存"><a href="#6-添加缓存" class="headerlink" title="6. 添加缓存"></a>6. 添加缓存</h5><p>先进行缓存的添加，然后进行模块代码的加载</p>
+<ol>
+<li>main 加载 A 模块， A 在真正加载前先去缓存中占一个位置</li>
+<li>A 在正式加载时加载了 B</li>
+<li>B 又去加载 A ，这时候缓存中已经有 A， 所以直接返回 A.exports, 这时 exports 可能是不完整的内容</li>
+</ol>
+<h5 id="7-module-load-真正去加载模块代码"><a href="#7-module-load-真正去加载模块代码" class="headerlink" title="7. module.load 真正去加载模块代码"></a>7. module.load 真正去加载模块代码</h5><p>通过 load 函数加载文件，源码中会有一个获取文件扩展名的函数(<a target="_blank" rel="noopener" href="https://github.com/nodejs/node/blob/master/lib/internal/modules/cjs/loader.js#L936">https://github.com/nodejs/node/blob/master/lib/internal/modules/cjs/loader.js#L936</a>)<br>, 有扩展名的取扩展名，没有的都按 .js 为扩展名处理。因为不是所有的都支持，所以在这之前会判断 Module._extensions 所支持的所有扩展名。</p>
+<p>自己实现 load 函数</p>
+<pre><code>    KolaModule.prototype.load = function (filename) &#123;
+        const extname = path.extname(filename);
+
+        // 根据不同的后缀名不同的处理
+        KolaModule._extensions[extname](this, filename);
+        this.loaded = true;
+    &#125;
+</code></pre>
+<p>获取不同的扩展名后取执行不同的扩展名函数，源码中支持的扩展名有.js， .json, .node;</p>
+<h6 id="7-1-加载-js"><a href="#7-1-加载-js" class="headerlink" title="7.1 加载 js"></a>7.1 加载 js</h6><p>源码：<a target="_blank" rel="noopener" href="https://github.com/nodejs/node/blob/master/lib/internal/modules/cjs/loader.js#L1092">https://github.com/nodejs/node/blob/master/lib/internal/modules/cjs/loader.js#L1092</a></p>
+<pre><code>    简单实现：
+    KolaModule._extensions[&#39;.js&#39;] = function (module, filename) &#123;
+        const content = fs.readFileSync(filename, &#39;utf8&#39;);
+        module._compile(content, filename);
+    &#125;
+
+    KoalaModule.wrapper = [
+        &#39;(function (exports, require, module, __filename, __dirname) &#123; &#39;,
+            &#39;\n&#125;);&#39;
+        ];
+
+        KoalaModule.wrap = function (script) &#123;
+            return KoalaModule.wrapper[0] + script + KoalaModule.wrapper[1];
+        &#125;;
+
+        KoalaModule.prototype._compile = function (content, filename) &#123;
+        const wrapper = KoalaModule.wrap(content);    // 获取包装后函数体
+
+        // vm是 Node.js 的虚拟机模块，runInThisContext方法可以接受一个字符串并将它转化为一个函数
+        // 返回值就是转化后的函数，compiledWrapper是一个函数
+        const compiledWrapper = vm.runInThisContext(wrapper, &#123;
+            filename,
+            lineOffset: 0,
+            displayErrors: true,
+        &#125;);
+        const dirname = path.dirname(filename);
+        // 调用函数，这里一定注意传递进的内容。
+        compiledWrapper.call(this.exports, this.exports, this.require, this,
+            filename, dirname);
+    &#125;
+</code></pre>
+<p>vm 是 Node.js 的虚拟机模块，runInThisContext 方法 可以接收一个字符串并将它转化为一个函数。</p>
+<ul>
+<li><p>使用 vm 进行模块代码的执行，模块代码外面进行了一层包裹，以便注入一些变量，</p>
+<pre><code> &#39;(function (exports, require, module, __filename, __dirname) &#123; &#39;,
+ &#39;\n&#125;);&#39;
+</code></pre>
+</li>
+<li><p>最终执行代码的函数需要传递参数</p>
+<pre><code>      this: compiledWrapper函数是通过 call 调用的，第一个参数就是里面的this，这里我们传入的是 this.exports，也就是 module.exports
+      exports: compiledWrapper 函数正式接收的第一个参数是 exports，我们传的也是 this.exports,所以 js 文件里面的 exports 也是对module.exports 的一个引用。
+      require: 这个方法我们传的是 this.require，其实就是KoalaModule.prototype.require 函数，也就是 KoalaModule._load。
+      module: 我们传入的是 this，也就是当前模块的实例。
+      __filename：文件所在的绝对路径。
+      __dirname: 文件所在文件夹的绝对路径
+</code></pre>
+</li>
+</ul>
+<p>这也是为什么能直接在 js 模块文件中使用这几个变量的原因</p>
+<h6 id="7-2-加载-json"><a href="#7-2-加载-json" class="headerlink" title="7.2 加载 json"></a>7.2 加载 json</h6><p>使用 JSONParse</p>
+<pre><code>    KoalaModule._extensions[&#39;.json&#39;] = function (module, filename) &#123;
+        const content = fs.readFileSync(filename, &#39;utf8&#39;);
+        try &#123;
+        module.exports = JSONParse(content);
+        &#125; catch (err) &#123;
+            throw err;
+        &#125;
+    &#125;
+</code></pre>
+<h4 id="8-返回模块的-module-exports"><a href="#8-返回模块的-module-exports" class="headerlink" title="8. 返回模块的 module.exports"></a>8. 返回模块的 module.exports</h4><pre><code>    return module.exports
+</code></pre>
+<h3 id="require-总结"><a href="#require-总结" class="headerlink" title="require 总结"></a>require 总结</h3><ol>
+<li><p>require 加载是同步的，任何文件相关操作都是同步的, 例如：</p>
+<p>fs.existsSync(currentPath) &#x2F;&#x2F; 判断文件是否存在<br>fs.readFileSync(filename, ‘utf8) &#x2F;&#x2F; 读取文件</p>
+</li>
+<li><p>exports 和 module.exports 区别</p>
+</li>
+</ol>
+<p>使用方法区别</p>
+<pre><code>    exports用法：exports 的方法可以直接调用
+    exports [function name] = [function name]
+    import [function name] from &quot;xxx&quot;;
+
+    module.exports 用法：module.exports 返回的是模块对象本身，需要new 对象后才可以使用
+    module.exports = [function name]
+    var xx = require(&#39;./xxxx.js&#39;) // 具体路径
+    xxx = new xx()
+</code></pre>
+<p>2.1 Node 模块导入导出</p>
+<p>Node 运行时，为每个模块提供一个 exports 变量，指向 module.exports</p>
+<pre><code>    exports = module.exports = &#123;&#125;; // 最初他们指向同一块内存
+</code></pre>
+<p>exports 只是 module.exports 的引用</p>
+<p>require 导出的内容，是 module.exports 的指向的内存块内容，并不是 exports 指向的内存块内容，</p>
+<p>2.2 ES 中的模块导入导出</p>
+<ul>
+<li><p>export 和 export default</p>
+<ol>
+<li>export 和 export default 都可以导出 常量，函数，模块，文件等</li>
+<li>在一个模块或者文件中，export ，import 可以多个，但是 export default 只有一个</li>
+<li>同个 export 导出的模块，引入时需要加入 {}, export default 则不需要</li>
+<li>export 能直接导出变量表达式，export default 不行</li>
+</ol>
+</li>
+</ul>
+<p>参考文章:</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/v94ZYnBdUZNBwKjQuGIiOg">彻底搞懂 Node.js 中的 Require 机制</a></p>
+<p><a target="_blank" rel="noopener" href="https://es6.ruanyifeng.com/#docs/module-loader">Module 的加载实现</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2020/12/03/Module%20%E5%8A%A0%E8%BD%BD%E5%8E%9F%E7%90%86/" data-id="cl39r6mbh0000k5y11y77elhs" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-元素垂直水平居中" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/01/06/%E5%85%83%E7%B4%A0%E5%9E%82%E7%9B%B4%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/" class="article-date">
@@ -887,7 +1496,7 @@ FALLBACK:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
     </div>
   </div>
 
@@ -900,6 +1509,14 @@ FALLBACK:
       <ul>
         
           <li>
+            <a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/">安卓自适应应用图标</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/">记录 React 18 升级变更</a>
+          </li>
+        
+          <li>
             <a href="/2022/05/13/CSS%E5%AE%9E%E7%8E%B0%E7%BB%98%E5%88%B6%E5%B0%8F%E5%9B%BE%E6%A0%87/">绘制三角形</a>
           </li>
         
@@ -909,14 +1526,6 @@ FALLBACK:
         
           <li>
             <a href="/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/">React 组件代码结构优化</a>
-          </li>
-        
-          <li>
-            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/">自定义主题色实现之 CSS Variable</a>
-          </li>
-        
-          <li>
-            <a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8Bless%20%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E7%BC%96%E8%AF%91/">自定义主题色实现之 less 浏览器端编译</a>
           </li>
         
       </ul>

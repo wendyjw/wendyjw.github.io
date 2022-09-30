@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>安卓自适应应用图标 | 吴文君的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边 背景：IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。在 Android 上，应用图标可以是方形、圆形、圆角矩形、或者是其他任意不规则图形。但由于 Android 操作系统是开源的，国内一些手机厂商在定制操作系统的时候就把这一特性给改了。比如小米手机，就选择了向苹果靠拢，强制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓自适应应用图标">
+<meta property="og:url" content="http://wendyjw.github.io/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/index.html">
+<meta property="og:site_name" content="吴文君的博客">
+<meta property="og:description" content="问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边 背景：IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。在 Android 上，应用图标可以是方形、圆形、圆角矩形、或者是其他任意不规则图形。但由于 Android 操作系统是开源的，国内一些手机厂商在定制操作系统的时候就把这一特性给改了。比如小米手机，就选择了向苹果靠拢，强制">
+<meta property="og:locale">
+<meta property="og:image" content="https://wendyjw.github.io/images/androidMainifest.png">
+<meta property="og:image" content="https://wendyjw.github.io/images/%E5%8E%9Fmipmap.png">
+<meta property="og:image" content="https://wendyjw.github.io/images/1-NB_Icon_Mask_Shapes_Ext_02.gif">
+<meta property="og:image" content="https://wendyjw.github.io/images/3-adaptive-icon-themed-icons.png">
+<meta property="og:image" content="https://wendyjw.github.io/images/4-adaptive-icon-foreground-background.png">
+<meta property="og:image" content="https://wendyjw.github.io/images/5-adaptive-icon-mask-applied.png">
+<meta property="og:image" content="https://wendyjw.github.io/images/mipmap.png">
+<meta property="article:published_time" content="2022-09-29T03:00:25.000Z">
+<meta property="article:modified_time" content="2022-09-29T03:24:22.605Z">
+<meta property="article:author" content="吴文君">
+<meta property="article:tag" content="前端, JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wendyjw.github.io/images/androidMainifest.png">
+  
+    <link rel="alternate" href="/atom.xml" title="吴文君的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">吴文君的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wendyjw.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-安卓自适应应用图标" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" class="article-date">
+  <time datetime="2022-09-29T03:00:25.000Z" itemprop="datePublished">2022-09-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      安卓自适应应用图标
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边</p>
+<p>背景：<br>IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。<br>在 Android 上，应用图标可以是方形、圆形、圆角矩形、或者是其他任意不规则图形。<br>但由于 Android 操作系统是开源的，国内一些手机厂商在定制操作系统的时候就把这一特性给改了。比如小米手机，就选择了向苹果靠拢，强制要求应用图标圆角化。<br>终于在 Android 8.0 系统中，Google 下定决心要好好整治一下 Android 应用图标的规范性。</p>
+<h4 id="Android-8-0-应用图标适配"><a href="#Android-8-0-应用图标适配" class="headerlink" title="Android 8.0 应用图标适配"></a>Android 8.0 应用图标适配</h4><p>从 Android 8.0 系统开始，应用程序的图标被分为了两层：前景层和背景层。也就是说，我们在设计应用图标的时候，需要将前景和背景部分分离，前景用来展示应用图标的 Logo，背景用来衬托应用图标的 Logo。需要注意的是，背景层在设计的时候只允许定义颜色和纹理，但是不能定义形状。</p>
+<p>那么应用图标的形状由谁来定义呢？Google 将这个权利就交给手机厂商了。不是有些手机厂商喜欢学习苹果的圆角图标吗？没问题，由于应用图标的设计分为了两层，手机厂商只需要在这两层之上再盖上一层 mask，这个 mask 可以是圆角矩形、圆形或者是方形等等，视具体手机厂商而定，就可以瞬间让手机上的所有应用图标都变成相同的规范</p>
+<p>何时需要适配？</p>
+<p>如果你的 APP 中的 targetSdkVersion 是低于 26 的，那么就可以不用进行应用图标适配，Android 8.0 系统仍然是向下兼容的。<br>如果你将 targetSdkVersion 指定到了 26 或者更高，那么 Android 系统就会认为你的 APP 已经做好了 8.0 系统的适配工作，当然包括了应用图标的适配</p>
+<h4 id="如何进行-8-0-系统的应用图标适配"><a href="#如何进行-8-0-系统的应用图标适配" class="headerlink" title="如何进行 8.0 系统的应用图标适配"></a>如何进行 8.0 系统的应用图标适配</h4><ol>
+<li>确认 targetSdkVersion &gt;&#x3D; 26</li>
+</ol>
+<p>打开 <code>app/build.gradle</code> 文件，确认 targetSdkVersion 版本</p>
+<ol start="2">
+<li>查看应用图标文件</li>
+</ol>
+<p>打卡 <code>AndroidManifest.xml</code> 文件，查看 android:icon 属性，该属性将应用的图标指定为了 mipmap 目录下的 ic_launcher 文件,<br>Android 8.0 或以上系统的手机，都会使用 mipmap-anydpi-v26 这个目录下的 ic_launcher 来作为图标。<br>注：android:roundIcon 属性，这是一个只适用在 Android 7.1 系统上的过渡版本，很快就被 8.0 系统的应用图标适配所替代了。</p>
+<p><img src="https://wendyjw.github.io/images/androidMainifest.png" alt="androidMainifest"></p>
+<ol start="3">
+<li>查看 ic_launcher</li>
+</ol>
+<p>mipmap-anydpi-v26 目录下的 ic_launcher 并不是一张图片，而是一个 XML 文件，包含指定图标的背景层和前景层。<br>直接体现了在 8.0 系统的应用图标展示效果,可见过于贴边</p>
+<p><img src="https://wendyjw.github.io/images/%E5%8E%9Fmipmap.png" alt="有问题的应用图标"></p>
+<p>其中 <code>@color/ic_launcher_background</code> 是背景色，默认 #FFFFFF, 可自定义</p>
+<h4 id="如何解决过于贴边"><a href="#如何解决过于贴边" class="headerlink" title="如何解决过于贴边"></a>如何解决过于贴边</h4><h5 id="1-安卓自适应图标"><a href="#1-安卓自适应图标" class="headerlink" title="1. 安卓自适应图标"></a>1. 安卓自适应图标</h5><p>一个自适应的图标可以适应不同的使用情况</p>
+<ol>
+<li>不同的形状：一个自适应图标可以在不同的设备型号上显示各种形状。例如，它可以在一个 OEM 设备上显示一个圆形，而在另一个设备上显示一个正方形。每个设备 OEM 必须提供一个掩码，系统用它来渲染所有具有相同形状的自适应图标</li>
+</ol>
+<p><img src="https://wendyjw.github.io/images/1-NB_Icon_Mask_Shapes_Ext_02.gif" alt="不同遮罩层"></p>
+<p>图 1：自适应图标支持各种遮罩层，这些遮罩层在不同的设备上有所不同</p>
+<ol start="2">
+<li>视觉效果：自适应图标支持各种吸引人的视觉效果，当用户在主屏幕上放置或移动图标时，这些效果会显示出来</li>
+</ol>
+<p>注意：动画的视觉效果是由支持的启动器生成的。视觉效果可能因不同的发射器而异。</p>
+<ol start="3">
+<li>用户主题化：从安卓 13（API 级别 33）开始，用户可以给他们的自适应图标做主题。如果用户启用了主题应用图标（换句话说，在系统设置中打开了主题图标的开关），并且启动器支持这一功能，系统会使用用户选择的壁纸和主题的着色来决定色调的颜色。</li>
+</ol>
+<p><img src="https://wendyjw.github.io/images/3-adaptive-icon-themed-icons.png" alt="自适应图标"></p>
+<p>图 3：从用户的墙纸和主题继承的自适应图标</p>
+<h5 id="2-如何设置自适应图标"><a href="#2-如何设置自适应图标" class="headerlink" title="2. 如何设置自适应图标"></a>2. 如何设置自适应图标</h5><ol>
+<li>为图标提供两个图层：一个为前景，一个为背景</li>
+</ol>
+<p><img src="https://wendyjw.github.io/images/4-adaptive-icon-foreground-background.png" alt="安全区域"></p>
+<p>图 4：使用前景和背景层定义的自适应图标。</p>
+<p>第二张图片中的 72 x 72 安全区显示了你的图标和前景层永远不会被 OEM 定义的形状掩码所剪切的地方。</p>
+<p><img src="https://wendyjw.github.io/images/5-adaptive-icon-mask-applied.png" alt="前景+ 背景"><br>图 5：在应用了圆形遮罩的情况下，前景层和背景层在一起的例子。</p>
+<ol start="2">
+<li>限制大小</li>
+</ol>
+<ul>
+<li>所有图层的大小必须是 108 x 108 dp。</li>
+<li>图标的边缘应该是干净的；图层在图标的轮廓周围不能有遮罩或背景阴影。</li>
+<li>图标必须至少是 48 x 48 dp；它不能超过 72 x 72 dp，因为图标的内部 72 x 72 dp 会出现在遮罩的视口内。</li>
+<li>图层四边的外侧 18dp 是为遮蔽和创造视觉效果（如视差或脉冲）而保留的。</li>
+</ul>
+<h4 id="3-项目中修改"><a href="#3-项目中修改" class="headerlink" title="3. 项目中修改"></a>3. 项目中修改</h4><p>提供 icon-background.png，icon-foreground.png 尺寸都是 432 X 432，其中前景部分占比缩小为 55%，保证边框处有空白背景展示</p>
+<p><img src="https://wendyjw.github.io/images/mipmap.png" alt="修改后应用图标展示"></p>
+<p>参考文章：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/develop/ui/views/launch/icon_design_adaptive">https://developer.android.com/develop/ui/views/launch/icon_design_adaptive</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/25abce3f0492">https://www.jianshu.com/p/25abce3f0492</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/google-design/designing-adaptive-icons-515af294c783">https://medium.com/google-design/designing-adaptive-icons-515af294c783</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wendyjw.github.io/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" data-id="cl8nvqp490001pky18th2elyc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">记录 React 18 升级变更</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/">安卓自适应应用图标</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/">记录 React 18 升级变更</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/13/CSS%E5%AE%9E%E7%8E%B0%E7%BB%98%E5%88%B6%E5%B0%8F%E5%9B%BE%E6%A0%87/">绘制三角形</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/">浅谈字符串长度</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/16/%20React%20%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96/">React 组件代码结构优化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 吴文君<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
