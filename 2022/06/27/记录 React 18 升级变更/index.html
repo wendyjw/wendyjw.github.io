@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>记录 React 18 升级变更 - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="React 18 放弃了对 IE11 的支持。
+1. createRoot1.1 React 18 提供 2 个根 API： Legacy Root API 和 New Root API
+
+lega,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">记录 React 18 升级变更</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                六月 27, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/06/27/%E8%AE%B0%E5%BD%95%20React%2018%20%E5%8D%87%E7%BA%A7%E5%8F%98%E6%9B%B4/" title="记录 React 18 升级变更" class="">记录 React 18 升级变更</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    22k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    20 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p>React 18 放弃了对 IE11 的支持。</p>
+<h3 id="1-createRoot"><a href="#1-createRoot" class="headerlink" title="1. createRoot"></a>1. createRoot</h3><p>1.1 React 18 提供 2 个根 API： <strong>Legacy Root API</strong> 和 <strong>New Root API</strong></p>
+<ul>
+<li><strong>legacy root API</strong>: 即 <code>ReactDom.render</code> 工作原理与 React 17 一样</li>
+<li><strong>New Root API</strong>: 即 <code>createRoot</code>，创建一个在 React 18 中运行的 root,添加了 18 所有改进并允许使用并发的功能</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// React 17</span></span><br><span class="line"><span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;app&quot;</span>);</span><br><span class="line"><span class="comment">// 装载</span></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>, container);</span><br><span class="line"><span class="comment">// 卸载</span></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">unmountComponentAtNode</span>(container);</span><br><span class="line"></span><br><span class="line"><span class="comment">// React 18</span></span><br><span class="line"><span class="keyword">import</span> &#123; createRoot &#125; <span class="keyword">from</span> <span class="string">&quot;react-dom/client&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;app&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> root = <span class="title function_">createRoot</span>(container);</span><br><span class="line"><span class="comment">// 装载</span></span><br><span class="line">root.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>);</span><br><span class="line"><span class="comment">// 卸载</span></span><br><span class="line">root.<span class="title function_">unmount</span>();</span><br></pre></td></tr></table></figure>
+
+<p>1.2 为什么 React 18 用 <code>createRoot</code> 替换 <code>render</code></p>
+<p>在 React 中，<code>root</code> 是一个指向顶层数据结构的指针，当运行<code>ReactDOM.render(rootElement, &lt;App /&gt;);</code>时，<br>React 会创建一个顶级的根节点，即 <code>FiberRoot</code> ，这个根节点是绑定到 <code>rootElement</code> 这个 DOM 节点上。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// container 对应的就是 `ReactDOM.render` 的第一个参数</span></span><br><span class="line">container.<span class="property">_reactRootContainer</span> = <span class="title function_">legacyCreateRootFromDOMContainer</span>(</span><br><span class="line">  container,</span><br><span class="line">  forceHydrate</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>如果想重新渲染整个应用，就算我们没有改变 DOM 根节点 <code>rootElement</code> ,也要重新传递 <code>rootElement</code>。<br>而且， React 应用的根节点对使用者来说是不透明的，我们无法渠道这个值，只能取到对应的 DOM 节点<br><code>const container = document.getElementById(&#39;app&#39;);</code></p>
+<p>当使用 <code>createRoot</code> 后，只需要在第一次的时候传入 <code>rootElement</code> 节点</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> root = <span class="title class_">ReactDOM</span>.<span class="title function_">createRoot</span>(rootElement);</span><br></pre></td></tr></table></figure>
+
+<p>后续渲染时调用 <code>render</code> 方法就好了，</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">App</span> /&gt;</span></span>);</span><br></pre></td></tr></table></figure>
+
+<p>React 向我们暴露了应用的根节点，就不需要把他隐式的绑定到对应的 DOM 节点上了。</p>
+<h3 id="2-服务端渲染-hydrateRoot"><a href="#2-服务端渲染-hydrateRoot" class="headerlink" title="2. 服务端渲染-hydrateRoot"></a>2. 服务端渲染-hydrateRoot</h3><p>如果的应用使用带注水的服务端渲染，请升级 <code>hydrate</code> 到 <code>hydrateRoot</code></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> root = <span class="title function_">hydrateRoot</span>(container, <span class="language-xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>);</span><br><span class="line"><span class="comment">// 这里无需执行 root.render</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-批量处理，setState-同步-异步"><a href="#3-批量处理，setState-同步-异步" class="headerlink" title="3. 批量处理，setState 同步&#x2F;异步"></a>3. 批量处理，setState 同步&#x2F;异步</h3><p>React 18 之前，React 只能在组件的生命周期函数或合成事件函数中进行批处理（多个状态更新合并为一次重新渲染），<br>默认情况下，<code>Promise</code>，<code>setTimeout</code>以及 原生事件中不会进行批处理。如果需要批处理，可以使用 <code>unstable_batchedUpdates</code>实现。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">setCount</span>(<span class="number">1</span>);</span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">true</span>);</span><br><span class="line">  <span class="comment">// 批处理：会合并为一次 render</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setCount</span>(<span class="number">2</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">// 同步模式：会执行两次 render</span></span><br><span class="line">  <span class="comment">// 并且在 setCount 后，在 setFlag 之前能通过 Ref 获取到最新的 count 值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>React 18 上第二个例子只会一次<code>render</code>,因为所有的更新都自动批处理。<br>不过一下例子在 react 18 执行 2 次 <code>render</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">setCount</span>(<span class="number">2</span>);</span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">// React 18：会执行两次 render</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-flushSync"><a href="#3-flushSync" class="headerlink" title="3. flushSync"></a>3. flushSync</h3><p>如果需要在 React 18 中退出批处理可以使用 API <code>flushSync</code></p>
+<p><code>flushSync&lt;R&gt;(fn: () =&gt; R):R</code>，接收一个函数作为参数，并允许有返回值。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">flushSync</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setCount</span>(<span class="number">3</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 会在 setCount 并 render 之后再执行 setFlag</span></span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：<code>flushSync</code> 会以函数为作用域，函数内部的多个 <code>setState</code>仍然为批量更新，这样可以精准控制哪些不需要的批量更新：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">flushSync</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setCount</span>(<span class="number">3</span>);</span><br><span class="line">    <span class="title function_">setFlag</span>(<span class="literal">true</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// setCount 和 setFlag 为批量更新，结束后</span></span><br><span class="line">  <span class="title function_">setFlag</span>(<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">// 此方法会触发两次 render</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Concurrent（并发）-模式"><a href="#4-Concurrent（并发）-模式" class="headerlink" title="4. Concurrent（并发） 模式"></a>4. Concurrent（并发） 模式</h3><p>并发模式通过使渲染可中断来修复阻塞渲染限制，在 Concurrent 模式中，React 可以同事更新多个状态。</p>
+<p><strong>4.1 Transition</strong></p>
+<p>在 React 18 中，为了能在大量任务下也能保持 UI 响应，引入新的 API <code>startTransition</code>,<br>这个 API 可以通过将特定场景，更新标记为 “过渡” 来显著改善用户交互。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; startTransition &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 紧急：显示输入的内容</span></span><br><span class="line"><span class="title function_">setInputValue</span>(input);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 标记回调函数内的更新标记为非紧急更新，这些渲染可能被其他紧急渲染所抢占</span></span><br><span class="line"><span class="title function_">startTransition</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">setSearchQuery</span>(input);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>用户场景示例：</p>
+<p>提供一个带有 <code>isPending</code> 转换标志的 <code>useTransition</code>, React 在状态转换期间提供视觉返回，并在转换发生是保持浏览器响应。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useTransition &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> [isPending, startTransition] = <span class="title function_">useTransition</span>();</span><br><span class="line"><span class="keyword">const</span> [value, setValue] = <span class="title function_">useState</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> atRangeChange = <span class="title class_">React</span>.<span class="title function_">useCallback</span>(</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setValue</span>(e.<span class="property">target</span>.<span class="property">value</span>);</span><br><span class="line">    <span class="title function_">startTransition</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setRenderValue</span>(e.<span class="property">target</span>.<span class="property">value</span> / <span class="number">1</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  [startTransition]</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      value:</span></span><br><span class="line"><span class="language-xml">      &#123;value&#125;</span></span><br><span class="line"><span class="language-xml">      renderValue:</span></span><br><span class="line"><span class="language-xml">      &#123;renderValue&#125; &#123;isPending ? &quot; Loading...&quot; : null&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">input</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">type</span>=<span class="string">&quot;range&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">min</span>=<span class="string">&quot;0&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">max</span>=<span class="string">&quot;600&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">step</span>=<span class="string">&quot;1&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">value</span>=<span class="string">&#123;value&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">onChange</span>=<span class="string">&#123;atRangeChange&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    /&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>可以使用 <code>startTransition</code>包装任何可移至后台的更新，通常，这些类型的更新分为两类：</p>
+<ol>
+<li>渲染缓慢：React 需要执行大量工作才能转换 UI 以显示结果</li>
+<li>网络慢：React 正在等待网络回应中的数据，这个方式与<code>Suspense</code>紧密集成</li>
+</ol>
+<p><strong>4.2 把 <code>Transition</code> 融合到应用的设计系统</strong></p>
+<p>很多交互都需要使用 <code>useTransition</code>,建议把 <code>useTransition</code> 融合到应用的设计系统组件中。<br>例如，把该逻辑抽取到<code>button</code>组件中</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">button</span>(<span class="params">&#123; children, onClick &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [isPending, startTransition] = <span class="title function_">useTransition</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">startTransition</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">onClick</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;handleClick&#125;</span> <span class="attr">disabled</span>=<span class="string">&#123;isPending&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;children&#125;</span></span><br><span class="line"><span class="language-xml">      &#123;isPending ? &quot;加载中&quot; : null&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.3 useDeferredValue</strong></p>
+<p>返回一个延迟响应的值，这通常用于在具有基于用户输入立即渲染的内容，以及需要等待数据获取的内容时，保持接口的可响应性。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useDeferredValue &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> deferredValue = <span class="title function_">useDeferredValue</span>(value);</span><br></pre></td></tr></table></figure>
+
+<p><code>useDeferredValue</code> 与 <code>useTransition</code> 的相同不同处：</p>
+<ul>
+<li>相同：本质上都是标记成，延迟更新任务</li>
+<li>不同：<code>useTransition</code> 是把更新任务变成延迟更新任务，<code>useDeferredValue</code> 是产生一个新的值，这个值作为延迟状态</li>
+</ul>
+<p><code>useDeferredValue</code> 与 <code>debounce</code> 的差异：</p>
+<ul>
+<li><code>debounce</code> 即 <code>setTimeout</code>, 总是会有一个固定的延迟，而 <code>useDeferredValue</code> 的值只会在渲染耗费的时间下滞后，在性能好的机器上，延迟会变少，反之则变长。</li>
+</ul>
+<hr>
+<p>参考文章: <a target="_blank" rel="noopener" href="https://juejin.cn/post/7078511027091931167#heading-2">https://juejin.cn/post/7078511027091931167#heading-2</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">20 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-createRoot"><span class="toc-number">1.</span> <span class="toc-text">1. createRoot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93-hydrateRoot"><span class="toc-number">2.</span> <span class="toc-text">2. 服务端渲染-hydrateRoot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%EF%BC%8CsetState-%E5%90%8C%E6%AD%A5-%E5%BC%82%E6%AD%A5"><span class="toc-number">3.</span> <span class="toc-text">3. 批量处理，setState 同步&#x2F;异步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-flushSync"><span class="toc-number">4.</span> <span class="toc-text">3. flushSync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Concurrent%EF%BC%88%E5%B9%B6%E5%8F%91%EF%BC%89-%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">4. Concurrent（并发） 模式</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

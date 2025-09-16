@@ -5,12 +5,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TS 常用用法 - 吴文君的博客</title>
+    <title>私有 npm 仓库使用手册 - 吴文君的博客</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="1. enum1234567891011121314151617181920212223enum Direction &amp;#123;  Up=&amp;#x27;up&amp;#x27;,  Down=&amp;#x27;d,"> 
+    <meta name="description" content="需求背景
+平时在项目工作中可能会用到很多通用性的代码，比如，框架类、工具类以及公用的业务逻辑代码等。通过打包发布到 npm 中央仓库或者私有仓库，来进行维护和托管代码，方便公用的代码的使用，如果涉及,"> 
     <meta name="author" content="wuwenjun"> 
     <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -74,7 +75,7 @@
     <div class="navigation animated fadeIn fast delay-1s">
         <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
         <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
-        <h3 class="subtitle">TS 常用用法</h3>
+        <h3 class="subtitle">私有 npm 仓库使用手册</h3>
         <div class="social">
             <!--        <div class="like-icon">-->
             <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
@@ -106,22 +107,22 @@
                 
                 <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
                 
-                三月 08, 2020
+                一月 03, 2022
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2020/03/08/TS%20%E5%B8%B8%E7%94%A8%E7%94%A8%E6%B3%95%20copy/" title="TS 常用用法" class="">TS 常用用法</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="私有 npm 仓库使用手册" class="">私有 npm 仓库使用手册</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                    7.7k
+                    4.5k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                    7 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -153,12 +154,52 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h2 id="1-enum"><a href="#1-enum" class="headerlink" title="1. enum"></a>1. enum</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">enum <span class="title class_">Direction</span> &#123;</span><br><span class="line">  <span class="title class_">Up</span>=<span class="string">&#x27;up&#x27;</span>,</span><br><span class="line">  <span class="title class_">Down</span>=<span class="string">&#x27;down&#x27;</span>,</span><br><span class="line">  <span class="title class_">Left</span>=<span class="string">&#x27;left&#x27;</span>,</span><br><span class="line">  <span class="title class_">Right</span>=<span class="string">&#x27;right&#x27;</span>,</span><br><span class="line">  <span class="title class_">All</span>=<span class="title class_">Up</span>|<span class="title class_">Down</span>|<span class="title class_">Left</span>|<span class="title class_">Right</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">move</span>(<span class="params">direction: Direction</span>) &#123;</span><br><span class="line">  <span class="keyword">switch</span> (direction) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">Direction</span>.<span class="property">Up</span>:</span><br><span class="line">      <span class="comment">// move up</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">Direction</span>.<span class="property">Down</span>:</span><br><span class="line">      <span class="comment">// move down</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">Direction</span>.<span class="property">Left</span>:</span><br><span class="line">      <span class="comment">// move left</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">Direction</span>.<span class="property">Right</span>:</span><br><span class="line">      <span class="comment">// move right</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <p><strong>需求背景</strong></p>
+<p>平时在项目工作中可能会用到很多通用性的代码，比如，框架类、工具类以及公用的业务逻辑代码等。通过打包发布到 npm 中央仓库或者私有仓库，来进行维护和托管代码，方便公用的代码的使用，如果涉及到不方便公开的代码组件可以发布到私有创库。</p>
+<p><strong>私有 npm 组件库的优势</strong></p>
+<ul>
+<li>私有 npm 包只对公司内部局域网开放；</li>
+<li>速度比直接在 npm 下载包更快，也比使用淘宝镜像快，毕竟是在公司内部局域网；</li>
+<li>对于发布和下载 npm 包可以配置权限管理</li>
+</ul>
+<p><strong>发布 npm 到私有仓库</strong></p>
+<ol>
+<li><p>发布 npm 包之前必须先注册账号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm adduser --registry https://npmjs-dev.maycur.com/</span><br><span class="line">```    输入 npm 账号用户名、密码和邮箱，完成注册</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>发布 npm 包到私有仓库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各环境 maycur-business 发布执行以下命令即可</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 发布 dev</span></span><br><span class="line">npm run publish:prerelease:dev</span><br><span class="line"><span class="comment"># 发布 sit</span></span><br><span class="line">npm run publish:prerelease:sit</span><br><span class="line"><span class="comment"># 发布 uat</span></span><br><span class="line">npm run publish:prerelease:uat</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意：</span></span><br><span class="line"><span class="comment"># 发布到私有仓库的 npm 时，需要修改仓库地址，具体操作如下：</span></span><br><span class="line">npm <span class="built_in">set</span> registry https://npmjs-dev.maycur.com/</span><br><span class="line"><span class="comment"># 查看 npm 配置信息</span></span><br><span class="line">npm config <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>npm 成功发布到私有仓库</p>
+</li>
+<li><p>如何使用私有仓库 npm 包</p>
+<p>下载我们发布到私有仓库的 npm 包时，需要修改仓库地址，具体操作如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="built_in">set</span> registry https://npmjs-dev.maycur.com/</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-接口继承"><a href="#2-接口继承" class="headerlink" title="2. 接口继承"></a>2. 接口继承</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">interface <span class="title class_">Animal</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: string;</span><br><span class="line">  <span class="title function_">eat</span>(): <span class="keyword">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface <span class="title class_">Dog</span> <span class="keyword">extends</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">  <span class="title function_">bark</span>(): <span class="keyword">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="attr">myDog</span>: <span class="title class_">Dog</span> = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Buddy&quot;</span>,</span><br><span class="line">  <span class="title function_">eat</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Dog is eating&quot;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">bark</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Woof woof!&quot;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-交叉类型"><a href="#3-交叉类型" class="headerlink" title="3. 交叉类型"></a>3. 交叉类型</h2><p>需要注意的是，如果合并的接口类型中具有同名属性，且类型不同，则合并后类型为 never</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">interface <span class="title class_">ClassA</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: string;</span><br><span class="line">  <span class="attr">age</span>: number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface <span class="title class_">ClassB</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: string;</span><br><span class="line">  <span class="attr">phone</span>: number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type <span class="title class_">Class</span> = <span class="title class_">ClassA</span> &amp; <span class="title class_">ClassB</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="attr">info</span>: <span class="title class_">Class</span> = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;zhangsan&quot;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span>,</span><br><span class="line">  <span class="attr">phone</span>: <span class="number">15738755555</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在执行这条命令以后，再使用 <code>npm install</code> 命令就会优先去我们自己的私有仓库下载 npm 包，如何没有找到，则会从 npm 中央仓库下载。</p>
+</li>
+</ol>
+<p><strong>nrm 安装与配置</strong></p>
+<ol>
+<li><p><strong>安装 nrm</strong><br>最后推荐一个 npm 仓库切换工具：切换 npm 仓库地址，推荐使用 nrm<br>nrm 是 npm registry 管理工具，能够查看和切换当前使用的 registry 。不安装也可以，安装会更高效。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g nrm</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>使用</strong><br>执行命令 <code>nrm ls</code> 查看可选的源</p>
+</li>
+<li><p><strong>增加</strong><br>执行命令 <code>nrm add &lt;registry&gt; &lt;url&gt;</code>, 其中 registry 为源名，url 为源的路径。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nrm add maycur https://npmjs-dev.maycur.com/</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>切换</strong><br>如果要切换到 maycur 源，执行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nrm use maycur</span><br><span class="line">```5.  **删除**</span><br><span class="line">执行命令 `nrm del &lt;registry&gt;` 删除对应的源。</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>常见问题</strong></p>
+<ol>
+<li><p><strong>在家办公 npm install 失败</strong><br>请检查是否连接 VPN.</p>
+</li>
+<li><p><strong>jenkins 打包失败如下图：</strong></p>
+<p><img src="https://wendyjw.github.io/images/jkensError1.png" alt="jenkins 打包失败日志"></p>
+<p>检查 jenkins 打包配置信息，修改正确打包源地址（<code>https://npmjs-dev.maycur.com/</code>）如下图所示：</p>
+<p><img src="https://wendyjw.github.io/images/jkensErrorFix.png" alt="jenkins 打包失败日志"></p>
+</li>
+</ol>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -208,20 +249,13 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">7 <p>文章</p></a></li>
+                    <li><a href="/">20 <p>文章</p></a></li>
                     <li><a href="/categories">0 <p>分类</p></a></li>
                     <li><a href="/tags">0 <p>标签</p></a></li>
                 </ul>
             </div>
             
             
-            
-            <div class="box sticky animated fadeInRight faster">
-                <div id="toc" class="subbox">
-                    <h4>目录</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-enum"><span class="toc-number">1.</span> <span class="toc-text">1. enum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%8E%A5%E5%8F%A3%E7%BB%A7%E6%89%BF"><span class="toc-number">2.</span> <span class="toc-text">2. 接口继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BA%A4%E5%8F%89%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">3. 交叉类型</span></a></li></ol>
-                </div>
-            </div>
             
             
         </div>

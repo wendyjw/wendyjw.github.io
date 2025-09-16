@@ -5,12 +5,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>安卓自适应应用图标 - 吴文君的博客</title>
+    <title>CSS实现绘制小图标 - 吴文君的博客</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边背景：IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。在 Android 上,"> 
+    <meta name="description" content="好的，当然可以。我已经将您提供的 HTML 文件内容提取出来，并转换成了标准的 Markdown (.md) 格式。
+我已经去除了原有的网站导航、页眉、页脚和侧边栏等模板代码，只保留了核心的文章内容,"> 
     <meta name="author" content="wuwenjun"> 
     <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -74,7 +75,7 @@
     <div class="navigation animated fadeIn fast delay-1s">
         <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
         <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
-        <h3 class="subtitle">安卓自适应应用图标</h3>
+        <h3 class="subtitle">CSS实现绘制小图标</h3>
         <div class="social">
             <!--        <div class="like-icon">-->
             <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
@@ -106,22 +107,22 @@
                 
                 <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
                 
-                九月 08, 2022
+                五月 13, 2022
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2022/09/08/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" title="安卓自适应应用图标" class="">安卓自适应应用图标</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/05/13/CSS%E5%AE%9E%E7%8E%B0%E7%BB%98%E5%88%B6%E5%B0%8F%E5%9B%BE%E6%A0%87/" title="CSS实现绘制小图标" class="">CSS实现绘制小图标</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                    3k
+                    11k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                    3 mins.
+                    10 mins.
                 </span>
                 
                 
@@ -153,38 +154,17 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p>问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边<br>背景：<br>IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。<br>在 Android 上，应用图标可以是方形、圆形、圆角矩形、或者是其他任意不规则图形。<br>但由于 Android 操作系统是开源的，国内一些手机厂商在定制操作系统的时候就把这一特性给改了。比如小米手机，就选择了向苹果靠拢，强制要求应用图标圆角化。<br>终于在 Android 8.0 系统中，Google 下定决心要好好整治一下 Android 应用图标的规范性。</p>
-<h2 id="1-Android-8-0-应用图标适配"><a href="#1-Android-8-0-应用图标适配" class="headerlink" title="1. Android 8.0 应用图标适配"></a>1. Android 8.0 应用图标适配</h2><p>从 Android 8.0 系统开始，应用程序的图标被分为了两层：前景层和背景层。也就是说，我们在设计应用图标的时候，需要将前景和背景部分分离，前景用来展示应用图标的 Logo，背景用来衬托应用图标的 Logo。需要注意的是，背景层在设计的时候只允许定义颜色和纹理，但是不能定义形状。</p>
-<p>那么应用图标的形状由谁来定义呢？Google 将这个权利就交给手机厂商了。不是有些手机厂商喜欢学习苹果的圆角图标吗？没问题，由于应用图标的设计分为了两层，手机厂商只需要在这两层之上再盖上一层 mask，这个 mask 可以是圆角矩形、圆形或者是方形等等，视具体手机厂商而定，就可以瞬间让手机上的所有应用图标都变成相同的规范</p>
-<p>何时需要适配？</p>
-<p>如果你的 APP 中的 targetSdkVersion 是低于 26 的，那么就可以不用进行应用图标适配，Android 8.0 系统仍然是向下兼容的。<br>如果你将 targetSdkVersion 指定到了 26 或者更高，那么 Android 系统就会认为你的 APP 已经做好了 8.0 系统的适配工作，当然包括了应用图标的适配</p>
-<h2 id="2-如何进行-8-0-系统的应用图标适配"><a href="#2-如何进行-8-0-系统的应用图标适配" class="headerlink" title="2. 如何进行 8.0 系统的应用图标适配"></a>2. 如何进行 8.0 系统的应用图标适配</h2><ol>
-<li><p>确认 <code>targetSdkVersion &gt;= 26</code><br>打开 app&#x2F;build.gradle 文件，确认 targetSdkVersion 版本</p>
-</li>
-<li><p>查看应用图标文件<br>打卡 AndroidManifest.xml 文件，查看 android:icon 属性，该属性将应用的图标指定为了 mipmap 目录下的 ic_launcher 文件,<br>Android 8.0 或以上系统的手机，都会使用 mipmap-anydpi-v26 这个目录下的 ic_launcher 来作为图标。<br>注：android:roundIcon 属性，这是一个只适用在 Android 7.1 系统上的过渡版本，很快就被 8.0 系统的应用图标适配所替代了。</p>
-</li>
-<li><p>查看 ic_launcher<br>mipmap-anydpi-v26 目录下的 ic_launcher 并不是一张图片，而是一个 XML 文件，包含指定图标的背景层和前景层。<br>直接体现了在 8.0 系统的应用图标展示效果,可见过于贴边</p>
-</li>
-</ol>
-<h2 id="3-如何解决过于贴边"><a href="#3-如何解决过于贴边" class="headerlink" title="3. 如何解决过于贴边"></a>3. 如何解决过于贴边</h2><ol>
-<li>安卓自适应图标, 一个自适应的图标可以适应不同的使用情况</li>
-</ol>
-<ul>
-<li>. 不同的形状：一个自适应图标可以在不同的设备型号上显示各种形状。例如，它可以在一个 OEM 设备上显示一个圆形，而在另一个设备上显示一个正方形。每个设备 OEM 必须提供一个掩码，系统用它来渲染所有具有相同形状的自适应图标<br>自适应图标支持各种遮罩层，这些遮罩层在不同的设备上有所不同</li>
-<li>. 视觉效果：自适应图标支持各种吸引人的视觉效果，当用户在主屏幕上放置或移动图标时，这些效果会显示出来<br>注意：动画的视觉效果是由支持的启动器生成的。视觉效果可能因不同的发射器而异。</li>
-<li>用户主题化：从安卓 13（API 级别 33）开始，用户可以给他们的自适应图标做主题。如果用户启用了主题应用图标（换句话说，在系统设置中打开了主题图标的开关），并且启动器支持这一功能，系统会使用用户选择的壁纸和主题的着色来决定色调的颜色。</li>
-</ul>
-<ol start="2">
-<li>如何设置自适应图标</li>
-</ol>
-<ul>
-<li><p>为图标提供两个图层：一个为前景，一个为背景。<br>第二张图片中的 72 x 72 安全区显示了你的图标和前景层永远不会被 OEM 定义的形状掩码所剪切的地方。</p>
-</li>
-<li><p>限制大小<br>所有图层的大小必须是 108 x 108 dp。<br>图标的边缘应该是干净的；图层在图标的轮廓周围不能有遮罩或背景阴影。<br>图标必须至少是 48 x 48 dp；它不能超过 72 x 72 dp，因为图标的内部 72 x 72 dp 会出现在遮罩的视口内。<br>图层四边的外侧 18dp 是为遮蔽和创造视觉效果（如视差或脉冲）而保留的。</p>
-</li>
-</ul>
-<p>参考文章：</p>
-<p><a target="_blank" rel="noopener" href="https://developer.android.com/develop/ui/views/launch/icon_design_adaptive">https://developer.android.com/develop/ui/views/launch/icon_design_adaptive</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/25abce3f0492">https://www.jianshu.com/p/25abce3f0492</a><br><a target="_blank" rel="noopener" href="https://medium.com/google-design/designing-adaptive-icons-515af294c783">https://medium.com/google-design/designing-adaptive-icons-515af294c783</a></p>
+            <p>好的，当然可以。我已经将您提供的 HTML 文件内容提取出来，并转换成了标准的 Markdown (.md) 格式。</p>
+<p>我已经去除了原有的网站导航、页眉、页脚和侧边栏等模板代码，只保留了核心的文章内容。</p>
+<hr>
+<h1 id="绘制三角形"><a href="#绘制三角形" class="headerlink" title="绘制三角形"></a>绘制三角形</h1><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div className=<span class="string">&quot;box&quot;</span>&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;box-inner&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;triangle bottom&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;triangle right&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;triangle top&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;triangle left&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.triangle</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">margin-right</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="comment">/* Base Style */</span></span><br><span class="line">  <span class="attribute">border</span>: solid <span class="number">10px</span> transparent;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*下*/</span></span><br><span class="line"><span class="selector-class">.triangle</span><span class="selector-class">.bottom</span> &#123;</span><br><span class="line">  <span class="attribute">border-top-color</span>: <span class="number">#0097a7</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*上*/</span></span><br><span class="line"><span class="selector-class">.triangle</span><span class="selector-class">.top</span> &#123;</span><br><span class="line">  <span class="attribute">border-bottom-color</span>: <span class="number">#b2ebf2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*左*/</span></span><br><span class="line"><span class="selector-class">.triangle</span><span class="selector-class">.left</span> &#123;</span><br><span class="line">  <span class="attribute">border-right-color</span>: <span class="number">#00bcd4</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*右*/</span></span><br><span class="line"><span class="selector-class">.triangle</span><span class="selector-class">.right</span> &#123;</span><br><span class="line">  <span class="attribute">border-left-color</span>: <span class="number">#009688</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="绘制小箭头"><a href="#绘制小箭头" class="headerlink" title="绘制小箭头"></a>绘制小箭头</h3><p>用透明三角形遮挡上面的带颜色三角形，只留出 border 的宽度</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div className=<span class="string">&quot;box&quot;</span>&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;box-inner&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;arrow bottom&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;arrow right&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;arrow top&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;arrow left&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.arrow</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">margin-right</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="comment">/* Base Style */</span></span><br><span class="line">  <span class="attribute">border</span>: <span class="number">16px</span> solid;</span><br><span class="line">  <span class="attribute">border-color</span>: transparent <span class="number">#cddc39</span> transparent transparent;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.arrow</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="comment">/* 用透明三角形遮挡上面的带颜色三角形，只留出 border 的宽度 */</span></span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">right</span>: -<span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">top</span>: -<span class="number">16px</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">16px</span> solid;</span><br><span class="line">  <span class="attribute">border-color</span>: transparent <span class="number">#fff</span> transparent transparent;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*下*/</span></span><br><span class="line"><span class="selector-class">.arrow</span><span class="selector-class">.bottom</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">270deg</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*上*/</span></span><br><span class="line"><span class="selector-class">.arrow</span><span class="selector-class">.top</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">90deg</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*左*/</span></span><br><span class="line"><span class="selector-class">.arrow</span><span class="selector-class">.left</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">180deg</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*右*/</span></span><br><span class="line"><span class="selector-class">.arrow</span><span class="selector-class">.right</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">0deg</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -234,7 +214,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">7 <p>文章</p></a></li>
+                    <li><a href="/">20 <p>文章</p></a></li>
                     <li><a href="/categories">0 <p>分类</p></a></li>
                     <li><a href="/tags">0 <p>标签</p></a></li>
                 </ul>
@@ -245,7 +225,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>目录</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Android-8-0-%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87%E9%80%82%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text">1. Android 8.0 应用图标适配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C-8-0-%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87%E9%80%82%E9%85%8D"><span class="toc-number">2.</span> <span class="toc-text">2. 如何进行 8.0 系统的应用图标适配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%BF%87%E4%BA%8E%E8%B4%B4%E8%BE%B9"><span class="toc-number">3.</span> <span class="toc-text">3. 如何解决过于贴边</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E4%B8%89%E8%A7%92%E5%BD%A2"><span class="toc-number">1.</span> <span class="toc-text">绘制三角形</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E5%B0%8F%E7%AE%AD%E5%A4%B4"><span class="toc-number">1.0.1.</span> <span class="toc-text">绘制小箭头</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

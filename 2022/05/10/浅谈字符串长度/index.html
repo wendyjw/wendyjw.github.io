@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>浅谈字符串长度 - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="浅谈字符串长度前言：日常开发表单校验长度时，发现字符 length 可能和我们预期的不太一致，导致校验结果与预期有出入。这篇文章浅谈下 字符串长度， 首先从 UTF 编码说起。
+ECMAScript,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">浅谈字符串长度</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                五月 10, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/05/10/%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6/" title="浅谈字符串长度" class="">浅谈字符串长度</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    17k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    16 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="浅谈字符串长度"><a href="#浅谈字符串长度" class="headerlink" title="浅谈字符串长度"></a>浅谈字符串长度</h1><p>前言：日常开发表单校验长度时，发现字符 <code>length</code> 可能和我们预期的不太一致，导致校验结果与预期有出入。这篇文章浅谈下 字符串长度， 首先从 UTF 编码说起。</p>
+<p>ECMAScript 字符串使用的是 UTF-16 编码。</p>
+<p>Unicode 表包含了 1,114,112 个码点，即从 <code>000000</code>（十六进制） - <code>10FFFF</code>（十六进制）。<br>Unicode 将码空间划分为 17 个平面，从 00 - 10 （十六进制，最高两位），即从 0 - 16 （十进制），每个平面有 65,536 个码点（2^16)。<br>其中最重要的是第一个 Unicode 平面（码位从 <code>0000</code> - <code>FFFF</code>），包含了最常用的字符，该平面被称为 <strong>基本多语言平面</strong> （BMP）, 其他平面为<strong>辅助平面</strong>。</p>
+<p>Unicode 只是一个符号集，只规定了字符对应的码点，并没有指定使用何种编码方案进行存储。编码方案主要：UCS 和 UTF（Unicode Transformation Format）。</p>
+<p>其中 UTF 中主要有 UTF-8，UTF-16, UTF-32， 是 Unicode 一种具体的编码实现。</p>
+<h3 id="1-UTF-8"><a href="#1-UTF-8" class="headerlink" title="1. UTF-8"></a>1. UTF-8</h3><p>UTF-8 是变长编码方式，使用 1-4 个字节进行编码。 UTF-8 完全兼容 ASCII，对于 ASCII 中的字符，UTF-8 采用的编码值和 ASCII 完全一致。</p>
+<p>优点：节约网络流量（因为是变长编码而不是统一长度编码）</p>
+<table>
+<thead>
+<tr>
+<th align="left">Unicode 符号范围 (十六进制) (十进制)</th>
+<th align="left">UTF-8 编码方式 （二进制）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0000 0000-0000 007F (0-127)</td>
+<td align="left"><code>0xxxxxxx</code></td>
+</tr>
+<tr>
+<td align="left">0000 0080-0000 07FF (128-2047)</td>
+<td align="left"><code>110xxxxx 10xxxxxx</code></td>
+</tr>
+<tr>
+<td align="left">0000 0800-0000 FFFF (2048-65535)</td>
+<td align="left"><code>1110xxxx 10xxxxxx 10xxxxxx</code></td>
+</tr>
+<tr>
+<td align="left">0001 0000-0010 FFFF (65536-1114111)</td>
+<td align="left"><code>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</code></td>
+</tr>
+</tbody></table>
+<p>由上述编码规则可知，<code>0000 0000</code> - <code>0000 FFFF</code>（第一行到第三行）为 Unicode 第一个平面（基本多语言平面），而 <code>0001 0000</code> - <code>10 FFFF</code>（第四行）为 Unicode 其他平面（辅助平面）。在基本多语言平面对应了绝大多数常用的字符。对于大于 65535（十进制）的码点，即在辅助平面上的码点，需要使用 4 个字节来进行 UTF-8 编码。</p>
+<h3 id="2-UTF-16"><a href="#2-UTF-16" class="headerlink" title="2. UTF-16"></a>2. UTF-16</h3><p>UTF-8 是不定长的编码，使用 1、2、3、4 个字节编码，而 UTF-16 则只使用 2 或 4 个字节编码，关于 Unicode 如何转化为 UTf-16 编码规则如下：<br>若 Unicode 码点在第一平面（BPM）中，则使用 2 个字节进行编码；<br>若 Unicode 码点在其他平面（辅助平面），则使用 4 个字节进行编码。<br>Unicode 转 UTF-16 规则流程图如下：</p>
+<p><img src="https://wendyjw.github.io/images/unicode%E8%BD%ACutf-16%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="Unicode 转 UTF-16 "></p>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;\u0041&quot;</span>; <span class="comment">// A</span></span><br><span class="line"><span class="string">&quot;A&quot;</span> === <span class="string">&quot;\u0041&quot;</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>而字符 💩 的码点是 <code>U+1f4a9</code>，处于补充平面的字符, 计算得到 2 个码元</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;💩&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>); <span class="comment">// 55357 =&gt; 16进制：d83d</span></span><br><span class="line"><span class="string">&quot;💩&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">1</span>); <span class="comment">// 56489 =&gt; 16进制：dca9</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Javascript 中 \u 表示 Unicode 的转义字符，后面跟着一个十六进制数</span></span><br><span class="line"><span class="string">&quot;💩&quot;</span> === <span class="string">&quot;\ud83d\udca9&quot;</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>由于 Javascript 字符串使用 utf-16 编码，所以可以正确将代理对 <code>\ud83d\udca9</code> 解码得到码点 <code>U+1f4a9</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;\ud83d\udca9&quot;</span> === <span class="string">&quot;\u&#123;1f4a9&#125;&quot;</span>; <span class="comment">// -&gt; true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-为什么-length-判断有问题"><a href="#3-为什么-length-判断有问题" class="headerlink" title="3. 为什么 length 判断有问题"></a>3. 为什么 length 判断有问题</h3><blockquote>
+<p>Where ECMAScript operations interpret String values, each element is interpreted as a single UTF-16 code unit （每个元素都被解释为单个 UTF-16 代码单元）</p>
+</blockquote>
+<p><strong><em>这里’💩’字符实际占用了两个 UTF-16 的码元，也就是 2 个元素，所以他的 <code>length</code> 属性为 2</em></strong></p>
+<p>Antd Form 表单使用的 <code>async-validator</code> 包中可以看到下面这段<a target="_blank" rel="noopener" href="https://github.com/yiminghe/async-validator/blob/e5ca7cfd912837d1dd1910fb584b8c7c7ed5b3e9/src/rule/range.ts#L33">代码</a>,<br>当需要进行字符串长度的判断时，会将码点范围在补充平面的字符全部替换为下划线，这样长度判断就和实际显示的一致了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> spRegexp = <span class="regexp">/[\uD800-\uDBFF][\udc00-\udfff]/g</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (str) &#123;</span><br><span class="line">  val = value.<span class="title function_">replace</span>(spRegexp, <span class="string">&quot;_&quot;</span>).<span class="property">length</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-ES6-对-Unicode-的支持"><a href="#4-ES6-对-Unicode-的支持" class="headerlink" title="4. ES6 对 Unicode 的支持"></a>4. ES6 对 Unicode 的支持</h3><p>下面的内容将介绍部分存在异常的 API 以及在 ES6 中如何正确处理这些问题。</p>
+<h4 id="4-1-for-vs-for-of"><a href="#4-1-for-vs-for-of" class="headerlink" title="4.1 for vs for of"></a>4.1 for vs for of</h4><p>例如使用 <code>for</code> 循环打印字符串，字符串会按照 JS 理解的每个“元素”遍历，辅助平面的字符将会被识别成两个“元素”，于是出现“乱码”。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;👻yo𠮷&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; str.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(str[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// -&gt; �</span></span><br><span class="line"><span class="comment">// -&gt; �</span></span><br><span class="line"><span class="comment">// -&gt; y</span></span><br><span class="line"><span class="comment">// -&gt; o</span></span><br><span class="line"><span class="comment">// -&gt; �</span></span><br><span class="line"><span class="comment">// -&gt; �</span></span><br></pre></td></tr></table></figure>
+
+<p>而使用 ES6 的 <code>for...of</code> 语法就不会</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;👻yo𠮷&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> char <span class="keyword">of</span> str) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(char);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// -&gt; 👻</span></span><br><span class="line"><span class="comment">// -&gt; y</span></span><br><span class="line"><span class="comment">// -&gt; o</span></span><br><span class="line"><span class="comment">// -&gt; 𠮷</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-展开语法-Spread-syntax"><a href="#4-2-展开语法-Spread-syntax" class="headerlink" title="4.2 展开语法(Spread syntax)"></a>4.2 展开语法(Spread syntax)</h4><p>前面提到了使用正则表达式，将辅助平面的字符替换的方式来统计字符长度。使用展开语法也可以得到同样的效果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[...<span class="string">&quot;💩&quot;</span>].<span class="property">length</span>;</span><br><span class="line"><span class="comment">// -&gt; 1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-3-正则表达式-u"><a href="#4-3-正则表达式-u" class="headerlink" title="4.3 正则表达式 u"></a>4.3 正则表达式 u</h4><p>ES6 中还针对 Unicode 字符增加了 <code>u</code> 描述符。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/^.<span class="property">$</span>/.<span class="title function_">test</span>(<span class="string">&#x27;👻&#x27;</span>)</span><br><span class="line"><span class="comment">// -&gt; false</span></span><br><span class="line"></span><br><span class="line">/^.<span class="property">$</span>/u.<span class="title function_">test</span>(<span class="string">&#x27;👻&#x27;</span>)</span><br><span class="line"><span class="comment">// -&gt; true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-4-charCodeAt-codePointAt"><a href="#4-4-charCodeAt-codePointAt" class="headerlink" title="4.4 charCodeAt&#x2F;codePointAt"></a>4.4 charCodeAt&#x2F;codePointAt</h4><p>对于字符串，我们还常用 <code>charCodeAt</code> 来获取 Code Point，对于 BMP 平面的字符是可以适用的，<br>但是如果字符是辅助平面字符 <code>charCodeAt</code> 返回结果就只会是编码后第一个码元对于的数字。</p>
+<p>而使用 <code>codePointAt</code> 则可以将字符正确识别，并返回正确的码点。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;羽&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// -&gt; 32701</span></span><br><span class="line"><span class="string">&quot;羽&quot;</span>.<span class="title function_">codePointAt</span>(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// -&gt; 32701</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;😸&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// -&gt; 55357</span></span><br><span class="line"><span class="string">&quot;😸&quot;</span>.<span class="title function_">codePointAt</span>(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// -&gt; 128568</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>The <code>codePointAt(pos)</code> method returns a non-negative integer that is the Unicode code point value.( 返回一个非负整数，它是 Unicode 代码点值)</p>
+</blockquote>
+<blockquote>
+<p>The <code>charCodeAt(index)</code> method returns an integer between 0 and 65535 representing the UTF-16 code unit at the given index (返回一个介于 0 和 65535 之间的整数，表示给定索引处的 UTF-16 代码单元)</p>
+</blockquote>
+<p><code>codePointAt</code>: 如果在指定的位置(pos)没有元素则返回 <code>undefined</code> 。如果在索引处开始没有 UTF-16 代理对，将直接返回在那个索引处的编码单元。</p>
+<p>Surrogate Pair 是 UTF-16 中用于扩展字符而使用的编码方式，是一种采用四个字节(两个 UTF-16 编码)来表示一个字符，称作代理对。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;ABC&quot;</span>.<span class="title function_">codePointAt</span>(<span class="number">1</span>); <span class="comment">// 66</span></span><br><span class="line"><span class="string">&quot;\uD800\uDC00&quot;</span>.<span class="title function_">codePointAt</span>(<span class="number">0</span>); <span class="comment">// 65536</span></span><br><span class="line"><span class="string">&quot;XYZ&quot;</span>.<span class="title function_">codePointAt</span>(<span class="number">42</span>); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<p><code>str.charCodeAt(index)</code>: 指定 index 处字符的 UTF-16 代码单元值的一个数字；如果 index 超出范围，<code>charCodeAt()</code> 返回 <code>NaN</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;ABC&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>); <span class="comment">// returns 65:&quot;A&quot;</span></span><br><span class="line"><span class="string">&quot;ABC&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">1</span>); <span class="comment">// returns 66:&quot;B&quot;</span></span><br><span class="line"><span class="string">&quot;ABC&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">2</span>); <span class="comment">// returns 67:&quot;C&quot;</span></span><br><span class="line"><span class="string">&quot;ABC&quot;</span>.<span class="title function_">charCodeAt</span>(<span class="number">3</span>); <span class="comment">// returns NaN</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-5-String-prototype-normalize"><a href="#4-5-String-prototype-normalize" class="headerlink" title="4.5 String.prototype.normalize()"></a>4.5 String.prototype.normalize()</h4><p>由于 JS 中将字符串理解成一串两个字节的码元序列，判断是否相等是根据序列的值来判断的。所以可能存在一些字符串看起来长得一模一样，但是字符串相等判断结果确是 <code>false</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;café&quot;</span> === <span class="string">&quot;café&quot;</span>;</span><br><span class="line"><span class="comment">// -&gt; false</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码中第一个 <code>café</code> 是有 <code>cafe</code> 加上一个缩进的音标字符<code>\u0301</code>组成的，而第二个 <code>café</code> 则是由一个 <code>caf</code> + <code>é</code> 字符组成的。所以两者虽然看上去一样，但码点不一样，所以 JS 相等判断结果为 <code>false</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;cafe\u0301&quot;</span>;</span><br><span class="line"><span class="comment">// -&gt; &#x27;café&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;cafe\u0301&quot;</span>.<span class="property">length</span>;</span><br><span class="line"><span class="comment">// -&gt; 5</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;café&quot;</span>.<span class="property">length</span>;</span><br><span class="line"><span class="comment">// -&gt; 4</span></span><br></pre></td></tr></table></figure>
+
+<p>为了能正确识别这种码点不一样，但是语意一样的字符串判断，ES6 增加了 <code>String.prototype.normalize</code> 方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;cafe\u0301&quot;</span>.<span class="title function_">normalize</span>() === <span class="string">&quot;café&quot;</span>.<span class="title function_">normalize</span>();</span><br><span class="line"><span class="comment">// -&gt; true</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;cafe\u0301&quot;</span>.<span class="title function_">normalize</span>().<span class="property">length</span>;</span><br><span class="line"><span class="comment">// -&gt; 4</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7025400771982131236">为什么 “𠮷𠮷𠮷”.length !&#x3D;&#x3D; 3</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">20 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%85%E8%B0%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6"><span class="toc-number">1.</span> <span class="toc-text">浅谈字符串长度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-UTF-8"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. UTF-8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-UTF-16"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. UTF-16</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%B8%BA%E4%BB%80%E4%B9%88-length-%E5%88%A4%E6%96%AD%E6%9C%89%E9%97%AE%E9%A2%98"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. 为什么 length 判断有问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-ES6-%E5%AF%B9-Unicode-%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-number">1.0.4.</span> <span class="toc-text">4. ES6 对 Unicode 的支持</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

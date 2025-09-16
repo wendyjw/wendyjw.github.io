@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>网络基础知识 - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="本文从开发者的角度，从底层往上层进行五层模型的概述。文章底部附一张 x-mind 结构图，从上层往底层进行概述。
+网络通信概述
+网络通信的实质就是：交换网络数据包。
+
+数据包的结构：以太网标头-IP,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">网络基础知识</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                十月 21, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/10/21/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="网络基础知识" class="">网络基础知识</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    6.8k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    6 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p>本文从开发者的角度，从底层往上层进行五层模型的概述。文章底部附一张 x-mind 结构图，从上层往底层进行概述。</p>
+<h3 id="网络通信概述"><a href="#网络通信概述" class="headerlink" title="网络通信概述"></a>网络通信概述</h3><blockquote>
+<p>网络通信的实质就是：交换网络数据包。</p>
+</blockquote>
+<p>数据包的结构：以太网标头-IP 标头-TCP 标头-应用层数据包</p>
+<p>数据包能正常交换条件：本端及对端的 MAC 地址和 IP 地址</p>
+<p>上网设置必要条件：</p>
+<ol>
+<li>本机 IP 地址</li>
+<li>子网掩码</li>
+<li>网关 IP 地址</li>
+<li>DNS 的 IP 地址</li>
+</ol>
+<p>因为 MAC 有局限性，若不是在同个子网环境，无法知道对方的 MAC 地址，就需要网关转发</p>
+<ul>
+<li>同一子网络，需要知道对方的 MAC 地址及对方的 IP 地址</li>
+<li>非同一子网络，需要知道本端的网关 MAC 地址及对方的 IP 地址</li>
+</ul>
+<h3 id="物理层（实体层）"><a href="#物理层（实体层）" class="headerlink" title="物理层（实体层）"></a>物理层（实体层）</h3><blockquote>
+<p>物理层是把电脑连接起来的物理手段，主要规定了网络的一些电气特性。基于电气特性发送高低电压（电信号），高电压对应数字“1”，低电压对应数字“0”</p>
+</blockquote>
+<p>常见物理设备有：中继线、双绞线、集线器。</p>
+<h3 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h3><blockquote>
+<p>定义电信号“0”，“1”的分组方式，每组电信号是什么意思</p>
+</blockquote>
+<h5 id="常见物理设备"><a href="#常见物理设备" class="headerlink" title="常见物理设备"></a>常见物理设备</h5><p>网卡、网桥</p>
+<h5 id="以太网协议"><a href="#以太网协议" class="headerlink" title="以太网协议"></a>以太网协议</h5><p>一组电信号构成一个数据包，叫做“帧”，每一帧分成两个部分：标头（Head）和数据（Data）。</p>
+<p>“标头”包含数据包的一些说明项，例如发送者及源地址、接受者及目标地址、数据类型等。“数据”则是数据包的具体内容</p>
+<p>“标头”长度固定 18 字节，“数据”长度最低 46 字节。最长 1500 字节。</p>
+<p>所以，整个“帧”最低 64 字节。最长 1518 字节。如果数据很长，必须分割成多个帧进行发送（因为分帧后，多个被分割的数据包能不能按序号重新排序拼接，组成完成的原信息，后续会介绍到 TCP 和 UDP 协议）</p>
+<h5 id="MAC-地址"><a href="#MAC-地址" class="headerlink" title="MAC 地址"></a>MAC 地址</h5><blockquote>
+<p>以太网规定，连入网络的所有设备都必须具有“网卡”接口，数据包必须从一块网卡，传送到另一块网卡，网卡的地址就是数据包的发送地址和接收地址，即 MAC 地址</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-159760e1aeafdc88?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>每块网卡出厂时，都有一个独一无二的 MAC 地址，长度是 48 个二进制位，通常用 12 个十六进制数表示</p>
+<p>举个栗子： 00-B0-D0-86-BB-F7<br>前 6 个十六进制数是厂商编号，后六个是该厂商的网卡流水号</p>
+<h5 id="广播（同一广播域内）"><a href="#广播（同一广播域内）" class="headerlink" title="广播（同一广播域内）"></a>广播（同一广播域内）</h5><p>接下来又有几个问题：</p>
+<p>1.一块网卡怎么知道另外一块网卡的 MAC 地址？</p>
+<p>2.系统怎么才能吧数据包准确送到接送方？</p>
+<p>首先通过 ARP 协议，可以知道另一块网卡的 MAC 地址（不详细说明）<br>其次，因为数据包的 Head 中含有接收方的 MAC 地址，所有以太网采用很原始的方式：向本网络内所有 计算机发送数据包，让每台计算机自己判断，自己是否是接收方。这种发送方式就是“广播”。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-b2fae5493c1ef6f0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据包格式"></p>
+<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><p>由上述的“广播”方式可知，以太网采用广播方式发送数据包，不仅效率低。而且局限在发送者所在的子网络。<br>所以接下来要区分哪些 MAC 地址属于同个子网络，那些不是。</p>
+<p>如果是同个子网络采用广播方式发送，否则就采用“路由”方式发送。</p>
+<blockquote>
+<p>这就导致了“网络层”的诞生。他的作用是引进一套新的地址，使我们能区分不同的计算机是否属于同个子网络，这套地址就是“网络地址”，简称“网址”。</p>
+</blockquote>
+<blockquote>
+<p>网络层的功能即建立<strong>主机到主机通信</strong></p>
+</blockquote>
+<h5 id="常见物理设备-1"><a href="#常见物理设备-1" class="headerlink" title="常见物理设备"></a>常见物理设备</h5><p>路由器、三层交换机</p>
+<h5 id="IP-协议"><a href="#IP-协议" class="headerlink" title="IP 协议"></a>IP 协议</h5><blockquote>
+<p>规定网络地址的协议，即 IP 协议。他所定义的地址，被称为 IP 地址。</p>
+</blockquote>
+<blockquote>
+<p>作用：1. 为每台计算机分配 IP 地址；2. 确定哪些地址属于同个网络。</p>
+</blockquote>
+<p>目前广泛采用的是 IP 协议第四版，简称 IPv4。IPv4 规定网络地址由 32 个二进制位组成，习惯用四段十进制表示 IP 地址，从 0.0.0.0 到 255.255.255.255。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-868ec9c85133f4c5?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="IPv4地址"></p>
+<p>互联网上每台计算机会被分配到一个 IP 地址。地址分为两部分，前部分代表网络，后部分代表主机。那么如果从 IP 地址，判断两台计算机是否属于同一子网络？这时候需要另外一个参数<strong>子网掩码</strong>。</p>
+<p>子网掩码：表示子网络特征的一个参数。它在形式上等同于 IP 地址，也是一个 32 位二进制数字，它的网络部分全部为 1，主机部分全部为 0。比如，IP 地址 172.16.254.1，如果已知网络部分是前 24 位，主机部分是后 8 位，那么子网络掩码就是 11111111.11111111.11111111.00000000，写成十进制就是 255.255.255.0。</p>
+<p>知道”子网掩码”，我们就能判断，任意两个 IP 地址是否处在同一个子网络。方法是将两个 IP 地址与子网掩码分别进行 AND 运算（两个数位都为 1，运算结果为 1，否则为 0），然后比较结果是否相同，如果是的话，就表明它们在同一个子网络中，否则就不是。</p>
+<p>举个栗子：已知 IP 地址 172.16.254.1 和 172.16.254.233 的子网掩码都是 255.255.255.0，请问它们是否在同一个子网络？</p>
+<p>两者与子网掩码分别进行 AND 运算，结果都是 172.16.254.0，因此它们在同一个子网络。</p>
+<h5 id="IP-数据包"><a href="#IP-数据包" class="headerlink" title="IP 数据包"></a>IP 数据包</h5><p>根据 IP 协议发送的数据就叫 IP 数据包。IP 数据包分为“标头”和“数据”两个部分</p>
+<p>IP 数据包的“标头”长度为 20 ~ 60 字节，整个数据包做大为 65535 字节。</p>
+<p>如何在以太网协议中传递 IP 数据包？</p>
+<p>把 IP 数据包把 IP 数据包直接放在以太网数据包的“数据”部分，无需修改以太网的规格。数据结构就变为：</p>
+<p>以太网标头-IP 标头-数据</p>
+<h3 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h3><p>由网络层协议可知，互联网上任意两台主机可以建立通信，但是同个主机上运行了多个程序，当一个数据包从互联网上发来时，怎么知道这个数据包对应是哪个程序上使用？</p>
+<p>这时候必须引入<strong>端口</strong>，它实际是每一个使用网卡的程序的编号。每个数据包都发到主机的特定端口，所以不同的程序就能取到自己所需要的数据。</p>
+<p>端口是 0 ~ 65535 之间的整数，0 ~1023 的端口被系统占用，用户只能使用&gt;1023 的端口。<br>当启用某个应用程序时，若没有指定某个固定端口（例如 NodeJs 可以指定常用端口），程序会随机随机选用一个端口，然后和服务器对应端口联系。</p>
+<blockquote>
+<p>所以传输层的功能：网络中的数据包发到接收方对应的哪个程序中，即<strong>端口到端口的通信</strong></p>
+</blockquote>
+<h5 id="常见物理设备-2"><a href="#常见物理设备-2" class="headerlink" title="常见物理设备"></a>常见物理设备</h5><p>四层交换机、四层路由器</p>
+<h5 id="UDP-协议-和-TCP-协议"><a href="#UDP-协议-和-TCP-协议" class="headerlink" title="UDP 协议 和 TCP 协议"></a>UDP 协议 和 TCP 协议</h5><p>数据包中加入端口信息，就需要新的协议</p>
+<h6 id="UDP-协议"><a href="#UDP-协议" class="headerlink" title="UDP 协议"></a>UDP 协议</h6><p>UDP 数据包由“标头”和“数据”两部分组成，“标头”部分包含接收端口和发出端口，“数据”部分就是具体的内容。</p>
+<p>UDP 标头一共 8 个字节，总长度不超过 65535 字节，正好放进一个 IP 数据包。</p>
+<p>把整个 UDP 包放入 IP 数据包的“数据”部分。整个 IP 数据包又放在以太网数据包的“数据”部分，最后形成的数据包格式：以太网标头-IP 标头-UDP 标头-数据</p>
+<p>特点：网路中 UDP 数据包一旦发出，无法知道对方是否收到，不进行确定。容易实现但是网络可靠性低</p>
+<h5 id="TCP-协议"><a href="#TCP-协议" class="headerlink" title="TCP 协议"></a>TCP 协议</h5><p>TCP 协议可近似认为，它就是有确认机制的 UDP 协议，每发出一个数据包都要求确认。如果有一个数据包遗失，就收不到确认，发出方就知道有必要重发这个数据包</p>
+<p>特点：能够确保数据不会遗失。它的缺点是过程复杂、实现困难、消耗较多的资源。</p>
+<p>TCP 数据包和 UDP 数据包一样，都是内嵌在 IP 数据包的”数据”部分。TCP 数据包没有长度限制，理论上可以无限长，但是为了保证网络的效率，通常 TCP 数据包的长度不会超过 IP 数据包的长度，以确保单个 TCP 数据包不必再分割。</p>
+<p>TCP 报文：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-d89178430f387a3f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>TCP 三次握手四次挥手<br><img src="https://upload-images.jianshu.io/upload_images/4946810-c6ee4a0c6863d78f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="TCP三次握手四次挥手"></p>
+<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><blockquote>
+<p>规定应用程序的数据格式，以太网数据包：（以太网标头-IP 标头-TCP 标头-应用层数据包）</p>
+</blockquote>
+<p>举个栗子：TCP 协议可以为各种程序传递数据，比如网页、FTP、Email 数据，应用程序接收到传输层的数据，需要对其进行解读，那么，必须要有不同的协议规定网页、FTP、Email 各自不同的格式。这些应用程序协议就构成了应用层。</p>
+<h6 id="文末加个-X-mind-结构图"><a href="#文末加个-X-mind-结构图" class="headerlink" title="文末加个 X-mind 结构图"></a>文末加个 X-mind 结构图</h6><p><img src="https://upload-images.jianshu.io/upload_images/4946810-f9ff2c00357c3a0a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>本文参考博客：</p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html">http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html</a><br><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2012/06/internet_protocol_suite_part_ii.html">http://www.ruanyifeng.com/blog/2012/06/internet_protocol_suite_part_ii.html</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">20 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">网络通信概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%B1%82%EF%BC%88%E5%AE%9E%E4%BD%93%E5%B1%82%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">物理层（实体层）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="toc-number">3.</span> <span class="toc-text">数据链路层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">4.</span> <span class="toc-text">网络层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-number">5.</span> <span class="toc-text">传输层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">6.</span> <span class="toc-text">应用层</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

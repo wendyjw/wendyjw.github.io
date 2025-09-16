@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>自定义主题色实现之 CSS Variable - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="前言
+需求背景：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。
+兼容性问题：在 IE 中 var()报错显示异常，显示成透明色（css-vars-ponyfill 插件 ，,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">自定义主题色实现之 CSS Variable</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                三月 04, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/03/04/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B%20CSS%20Variable/" title="自定义主题色实现之 CSS Variable" class="">自定义主题色实现之 CSS Variable</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    24k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    22 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+<li><strong>需求背景</strong>：动态配置页面主题相关颜色，而不是定制主题模式（类似黑夜模式，白天模式）。</li>
+<li><strong>兼容性问题</strong>：在 IE 中 <code>var()</code>报错显示异常，显示成透明色（<code>css-vars-ponyfill</code> 插件 ，使页面展示一个默认色）</li>
+<li><strong>第三方 UI 库支持 CSS Variable</strong>，（<code>antd@4.17.0-alpha.0</code> 以上，<code>mkui-fd@4.1.8-beta</code> 以上 ）</li>
+</ul>
+<h3 id="1-实现原理"><a href="#1-实现原理" class="headerlink" title="1. 实现原理"></a>1. 实现原理</h3><h5 id="1-1-自定义属性-CSS-变量"><a href="#1-1-自定义属性-CSS-变量" class="headerlink" title="1.1. 自定义属性 (--*): CSS 变量"></a>1.1. 自定义属性 (<code>--*</code>): CSS 变量</h5><p>带有前缀 <code>--</code> 的属性名，比如<code>--example--name</code>，表示的是带有值的自定义属性，其可以通过<code>var</code> 函数在全文档范围内复用的。</p>
+<p>CSS 自定义属性是可以级联的：每一个自定义属性可以多次出现，并且变量的值将会借助级联算法和自定义属性值运算出来。</p>
+<p>注意，规则集所指定的选择器定义了自定义属性的可见作用域。通常的最佳实践是定义在根伪类 <code>:root</code> 下，这样就可以在 HTML 文档的任何地方访问到它。</p>
+<p><code>:root</code> 这个 CSS 伪类匹配文档树的根元素。对于 HTML 来说，<code>:root</code> 表示 <code>&lt;html&gt;</code> 元素，除了优先级更高之外，与 <code>html</code> 选择器相同。</p>
+<h5 id="1-2-ConfigProvider-config-config-provider-index-js"><a href="#1-2-ConfigProvider-config-config-provider-index-js" class="headerlink" title="1.2. ConfigProvider.config() (config-provider/index.js)"></a>1.2. ConfigProvider.config() (<code>config-provider/index.js</code>)</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">ConfigProvider</span>.<span class="property">config</span> = setGlobalConfig;</span><br><span class="line"><span class="keyword">var</span> setGlobalConfig = <span class="keyword">function</span> <span class="title function_">setGlobalConfig</span>(<span class="params">_ref</span>) &#123;</span><br><span class="line"><span class="keyword">var</span> prefixCls = _ref.<span class="property">prefixCls</span>,</span><br><span class="line">      iconPrefixCls = _ref.<span class="property">iconPrefixCls</span>,</span><br><span class="line">      theme = _ref.<span class="property">theme</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (prefixCls !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">   globalPrefixCls = prefixCls;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (iconPrefixCls !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">   globalIconPrefixCls = iconPrefixCls;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (theme) &#123;</span><br><span class="line">   (<span class="number">0</span>, _cssVariables.<span class="property">registerTheme</span>)(<span class="title function_">getGlobalPrefixCls</span>(), theme); <span class="comment">// 更改主题色</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-3-registerTheme-node-modules-mkui-fd-config-provider-cssVariables-js"><a href="#1-3-registerTheme-node-modules-mkui-fd-config-provider-cssVariables-js" class="headerlink" title="1.3. registerTheme() (node_modules/mkui-fd/config-provider/cssVariables.js)"></a>1.3. registerTheme() (<code>node_modules/mkui-fd/config-provider/cssVariables.js</code>)</h5><p>创建所有 css 变量，可参考简易版 <code>customCssVariable.js</code></p>
+<p><code>(0, _dynamicCSS.updateCSS)(&quot;\n :root &#123;\n &quot;.concat(cssList.join(&#39;\n&#39;), &quot;\n &#125;\n &quot;), &quot;&quot;.concat(dynamicStyleMark, &quot;-dynamic-theme&quot;));</code></p>
+<h5 id="1-4-updateCSS-node-modules-rc-util-lib-Dom-dynamicCSS-js"><a href="#1-4-updateCSS-node-modules-rc-util-lib-Dom-dynamicCSS-js" class="headerlink" title="1.4. updateCSS() (node_modules/rc-util/lib/Dom/dynamicCSS.js)"></a>1.4. updateCSS() (<code>node_modules/rc-util/lib/Dom/dynamicCSS.js</code>)</h5><p>创建 style 标签，值为 cssList，但是作为最后一个子元素插在 head 标签下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> styleNode = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;style&quot;</span>);</span><br><span class="line">styleNode.<span class="property">innerHTML</span> = <span class="string">`\n :root &#123;\n --mkui-primary-color: #423CBB;&#125;\n`</span>;</span><br><span class="line"><span class="keyword">const</span> head = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;head&quot;</span>);</span><br><span class="line">head.<span class="title function_">appendChild</span>(styleNode);</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-5-动态改变颜色另外一种写法（我们项目中不推荐）"><a href="#1-5-动态改变颜色另外一种写法（我们项目中不推荐）" class="headerlink" title="1.5. 动态改变颜色另外一种写法（我们项目中不推荐）"></a>1.5. 动态改变颜色另外一种写法（我们项目中不推荐）</h5><p>在 body 标签中增加 style 属性，改变 body 中所有 <code>--mkui-primary-color</code> 使用值, 优先级高于 html</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">style</span>.<span class="title function_">setProperty</span>(<span class="string">&#x27;--mkui-primary-color&#x27;</span>, <span class="string">&#x27;#ffff00&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ↓ ↓ ↓ ↓ ↓ ↓</span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">body</span> <span class="attr">style</span>=<span class="string">&quot;--mkui-primary-color:#ffff00;&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-如何使用"><a href="#2-如何使用" class="headerlink" title="2. 如何使用"></a>2. 如何使用</h3><h5 id="2-1-替换当前项目引入样式文件为-CSS-Variable-版本，并在-babel-config-中去除-babel-plugin-import-配置。"><a href="#2-1-替换当前项目引入样式文件为-CSS-Variable-版本，并在-babel-config-中去除-babel-plugin-import-配置。" class="headerlink" title="2.1 替换当前项目引入样式文件为 CSS Variable 版本，并在 .babel.config 中去除 babel-plugin-import 配置。"></a>2.1 替换当前项目引入样式文件为 CSS Variable 版本，并在 <code>.babel.config</code> 中去除 <code>babel-plugin-import</code> 配置。</h5><p><code>&#123; &quot;libraryName&quot;: &quot;antd&quot; &#125;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Button</span> &#125; <span class="keyword">from</span> <span class="string">&quot;antd&quot;</span>;</span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">Button</span>&gt;</span>xxxx<span class="tag">&lt;/<span class="name">Button</span>&gt;</span></span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ↓ ↓ ↓ ↓ ↓ ↓</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> button = <span class="built_in">require</span>(<span class="string">&quot;antd/lib/button&quot;</span>);</span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">button</span>&gt;</span>xxxx<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>&#123; &quot;libraryName&quot;: &quot;antd&quot;, style: &quot;css&quot; &#125;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Button</span> &#125; <span class="keyword">from</span> <span class="string">&quot;antd&quot;</span>;</span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">Button</span>&gt;</span>xxxx<span class="tag">&lt;/<span class="name">Button</span>&gt;</span></span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ↓ ↓ ↓ ↓ ↓ ↓</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> button = <span class="built_in">require</span>(<span class="string">&quot;antd/lib/button&quot;</span>);</span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;antd/lib/button/style/css&quot;</span>);</span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">button</span>&gt;</span>xxxx<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>&#123; &quot;libraryName&quot;: &quot;antd&quot;, style: true &#125;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Button</span> &#125; <span class="keyword">from</span> <span class="string">&quot;antd&quot;</span>;</span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">Button</span>&gt;</span>xxxx<span class="tag">&lt;/<span class="name">Button</span>&gt;</span></span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ↓ ↓ ↓ ↓ ↓ ↓</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> button = <span class="built_in">require</span>(<span class="string">&quot;antd/lib/button&quot;</span>);</span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;antd/lib/button/style&quot;</span>);</span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(<span class="language-xml"><span class="tag">&lt;<span class="name">button</span>&gt;</span>xxxx<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意:</strong></p>
+<p>Antd 默认支持基于 ES modules 的 tree shaking，对于 js 部分，直接引入 <code>import &#123; Button &#125; from &#39;antd&#39;</code> 就会有按需加载的效果。</p>
+<p>如今 webpack,rollup 等构建工具都具备了摇树功能（Tree Shaking), 其原理是利用 ESM 模块的 import 语法的特性，通过 AST 语法树进行分析然后去除未使用到的代码。(todo)而要开启此功能必须确保引入的 Antd es 版本，在 webpack 上可通过 <code>resolve.mainFields</code> 来指定 npm 包的入口文件优先级，但 tree shaking 方式也只是处理了 js 部分，对于组件的 css 加载还需要手动引入.</p>
+<h5 id="2-2-引入包含-css-变量的组件库-css-文件-app-js"><a href="#2-2-引入包含-css-变量的组件库-css-文件-app-js" class="headerlink" title="2.2 引入包含 css 变量的组件库 css 文件(app.js)"></a>2.2 引入包含 css 变量的组件库 css 文件(app.js)</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;mkui-fd/dist/mkui-fd.min.css&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;mkui-fd/dist/mkui-fd.variable.min.css&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-3-定义颜色变量（variables-less）"><a href="#2-3-定义颜色变量（variables-less）" class="headerlink" title="2.3.定义颜色变量（variables.less）"></a>2.3.定义颜色变量（variables.less）</h5><ol>
+<li>使用 mkui-fd 组件中已有变量</li>
+</ol>
+<p><code>:root</code> 下已经默认生成了部分可全局使用的变量：<code>--mkui-primary-1, ... --mkui-primary-10</code></p>
+<p>使用 <code>var()</code> 插入 CSS 变量的值</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@theme-color:</span> <span class="built_in">var</span>(--mkui-primary-color, <span class="number">#1890ff</span>);</span><br><span class="line"><span class="variable">@theme-color-selected-bg:</span> <span class="built_in">var</span>(--mkui-primary-<span class="number">1</span>, <span class="number">#f0f8ff</span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>自定义创建可全局使用的 CSS 变量</p>
+<p><code>// color.less</code></p>
+<p>为了兼容 IE 使用 <code>css-vars-ponyfill</code>, 必须使用<code>:root</code> 而不是 <code>html</code></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">  <span class="attr">--theme-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">  <span class="attr">--theme-color-selected-bg</span>: <span class="number">#f0f8ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>// variables.less</code></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@theme-color:</span> <span class="built_in">var</span>(--theme-color);</span><br><span class="line"><span class="variable">@theme-color-selected-bg:</span> <span class="built_in">var</span>(--theme-color-selected-bg, <span class="number">#f0f8ff</span>);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h5 id="4-调用配置方法"><a href="#4-调用配置方法" class="headerlink" title="4. 调用配置方法"></a>4. 调用配置方法</h5><p>4.1 调用 <code>ConfigProvider</code> 配置方法设置主题色(cssVariable.js)：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">ConfigProvider</span>.<span class="title function_">config</span>(&#123;</span><br><span class="line">  <span class="attr">theme</span>: &#123; <span class="attr">primaryColor</span>: themeColor &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note</strong>: <code>primaryColor</code>: 组件基本色，<code>successColor</code>，<code>warningColor</code>，<code>errorColor</code>，<code>infoColor</code>特定情况下的颜色。</p>
+<p>4.2 动态更改自定义变量颜色（customCssVariable.js）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">setThemeColor</span>(&#123;</span><br><span class="line">  themeColor,</span><br><span class="line">  <span class="attr">varName</span>: <span class="string">&quot;theme-color&quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-色值相关"><a href="#5-色值相关" class="headerlink" title="5. 色值相关"></a>5. 色值相关</h5><ul>
+<li>与主题色相关的颜色，设计图中会给一个主色(C6)，及对应的 10 个色阶阶梯的哪一阶</li>
+<li>mkui-ext 组件颜色使用 <code>mkui-plugin.less</code> 中颜色替换(优先级更高)</li>
+</ul>
+<h3 id="3-注意点"><a href="#3-注意点" class="headerlink" title="3. 注意点:"></a>3. 注意点:</h3><ol>
+<li><strong>为什么是 <code>:root</code> 而不是 <code>html</code></strong><ul>
+<li>CSS 不仅用于样式化 HTML 文档, 它也用于 XML 和 SVG 文件。对于 XML 和 SVG 文件，<code>:root</code> 不是选择 <code>html</code> 元素，而是选择它们的根（例如 SVG 文件中的 <code>svg</code> 标签）。</li>
+<li><code>:root</code> 选择器优先级更高</li>
+<li>有助于将使用的 CSS 变量与项目中使用样式的选择器分开</li>
+<li><code>css-vars-ponyfill</code> 中要求：自定义属性声明支持仅限于 <code>:root</code> 和 <code>:host</code> 规则集</li>
+</ul>
+</li>
+<li><strong><code>fade()</code>，<code>dark()</code>等函数不支持变量参数</strong><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">fade</span>(<span class="string">&#x27;1199ff&#x27;</span>, <span class="number">90%</span>);</span><br><span class="line"><span class="selector-tag">fade</span>(<span class="built_in">var</span>(--theme-color), <span class="number">90%</span>); <span class="comment">// 错误使用</span></span><br></pre></td></tr></table></figure></li>
+<li><strong><code>mkui-fd</code>, <code>mkui-ext</code> 以及项目中颜色相关样式，不要使用内联和 <code>!important</code></strong></li>
+<li><strong>IE 11 下取色器组件 <code>react-color@2.19.3</code> 报错，降低<code>react-color@2.18.1</code> 组件版本</strong><br><code>SCRIPT438: Object doesn&#39;t support property or method &#39;contains&#39;</code></li>
+<li><strong>与设计人员达成色值统一，许多相近颜色的色值使用混乱</strong></li>
+</ol>
+<h3 id="4-其他扩展点"><a href="#4-其他扩展点" class="headerlink" title="4. 其他扩展点"></a>4. 其他扩展点</h3><h5 id="4-1-polyfill-和-ponyfill-的区别"><a href="#4-1-polyfill-和-ponyfill-的区别" class="headerlink" title="4.1 polyfill 和 ponyfill 的区别"></a>4.1 polyfill 和 ponyfill 的区别</h5><blockquote>
+<p>polyfill 在原有的墙壁上打补丁，ponyfill 的策略则是另起炉灶，不会在原有的墙壁上修补，而是重新建一面墙，保证原来的墙壁还是原始纯净无污染。</p>
+</blockquote>
+<p>例如: <code>Array.isArray()</code>, 此方法 IE8 浏览器并不支持</p>
+<p><strong>polyfill 策略</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="title class_">Array</span>.<span class="property">isArray</span>) &#123;</span><br><span class="line">  <span class="title class_">Array</span>.<span class="property">isArray</span> = <span class="keyword">function</span> (<span class="params">arg</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(arg) === <span class="string">&quot;[object Array]&quot;</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>ponyfill 策略</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 避免使用原生 API</span></span><br><span class="line"><span class="comment">// 基本上，为了避免全局命名的污染，Ponyfill都是建议采用独立的模块化的方式开发与调用的</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isArray</span>(<span class="params">arg</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(arg) === <span class="string">&quot;[object Array]&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>什么时候使用 Ponyfill?</strong></p>
+<ol>
+<li>有些原生 API 完全没法模拟，此时只能使用 Ponyfill 策略，例如 IE9 浏览器无法模拟 <code>indexDB</code> 能力，<code>history.pushState()</code>方法</li>
+<li>有些原生 API 规范还没稳定，或者处于快速迭代中，或者是浏览器部分支持</li>
+</ol>
+<h5 id="4-2-css-vars-ponyfill-的使用"><a href="#4-2-css-vars-ponyfill-的使用" class="headerlink" title="4.2 css-vars-ponyfill 的使用"></a>4.2 <code>css-vars-ponyfill</code> 的使用</h5><p><strong>作用：</strong></p>
+<ul>
+<li>CSS 自定义属性到静态值的转换</li>
+<li>现代和旧版浏览器中运行时值的实时更新</li>
+<li>转换 <code>&lt;link&gt;</code>、<code>&lt;style&gt;</code> 和 <code>@import CSS</code></li>
+<li>将相对 <code>url()</code> 路径转换为绝对 URL</li>
+<li>支持链式和嵌套的 <code>var()</code> 函数<br>…</li>
+</ul>
+<p><strong>限制：</strong></p>
+<ul>
+<li>自定义属性声明支持仅限于 <code>:root</code> 和 <code>:host</code> 规则集<ul>
+<li><code>var()</code> 的使用仅限于属性值（根据 W3C 规范）</li>
+</ul>
+</li>
+</ul>
+<p><strong>更新值：</strong></p>
+<ul>
+<li>在旧版浏览器中，ponyfill 将确定哪些 <code>&lt;link&gt;</code> 和<code>&lt;style&gt;</code>中包含 css 变量，然后转换成与旧版兼容的 CSS，并附加到每个元素的 DOM。</li>
+<li>在支持 CSS 变量的现代浏览器中，ponyfill 将使用<code> style.setProperty()</code> 接口更新值。<br>请注意，当 <code>options.onlyLegacy</code> 为<code>false</code> 时，支持 CSS 变量的现代浏览器将被视为旧版浏览器。</li>
+</ul>
+<p><strong>Note:</strong><br><code>&#123; onlyLegacy: true &#125;</code> 将此值设置为 <code>false</code>可以在现代浏览器中模仿旧版浏览器，进行测试和调试。</p>
+<h5 id="4-3-HSV-色相-hue-饱和度-saturation-亮度-Brightness"><a href="#4-3-HSV-色相-hue-饱和度-saturation-亮度-Brightness" class="headerlink" title="4.3 HSV (色相 hue, 饱和度 saturation, 亮度 Brightness)"></a>4.3 HSV (色相 hue, 饱和度 saturation, 亮度 Brightness)</h5><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/be40c662-8dc3-442e-a10b-bd399786d692#">基于 HSB 模型构建色彩体系</a></p>
+</blockquote>
+<ol>
+<li><p><strong>色相</strong></p>
+<p>表示色彩的相貌，也就是我们常说的红、橙、黄、绿等颜色名称。色相值按位置度量，取值为 0° ～ 360°，在 HSB 色彩模型中红色为 0°，黄色为 60°，绿色为 120°，青色为 180°，蓝色为 240°，品红色为 300°。十二色相环每一色相间距 30°，二十四色相环每一色相间距 15°。</p>
+</li>
+<li><p><strong>饱和度</strong></p>
+<p>表示色彩的纯度，取值范围 0 ～ 100%，从色环中心向外递增。当饱和度为 0 时点在中心，则显示为灰、白、黑无彩色。当饱和度达到 100%时，点则移动到色环边缘，会显示每个色相最纯的色光。如下图所示，在色相(H)、亮度(B)不变的情况下减少饱和度(S)颜色逐渐变淡最后变成白色。<strong>S 控制混入白色的量。</strong></p>
+</li>
+<li><p><strong>亮度</strong></p>
+<p>指色彩的明亮度，取值范围 0 ～ 100%，沿着圆柱体底部向上递增。亮度为 0 时即黑色，点处于最底部。当达到 100%时点上升到顶端，会显示色相最鲜明的状态。如下图所示，在色相(H)、饱和度(S)不变的情况下减少亮度(B)颜色逐渐变暗最后变成黑色。<strong>B 控制混入黑色的量。</strong></p>
+</li>
+<li><p><strong>结论</strong></p>
+<ol>
+<li>选取一个颜色作为主色(6 号色)；</li>
+<li>判断减淡或加深，进行颜色混合<ul>
+<li>若减淡，则主色与纯白色(#fff)混合，根据色号，获取贝塞尔曲线上的对应值。</li>
+<li>若加深，则主色与它对应的深色混合，根据色号，获取贝塞尔曲线上的对应比例值。加深时主色对应的深色进行了明度与色相的调整，其中对色相的调整也就是上述引用中说的“针对冷暖色的旋转”；</li>
+</ul>
+</li>
+<li>分别取 1~9 色号的色值，得到一条完整渐变色板。</li>
+</ol>
+</li>
+</ol>
+<hr>
+<p><strong>参考文章</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ant.design/docs/react/customize-theme-variable-cn">AntD 动态主题</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.yuque.com/docs/share/be40c662-8dc3-442e-a10b-bd399786d692#">基于 HSB 模型构建色彩体系</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/32422584">Ant Design 色板生成算法演进之路</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhangxinxu.com/wordpress/2021/08/polyfill-ponyfill-prollyfill/">polyfill 和 ponyfill</a></li>
+<li><a target="_blank" rel="noopener" href="https://jhildenbiddle.github.io/css-vars-ponyfill/#/">css-vars-ponyfill 文档</a></li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">20 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">1. 实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. 如何使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">3.</span> <span class="toc-text">3. 注意点:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B6%E4%BB%96%E6%89%A9%E5%B1%95%E7%82%B9"><span class="toc-number">4.</span> <span class="toc-text">4. 其他扩展点</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>前端大文件上传技术方案 - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="整体思路
+前端使用 Blob 的 slice 方法来对某个大文件进行切割，切成多个切片。
+通过 Http 可并发性，把一个大文件 变成 同时上传多个小的文件切片。
+并发的传输 传到服务器可能发生变化,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">前端大文件上传技术方案</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                十二月 03, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" title="前端大文件上传技术方案" class="">前端大文件上传技术方案</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    15k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    13 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h4 id="整体思路"><a href="#整体思路" class="headerlink" title="整体思路"></a>整体思路</h4><ul>
+<li>前端使用 <code>Blob</code> 的 <code>slice</code> 方法来对某个大文件进行切割，切成多个切片。</li>
+<li>通过 Http 可并发性，把一个大文件 变成 同时上传多个小的文件切片。</li>
+<li>并发的传输 传到服务器可能发生变化，所以要给切片记录顺序。</li>
+<li>服务端接收切片，那什么时候合并切片、如何合并切片（后端工作，前端如果是 node 使用 nodejs 的 读写流将所有的切片的流写到最终文件的流里面。）？</li>
+</ul>
+<p>什么时候合并切片需要前端配合，请求信息里面要告诉后端有多少切片。</p>
+<p><strong>方案一 是后端通过接收到数量阈值后、自己自动合并</strong></p>
+<p><strong>方案二 前端发一个额外的请求 主动通知合并</strong></p>
+<h4 id="上传切片"><a href="#上传切片" class="headerlink" title="上传切片"></a>上传切片</h4><ul>
+<li>对文件进行切片</li>
+<li>将切片传输给服务端</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成文件切片</span></span><br><span class="line"><span class="title function_">createFileChunk</span>(<span class="params">file, size = SIZE</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> fileChunkList = [];</span><br><span class="line">    <span class="keyword">let</span> cur = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (cur &lt; file.<span class="property">size</span>) &#123;</span><br><span class="line">        fileChunkList.<span class="title function_">push</span>(&#123; <span class="attr">file</span>: file.<span class="title function_">slice</span>(cur, cur + size) &#125;);</span><br><span class="line">        cur += size;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> fileChunkList;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="keyword">const</span> fileList = chunks.<span class="title function_">map</span>(<span class="function">(<span class="params">&#123; file &#125;, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="attr">chunk</span>: file,</span><br><span class="line">    <span class="attr">hash</span>: file.<span class="property">name</span> + <span class="string">&#x27;-&#x27;</span> + index,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组装数据 开始准备上传</span></span><br><span class="line"><span class="keyword">const</span> resultList = fileList.<span class="title function_">map</span>(<span class="function"><span class="params">c</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; hash &#125; = c;</span><br><span class="line">    <span class="keyword">let</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line"></span><br><span class="line">    formData.<span class="title function_">append</span>(<span class="string">&#x27;chunk&#x27;</span>, chunk); <span class="comment">// 切片文件</span></span><br><span class="line">    formData.<span class="title function_">append</span>(<span class="string">&#x27;hash&#x27;</span>, hash); <span class="comment">// 上传 合并需要的参数</span></span><br><span class="line">    formData.<span class="title function_">append</span>(<span class="string">&#x27;filename&#x27;</span>, files.<span class="property">name</span>); <span class="comment">// 文件名称</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123; formData &#125;;</span><br><span class="line">&#125;).<span class="title function_">map</span>(<span class="function">(<span class="params">&#123; formData &#125;</span>) =&gt;</span> <span class="title function_">upload</span>(formData));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 并发上传</span></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">all</span>(resultList).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> data = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; <span class="attr">filename</span>: files.<span class="property">name</span> &#125;);</span><br><span class="line">    <span class="title function_">mergeRequest</span>(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>调用 <code>createFileChunk</code> 将文件切片，切片数量通过文件大小控制，这里设置 10MB，也就是说 100 MB 的文件会被分成 10 个切片。</p>
+<p><code>createFileChunk</code> 内使用 <code>while</code> 循环和 <code>slice</code> 方法将切片放入 <code>fileChunkList</code> 数组中返回。</p>
+<p>在生成文件切片时，需要给每个切片一个标识作为 hash，这里暂时使用<code>文件名 + 下标</code>，这样后端可以知道当前切片是第几个切片，用于之后的合并切片。</p>
+<p>随后调用 <code>uploadChunks</code> 上传所有的文件切片，将文件切片，切片 hash，以及文件名放入 <code>FormData</code> 中，再调用上一步的 <code>request</code> 函数返回一个 proimise，最后调用 <code>Promise.all</code> 并发上传所有的切片。</p>
+<h4 id="HTTP-参数"><a href="#HTTP-参数" class="headerlink" title="HTTP 参数"></a>HTTP 参数</h4><p>这一块的内容封装的比较好，主要是 rfc 标准、Buffer、流以及 内存 CPU DMAC 硬盘的读写 对文件的处理。以后单独抽时间来简单讨论。</p>
+<p>请求报文这里，可以简单粗暴的理解为，只要是文件上传，<code>Content-Type</code> 必须为 <code>multipart/form-data</code>。</p>
+<p>看一下 <code>Content-Type</code> 字段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ContentType: multipart/form-data; boundary=----WebKitFormBoundaryGBVZwk1PFwCSPfCh</span><br></pre></td></tr></table></figure>
+
+<p><code>boundary=----WebKitFormBoundaryGBVZwk1PFwCSPfCh</code> 代表分隔符，用来分隔多个表单项。我们这里上传数据用的是 <code>FormData</code>，其本质还是构造了一个表单数据。每次 <code>formData.apend(key, value)</code>，就是构建一个表单项的数据结构，每个表单项都用<code>boundary</code>分割。具体字段 需要自己去下面查看 **<a target="_blank" rel="noopener" href="https://www.ietf.org/rfc/rfc1867.txt">rfc 1867 文档的定义</a>**。</p>
+<p>简单案例演示：xxxx</p>
+<h4 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h4><p>后端合并切片，主要就是接收 请求参数，读写流的过程。</p>
+<p><strong>这边使用 Node 的 <code>multiparty</code> 包处理 FormData。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> fse = <span class="built_in">require</span>(<span class="string">&quot;fs-extra&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> multiparty = <span class="built_in">require</span>(<span class="string">&quot;multiparty&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.<span class="title function_">createServer</span>();</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">UPLOAD_DIR</span> = path.<span class="title function_">resolve</span>(__dirname, <span class="string">&quot;..&quot;</span>, <span class="string">&quot;target&quot;</span>); <span class="comment">// 大文件存储目录</span></span><br><span class="line"></span><br><span class="line">server.<span class="title function_">on</span>(<span class="string">&quot;request&quot;</span>, <span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  res.<span class="title function_">setHeader</span>(<span class="string">&quot;Access-Control-Allow-Origin&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line">  res.<span class="title function_">setHeader</span>(<span class="string">&quot;Access-Control-Allow-Headers&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (req.<span class="property">method</span> === <span class="string">&quot;OPTIONS&quot;</span>) &#123;</span><br><span class="line">    res.<span class="property">status</span> = <span class="number">200</span>;</span><br><span class="line">    res.<span class="title function_">end</span>();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> multipart = <span class="keyword">new</span> multiparty.<span class="title class_">Form</span>();</span><br><span class="line"></span><br><span class="line">  multipart.<span class="title function_">parse</span>(req, <span class="keyword">async</span> (err, fields, files) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> [chunk] = files.<span class="property">chunk</span>;</span><br><span class="line">    <span class="keyword">const</span> [hash] = fields.<span class="property">hash</span>;</span><br><span class="line">    <span class="keyword">const</span> [filename] = fields.<span class="property">filename</span>;</span><br><span class="line">    <span class="keyword">const</span> chunkDir = path.<span class="title function_">resolve</span>(<span class="variable constant_">UPLOAD_DIR</span>, filename);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 切片目录不存在，创建切片目录</span></span><br><span class="line">    <span class="keyword">if</span> (!fse.<span class="title function_">existsSync</span>(chunkDir)) &#123;</span><br><span class="line">      <span class="keyword">await</span> fse.<span class="title function_">mkdirs</span>(chunkDir);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// fs-extra 专用方法，类似 fs.rename 并且跨平台</span></span><br><span class="line">    <span class="comment">// fs-extra 的 rename 方法 windows 平台会有权限问题</span></span><br><span class="line">    <span class="comment">// https://github.com/meteor/meteor/issues/7852#issuecomment-255767835</span></span><br><span class="line">    <span class="keyword">await</span> fse.<span class="title function_">move</span>(chunk.<span class="property">path</span>, <span class="string">`<span class="subst">$&#123;chunkDir&#125;</span>/<span class="subst">$&#123;hash&#125;</span>`</span>);</span><br><span class="line">    res.<span class="title function_">end</span>(<span class="string">&quot;received file chunk&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>查看 <code>multiparty</code> 处理后的 <code>chunk</code> 对象，<code>path</code> 是存储临时文件的路径，<code>size</code> 是临时文件大小，在 multiparty 文档中提到可以使用 <code>fs.rename</code> 移动临时文件，即移动文件切片, 在接受文件切片时，需要先创建存储切片的文件夹，由于前端在发送每个切片时额外携带了唯一值 hash，所以以 hash 作为文件名，将切片从临时路径移动切片文件夹中。</p>
+<h4 id="合并-1"><a href="#合并-1" class="headerlink" title="合并"></a>合并</h4><p>由于前端在发送合并请求时会携带文件名，服务端根据文件名可以找到上一步创建的切片文件夹接着使用 <code>fs.createWriteStream</code> 创建一个可写流，可写流文件名就是<strong>切片文件夹名 + 后缀名</strong>组合而成 随后遍历整个切片文件夹，将切片通过 <code>fs.createReadStream</code> 创建可读流，传输合并到目标文件中，值得注意的是每次可读流都会传输到可写流的指定位置，这是通过 <code>createWriteStream</code> 的第二个参数 <code>start</code>&#x2F;<code>end</code> 控制的，目的是能够并发合并多个可读流到可写流中，这样即使流的顺序不同也能传输到正确的位置，所以这里还需要让前端在请求的时候多提供一个 <code>size</code> 参数。</p>
+<h1 id="断点续传"><a href="#断点续传" class="headerlink" title="断点续传"></a>断点续传</h1><p>断点续传的原理在于前端&#x2F;服务端需要<code>记住</code>已上传的切片，这样下次上传就可以跳过之前已上传的部分，有两种方案实现记忆的功能</p>
+<ul>
+<li>前端使用 localStorage 记录已上传的切片 hash</li>
+<li>服务端保存已上传的切片 hash，前端每次上传前向服务端获取已上传的切片</li>
+</ul>
+<h2 id="文件秒传"><a href="#文件秒传" class="headerlink" title="文件秒传"></a>文件秒传</h2><p>所谓的文件秒传，即在服务端已经存在了上传的资源，所以当用户<code>再次上传</code>时会直接提示上传成功。</p>
+<p>文件秒传需要依赖上一步生成的 hash，即在<code>上传前</code>，先计算出文件 hash，并把 hash 发送给服务端进行验证，由于 hash 的唯一性，所以一旦服务端能找到 hash 相同的文件，则直接返回上传成功的信息即可。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>大文件上传的基本思路大致是这样，不同的业务场景下 对 hash 的生成、切片的存储记录方式有所差别。网上也有一些比较好的案例。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">20 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0"><span class="toc-number">1.</span> <span class="toc-text">断点续传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%A7%92%E4%BC%A0"><span class="toc-number">1.1.</span> <span class="toc-text">文件秒传</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

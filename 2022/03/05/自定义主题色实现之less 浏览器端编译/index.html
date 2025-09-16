@@ -1,0 +1,505 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>自定义主题色实现之less 浏览器端编译 - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="自定义主题色实现之 less 浏览器端编译利用 less 在浏览器端实时编译的原理，在项目初始化和更改主题色时，调用 less.modifyVars() 方法，实现主题色的变更。
+1. 用法1.1 ,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">自定义主题色实现之less 浏览器端编译</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                三月 05, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/03/05/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8Bless%20%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E7%BC%96%E8%AF%91/" title="自定义主题色实现之less 浏览器端编译" class="">自定义主题色实现之less 浏览器端编译</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    17k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    15 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="自定义主题色实现之-less-浏览器端编译"><a href="#自定义主题色实现之-less-浏览器端编译" class="headerlink" title="自定义主题色实现之 less 浏览器端编译"></a>自定义主题色实现之 less 浏览器端编译</h1><p>利用 less 在浏览器端实时编译的原理，在项目初始化和更改主题色时，调用 <code>less.modifyVars()</code> 方法，实现主题色的变更。</p>
+<h3 id="1-用法"><a href="#1-用法" class="headerlink" title="1. 用法"></a>1. 用法</h3><p><strong>1.1 less.js 在浏览器端使用：</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet/less&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span> <span class="attr">href</span>=<span class="string">&quot;color.less&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">window</span>.<span class="property">less</span> = &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">env</span>: <span class="string">&quot;development&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">async</span>: <span class="literal">false</span>,</span></span><br><span class="line"><span class="language-javascript">  &#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;less.js&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>1.2 更改主题色</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">less</span>.<span class="property">pageLoadFinished</span>.<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">window</span>.<span class="property">less</span></span><br><span class="line">    .<span class="title function_">modifyVars</span>(&#123;</span><br><span class="line">      <span class="string">&quot;@maycur-color&quot;</span>: color,</span><br><span class="line">      <span class="string">&quot;@primary-color&quot;</span>: color,</span><br><span class="line">      <span class="string">&quot;@brand-primary&quot;</span>: color,</span><br><span class="line">      <span class="string">&quot;@brand-primary-tap&quot;</span>: color,</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// eslint-disable-next-line no-console</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;theme generate successfully&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-项目落地步骤"><a href="#2-项目落地步骤" class="headerlink" title="2.项目落地步骤"></a>2.项目落地步骤</h3><p>2.1 安装 <code>@maycur/theme-webpack-plugin</code>, 这一插件主要是在 webpack 打包阶段，在将静态资源输出到 output 目录之前，改变 <code>index.html</code> 的内容，在其 <code>&lt;body&gt;</code> 标签后面插入上述第一段代码（用法 - less.js 在浏览器端的使用），并生成 <code>color.less</code> 文件。</p>
+<p>2.2 将主题色相关的变量提出到 <code>color.less</code> 中。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @import &quot;~maycur-antd/lib/style/themes/default.less&quot;;</span></span><br><span class="line"><span class="comment">// @import &quot;~@maycur/business/lib/style/variables.less&quot;;</span></span><br><span class="line"><span class="keyword">@import</span> <span class="string">&quot;colorPalette&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">@maycur-color:</span> <span class="number">#0670FF</span>;</span><br><span class="line"><span class="variable">@maycur-color-1:</span> <span class="built_in">color</span>(<span class="built_in">~`colorPalette(&#x27;@&#123;maycur-color&#125;&#x27;, 1)`</span>);</span><br><span class="line"><span class="variable">@maycur-color-2:</span> <span class="built_in">color</span>(<span class="built_in">~`colorPalette(&#x27;@&#123;maycur-color&#125;&#x27;, 2)`</span>);</span><br><span class="line"></span><br><span class="line">&lt;!<span class="selector-tag">--</span> 页面中使用的色值变量  <span class="selector-tag">antd-mobile</span> <span class="selector-tag">color</span> <span class="selector-tag">--</span>&gt;</span><br><span class="line"></span><br><span class="line">@<span class="selector-tag">brand-primary</span>: @<span class="selector-tag">maycur-color</span>;</span><br><span class="line">@<span class="selector-tag">brand-primary-tap</span>: @<span class="selector-tag">maycur-color</span>;</span><br><span class="line">@<span class="selector-tag">ghost-button-fill-tap</span>: <span class="selector-tag">color</span>(<span class="built_in">~`colorPalette(&#x27;@&#123;maycur-color&#125;&#x27;, 3)`</span>);;</span><br></pre></td></tr></table></figure>
+
+<p>2.3 <code>@maycur/theme-webpack-plugin</code> 插件配置。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// themeOptions.js</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> utils = <span class="built_in">require</span>(<span class="string">&quot;./utils.js&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> lessPath = path.<span class="title function_">join</span>(__dirname, <span class="string">&quot;../src/less/themes/color/color.less&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">antdStylesDir</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&quot;../node_modules/antd-mobile/lib&quot;</span>),</span><br><span class="line">  <span class="attr">stylesDir</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&quot;../src&quot;</span>),</span><br><span class="line">  <span class="attr">varFile</span>: lessPath,</span><br><span class="line">  <span class="attr">publicPath</span>: process.<span class="property">env</span>.<span class="property">MK_ENV</span> ? <span class="string">&quot;/h5&quot;</span> : <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">srcAlias</span>: <span class="string">&quot;root&quot;</span>,</span><br><span class="line">  <span class="attr">resolvePath</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">async</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">pureLess</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">generateScopedName</span>: <span class="keyword">function</span> (<span class="params">name, filename, css</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> i = css.<span class="title function_">indexOf</span>(<span class="string">&quot;.&quot;</span> + name);</span><br><span class="line">    <span class="keyword">if</span> (i &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> componentName = filename.<span class="title function_">split</span>(path.<span class="property">sep</span>).<span class="title function_">slice</span>(-<span class="number">2</span>, -<span class="number">1</span>);</span><br><span class="line">      componentName = utils.<span class="title function_">camelSplit</span>(componentName[<span class="number">0</span>]);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">`mk-<span class="subst">$&#123;componentName&#125;</span>*<span class="subst">$&#123;name&#125;</span>`</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.4 修改 <code>webpack.common.js</code>，在 webpack 的配置中增加 plugin： <code>@maycur/theme-webpack-plugin</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> themeOptions = <span class="built_in">require</span>(<span class="string">&quot;./themeOptions&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">MKThemePlugin</span> = <span class="built_in">require</span>(<span class="string">&quot;@maycur/theme-webpack-plugin&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">THEME_COLOR</span> !== <span class="string">&quot;yango&quot;</span>) &#123;</span><br><span class="line">  plugins.<span class="title function_">push</span>(<span class="keyword">new</span> <span class="title class_">MKThemePlugin</span>(themeOptions));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.5 若配置了 css module，需要修改 <code>.gitignore</code>, 忽略 <code>.less.json</code> 文件。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**/</span>*.less.json</span><br></pre></td></tr></table></figure>
+
+<p>2.6 在获取到主题色配置之后，使用 <code>less.modifyVars()</code> 更改主题色。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">less</span>.<span class="property">pageLoadFinished</span>.<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">window</span>.<span class="property">less</span></span><br><span class="line">    .<span class="title function_">modifyVars</span>(&#123;</span><br><span class="line">      <span class="string">&quot;@maycur-color&quot;</span>: color,</span><br><span class="line">      <span class="string">&quot;@primary-color&quot;</span>: color,</span><br><span class="line">      <span class="string">&quot;@brand-primary&quot;</span>: color,</span><br><span class="line">      <span class="string">&quot;@brand-primary-tap&quot;</span>: color,</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// eslint-disable-next-line no-console</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;theme generate successfully&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>2.7 可使用 <code>colorPalette</code> 方法对主题色进行计算，详细见 《自定义主题色实现之 CSS Variable》篇。</p>
+<p>2.8 调试</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;debug&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node --inspect --inspect-brk config/start.js&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意事项</strong></p>
+<p><code>varFile</code> 所指定的文件里仅存放需要变更颜色的变量，否则可能会出现以下问题：</p>
+<ul>
+<li>定义多个相同色值的变量时，调用 <code>modifyVars</code> 不起作用</li>
+<li>如果 <code>variables.less</code> 里定义了某个色值变量，尽量使用变量，而不要直接写色值，否则可能出现 <code>#FFFFFF</code> 被替换成 <code>@white-colorFFF</code></li>
+<li><code>variables.less</code> 所在目录下的样式文件，互相引入时用相对路径</li>
+</ul>
+<p>方案 2: css variable, 详见 《自定义主题色实现之 CSS Variable》</p>
+<h3 id="3-Less-编译和-css-variable-比较"><a href="#3-Less-编译和-css-variable-比较" class="headerlink" title="3. Less 编译和 css variable 比较"></a>3. Less 编译和 css variable 比较</h3><p><strong>less 实时编译</strong></p>
+<ul>
+<li>代码改动量小</li>
+<li>需要加载额外的资源文件，浏览器端编译对性能小有影响</li>
+<li>项目和第三方 UI 库都需要使用 less 预处理器</li>
+<li>会将所有与主题色色值相同的变量都改掉，无法做到只修改特定变量的颜色</li>
+</ul>
+<p><strong>css variable</strong></p>
+<ul>
+<li>代码改动量更小</li>
+<li>实现简单，不需要加载额外资源，性能影响小</li>
+<li>通用且易操作，对使用的 css 预处理器没有要求</li>
+<li>第三方 UI 库需要支持使用 css 变量切换主题色</li>
+<li>可以仅更改特定变量的颜色</li>
+<li>存在浏览器兼容性问题，不支持 IE (<code>css-vars-ponyfill</code>)</li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">20 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98%E8%89%B2%E5%AE%9E%E7%8E%B0%E4%B9%8B-less-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E7%BC%96%E8%AF%91"><span class="toc-number">1.</span> <span class="toc-text">自定义主题色实现之 less 浏览器端编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%A8%E6%B3%95"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. 用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%A1%B9%E7%9B%AE%E8%90%BD%E5%9C%B0%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.项目落地步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Less-%E7%BC%96%E8%AF%91%E5%92%8C-css-variable-%E6%AF%94%E8%BE%83"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. Less 编译和 css variable 比较</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>
