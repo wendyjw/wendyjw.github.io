@@ -10,7 +10,23 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边背景：IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。在 Android 上,"> 
+    <meta name="description" content="快速对比表
+
+
+特性
+Memory Cache (内存缓存)
+Disk Cache (磁盘缓存)
+
+
+
+存储位置
+RAM (内存)
+硬盘 &amp;#x2F; SSD
+
+
+访问速度
+极快 (纳秒级)
+快 (,"> 
     <meta name="author" content="wuwenjun"> 
     <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -106,22 +122,22 @@
                 
                 <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
                 
-                九月 29, 2022
+                一月 29, 2025
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" title="安卓自适应应用图标" class="">安卓自适应应用图标</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2025/01/29/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E4%B8%AD%20memory%20cache%20%E5%92%8C%20Disk%20cache%20%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/" title="安卓自适应应用图标" class="">安卓自适应应用图标</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                    3k
+                    4.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                    3 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -153,38 +169,107 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p>问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边<br>背景：<br>IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。<br>在 Android 上，应用图标可以是方形、圆形、圆角矩形、或者是其他任意不规则图形。<br>但由于 Android 操作系统是开源的，国内一些手机厂商在定制操作系统的时候就把这一特性给改了。比如小米手机，就选择了向苹果靠拢，强制要求应用图标圆角化。<br>终于在 Android 8.0 系统中，Google 下定决心要好好整治一下 Android 应用图标的规范性。</p>
-<h2 id="1-Android-8-0-应用图标适配"><a href="#1-Android-8-0-应用图标适配" class="headerlink" title="1. Android 8.0 应用图标适配"></a>1. Android 8.0 应用图标适配</h2><p>从 Android 8.0 系统开始，应用程序的图标被分为了两层：前景层和背景层。也就是说，我们在设计应用图标的时候，需要将前景和背景部分分离，前景用来展示应用图标的 Logo，背景用来衬托应用图标的 Logo。需要注意的是，背景层在设计的时候只允许定义颜色和纹理，但是不能定义形状。</p>
-<p>那么应用图标的形状由谁来定义呢？Google 将这个权利就交给手机厂商了。不是有些手机厂商喜欢学习苹果的圆角图标吗？没问题，由于应用图标的设计分为了两层，手机厂商只需要在这两层之上再盖上一层 mask，这个 mask 可以是圆角矩形、圆形或者是方形等等，视具体手机厂商而定，就可以瞬间让手机上的所有应用图标都变成相同的规范</p>
-<p>何时需要适配？</p>
-<p>如果你的 APP 中的 targetSdkVersion 是低于 26 的，那么就可以不用进行应用图标适配，Android 8.0 系统仍然是向下兼容的。<br>如果你将 targetSdkVersion 指定到了 26 或者更高，那么 Android 系统就会认为你的 APP 已经做好了 8.0 系统的适配工作，当然包括了应用图标的适配</p>
-<h2 id="2-如何进行-8-0-系统的应用图标适配"><a href="#2-如何进行-8-0-系统的应用图标适配" class="headerlink" title="2. 如何进行 8.0 系统的应用图标适配"></a>2. 如何进行 8.0 系统的应用图标适配</h2><ol>
-<li><p>确认 <code>targetSdkVersion &gt;= 26</code><br>打开 app&#x2F;build.gradle 文件，确认 targetSdkVersion 版本</p>
+            <h3 id="快速对比表"><a href="#快速对比表" class="headerlink" title="快速对比表"></a>快速对比表</h3><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">Memory Cache (内存缓存)</th>
+<th align="left">Disk Cache (磁盘缓存)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>存储位置</strong></td>
+<td align="left"><strong>RAM (内存)</strong></td>
+<td align="left"><strong>硬盘 &#x2F; SSD</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>访问速度</strong></td>
+<td align="left"><strong>极快</strong> (纳秒级)</td>
+<td align="left"><strong>快</strong> (毫秒级，但比内存慢几个数量级)</td>
+</tr>
+<tr>
+<td align="left"><strong>生命周期</strong></td>
+<td align="left"><strong>短暂 (临时性)</strong></td>
+<td align="left"><strong>长久 (持久性)</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>关闭标签页后</strong></td>
+<td align="left"><strong>缓存会消失</strong></td>
+<td align="left"><strong>缓存仍然存在</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>容量</strong></td>
+<td align="left">较小</td>
+<td align="left">较大</td>
+</tr>
+<tr>
+<td align="left"><strong>开发者控制</strong></td>
+<td align="left">间接控制，主要由浏览器决定</td>
+<td align="left"><strong>直接控制 (通过 HTTP 缓存头)</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="详细解析"><a href="#详细解析" class="headerlink" title="详细解析"></a>详细解析</h3><h4 id="1-Memory-Cache-内存缓存"><a href="#1-Memory-Cache-内存缓存" class="headerlink" title="1. Memory Cache (内存缓存)"></a>1. Memory Cache (内存缓存)</h4><ul>
+<li><p><strong>是什么？</strong> 它是将资源直接存储在计算机的 <strong>RAM (内存)</strong> 中的缓存。内存的读写速度远超硬盘，所以这是<strong>最快</strong>的缓存。</p>
 </li>
-<li><p>查看应用图标文件<br>打卡 AndroidManifest.xml 文件，查看 android:icon 属性，该属性将应用的图标指定为了 mipmap 目录下的 ic_launcher 文件,<br>Android 8.0 或以上系统的手机，都会使用 mipmap-anydpi-v26 这个目录下的 ic_launcher 来作为图标。<br>注：android:roundIcon 属性，这是一个只适用在 Android 7.1 系统上的过渡版本，很快就被 8.0 系统的应用图标适配所替代了。</p>
+<li><p><strong>生命周期 (关键特征)：</strong><br>它是<strong>临时性</strong>的，与当前页面的<strong>生命周期</strong>紧密相关。一旦你关闭了浏览器标签页或关闭了整个浏览器，这部分缓存就会被释放，<strong>数据会消失</strong>。</p>
 </li>
-<li><p>查看 ic_launcher<br>mipmap-anydpi-v26 目录下的 ic_launcher 并不是一张图片，而是一个 XML 文件，包含指定图标的背景层和前景层。<br>直接体现了在 8.0 系统的应用图标展示效果,可见过于贴边</p>
-</li>
-</ol>
-<h2 id="3-如何解决过于贴边"><a href="#3-如何解决过于贴边" class="headerlink" title="3. 如何解决过于贴边"></a>3. 如何解决过于贴边</h2><ol>
-<li>安卓自适应图标, 一个自适应的图标可以适应不同的使用情况</li>
-</ol>
+<li><p><strong>它缓存什么？</strong><br>浏览器会倾向于将一些资源，特别是那些<strong>当前页面正在使用</strong>或<strong>刚刚使用过</strong>的资源放入内存缓存。这包括：</p>
 <ul>
-<li>. 不同的形状：一个自适应图标可以在不同的设备型号上显示各种形状。例如，它可以在一个 OEM 设备上显示一个圆形，而在另一个设备上显示一个正方形。每个设备 OEM 必须提供一个掩码，系统用它来渲染所有具有相同形状的自适应图标<br>自适应图标支持各种遮罩层，这些遮罩层在不同的设备上有所不同</li>
-<li>. 视觉效果：自适应图标支持各种吸引人的视觉效果，当用户在主屏幕上放置或移动图标时，这些效果会显示出来<br>注意：动画的视觉效果是由支持的启动器生成的。视觉效果可能因不同的发射器而异。</li>
-<li>用户主题化：从安卓 13（API 级别 33）开始，用户可以给他们的自适应图标做主题。如果用户启用了主题应用图标（换句话说，在系统设置中打开了主题图标的开关），并且启动器支持这一功能，系统会使用用户选择的壁纸和主题的着色来决定色调的颜色。</li>
+<li>预加载的资源 (<code>preload</code>)。</li>
+<li>已经解码的图片、解析后的脚本和样式表等，这些是“随时可用”的状态，无需再次处理。</li>
 </ul>
-<ol start="2">
-<li>如何设置自适应图标</li>
-</ol>
+</li>
+<li><p><strong>何时触发？</strong></p>
 <ul>
-<li><p>为图标提供两个图层：一个为前景，一个为背景。<br>第二张图片中的 72 x 72 安全区显示了你的图标和前景层永远不会被 OEM 定义的形状掩码所剪切的地方。</p>
-</li>
-<li><p>限制大小<br>所有图层的大小必须是 108 x 108 dp。<br>图标的边缘应该是干净的；图层在图标的轮廓周围不能有遮罩或背景阴影。<br>图标必须至少是 48 x 48 dp；它不能超过 72 x 72 dp，因为图标的内部 72 x 72 dp 会出现在遮罩的视口内。<br>图层四边的外侧 18dp 是为遮蔽和创造视觉效果（如视差或脉冲）而保留的。</p>
+<li>当你<strong>在同一个标签页内</strong>进行页面跳转（比如从首页点到详情页，再点返回）。</li>
+<li>当一个资源在当前页面被多次请求时。</li>
+</ul>
 </li>
 </ul>
-<p>参考文章：</p>
-<p><a target="_blank" rel="noopener" href="https://developer.android.com/develop/ui/views/launch/icon_design_adaptive">https://developer.android.com/develop/ui/views/launch/icon_design_adaptive</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/25abce3f0492">https://www.jianshu.com/p/25abce3f0492</a><br><a target="_blank" rel="noopener" href="https://medium.com/google-design/designing-adaptive-icons-515af294c783">https://medium.com/google-design/designing-adaptive-icons-515af294c783</a></p>
+<h4 id="2-Disk-Cache-磁盘缓存"><a href="#2-Disk-Cache-磁盘缓存" class="headerlink" title="2. Disk Cache (磁盘缓存)"></a>2. Disk Cache (磁盘缓存)</h4><ul>
+<li><p><strong>是什么？</strong> 它是将资源存储在你的<strong>硬盘或 SSD</strong> 上的缓存。它的速度虽然远不及内存，但对于网络请求来说，仍然是飞快的。</p>
+</li>
+<li><p><strong>生命周期 (关键特征)：</strong><br>它是<strong>持久性</strong>的。只要缓存没有过期、没有被用户手动清除、且没有超出容量限制，那么即使你<strong>关闭标签页或浏览器，甚至重启电脑，这部分缓存依然存在</strong>。</p>
+</li>
+<li><p><strong>它缓存什么？</strong><br>它会根据 HTTP 响应头中的规则，存储绝大多数的静态资源，如 JS、CSS、图片、字体等。这些资源是以<strong>原始文件</strong>的形式存储的。</p>
+</li>
+<li><p><strong>开发者如何控制？ (关键！)</strong><br>Disk Cache 是我们作为前端开发者<strong>可以直接控制</strong>的。通过在服务器上配置 HTTP 响应头，我们可以精确地告诉浏览器如何缓存文件：</p>
+<ul>
+<li><strong><code>Cache-Control</code></strong>: 这是最重要的头部，可以设置 <code>max-age</code> (缓存多久)、<code>immutable</code> (文件永不改变) 等。</li>
+<li><strong><code>ETag</code> &#x2F; <code>Last-Modified</code></strong>: 用于协商缓存，当缓存过期后，浏览器可以用它们来询问服务器文件是否有更新。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="两者如何协同工作？——-缓存的优先级"><a href="#两者如何协同工作？——-缓存的优先级" class="headerlink" title="两者如何协同工作？—— 缓存的优先级"></a>两者如何协同工作？—— 缓存的优先级</h3><p>浏览器在请求一个资源时，会按照以下优先级顺序进行查找：</p>
+<ol>
+<li><p><strong>第一步：检查 Memory Cache</strong></p>
+<ul>
+<li>浏览器会首先检查内存中是否有这个资源的缓存。</li>
+<li>如果<strong>命中</strong> ，则直接从内存中读取，速度最快。这是你在 DevTools 的 Network 面板中看到的 <code>(memory cache)</code>。</li>
+</ul>
+</li>
+<li><p><strong>第二步：检查 Disk Cache</strong></p>
+<ul>
+<li>如果内存缓存中<strong>未命中</strong> ，浏览器会接着检查硬盘中是否有这个资源的缓存。</li>
+<li>如果<strong>命中</strong>，则从硬盘中读取。这个过程需要一次 I&#x2F;O 操作，比内存慢，但仍然远快于网络请求。这是你在 Network 面板中看到的 <code>(disk cache)</code>。</li>
+</ul>
+</li>
+<li><p><strong>第三步：发起网络请求</strong></p>
+<ul>
+<li>如果内存和磁盘缓存都未命中，浏览器才会真正地向服务器发起网络请求。</li>
+<li>请求成功后，浏览器会根据该资源的 HTTP 响应头，决定是否以及如何将其存入 <strong>Disk Cache</strong>。同时，它可能会将这个刚下载的资源放入 <strong>Memory Cache</strong>，以备当前页面后续使用。</li>
+</ul>
+</li>
+</ol>
+<h3 id="如何在-Chrome-开发者工具中观察？"><a href="#如何在-Chrome-开发者工具中观察？" class="headerlink" title="如何在 Chrome 开发者工具中观察？"></a>如何在 Chrome 开发者工具中观察？</h3><ol>
+<li>打开开发者工具 (<code>F12</code>)，切换到 <strong>Network (网络)</strong> 标签页。</li>
+<li>**勾选 <code>Disable cache</code>**，然后访问你的网站，此时所有资源都是从网络加载的。</li>
+<li>**取消勾选 <code>Disable cache</code><strong>，然后</strong>刷新页面 (F5)**。你会看到很多资源的 <strong>Size</strong> 列显示为 <code>(disk cache)</code>。</li>
+<li>现在，<strong>在同一个标签页中，点击一个链接跳转到网站的另一个页面</strong>。然后再点击浏览器的“后退”按钮返回刚才的页面。再次观察 Network 面板，你可能会发现一些资源的 <strong>Size</strong> 列显示为 <code>(memory cache)</code>，因为浏览器认为这些资源马上会被再次用到，所以将它们保留在了更快的内存中。</li>
+</ol>
+<p><strong>总结：</strong> <code>Memory Cache</code> 是为了<strong>极致的速度和即时访问</strong>，服务于当前会话；而 <code>Disk Cache</code> 是为了<strong>长期的持久化和减少重复下载</strong>，服务于跨会话的用户体验。作为开发者，我们主要通过配置 HTTP 缓存头来优化 <code>Disk Cache</code> 的行为。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -245,7 +330,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>目录</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Android-8-0-%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87%E9%80%82%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text">1. Android 8.0 应用图标适配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C-8-0-%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87%E9%80%82%E9%85%8D"><span class="toc-number">2.</span> <span class="toc-text">2. 如何进行 8.0 系统的应用图标适配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%BF%87%E4%BA%8E%E8%B4%B4%E8%BE%B9"><span class="toc-number">3.</span> <span class="toc-text">3. 如何解决过于贴边</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E5%AF%B9%E6%AF%94%E8%A1%A8"><span class="toc-number">1.</span> <span class="toc-text">快速对比表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E8%A7%A3%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">详细解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E8%80%85%E5%A6%82%E4%BD%95%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C%EF%BC%9F%E2%80%94%E2%80%94-%E7%BC%93%E5%AD%98%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">3.</span> <span class="toc-text">两者如何协同工作？—— 缓存的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8-Chrome-%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E4%B8%AD%E8%A7%82%E5%AF%9F%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">如何在 Chrome 开发者工具中观察？</span></a></li></ol>
                 </div>
             </div>
             

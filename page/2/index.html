@@ -130,22 +130,22 @@
             
             <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
             
-            十一月 18, 2021
+            一月 03, 2022
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86/" title="请求竞态处理" class="posttitle">请求竞态处理</a></h3>
+            <a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="私有 npm 仓库使用手册" class="posttitle">私有 npm 仓库使用手册</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                21k
+                4.5k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                19 mins.
+                4 mins.
             </span>
             
             
@@ -154,9 +154,15 @@
         
         <div class="md-content animated fadeIn">
             
-            1. 使用 useEffect 执行机制12345678910111213141516171819202122// useArticlesLoading.jsxuseEffct(() =&gt; &#123;  let didCancel = false;  fetch(`https://get.a.article.com/articles/$&#123;articleId&#125;`) ...
+            需求背景
+平时在项目工作中可能会用到很多通用性的代码，比如，框架类、工具类以及公用的业务逻辑代码等。通过打包发布到 npm 中央仓库或者私有仓库，来进行维护和托管代码，方便公用的代码的使用，如果涉及到不方便公开的代码组件可以发布到私有创库。
+私有 npm 组件库的优势
+
+私有 npm 包只对公司内部局域网开放；
+速度比直接在 npm 下载包更快，也比使用淘宝镜像快，毕竟是在公司内部局域网；
+...
             
-            <span class="read-more"><a href="/2021/11/18/%E8%AF%B7%E6%B1%82%E7%AB%9E%E6%80%81%E5%A4%84%E7%90%86/" title="查看全文" class="posttitle">查看全文</a>
+            <span class="read-more"><a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="查看全文" class="posttitle">查看全文</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -177,6 +183,117 @@
 
     <div id="primary">
         
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+            
+            一月 03, 2022
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="私有 npm 仓库使用手册" class="posttitle">私有 npm 仓库使用手册</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        4.5k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        4 mins.
+                    </span>
+                
+                
+            </p>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                需求背景
+平时在项目工作中可能会用到很多通用性的代码，比如，框架类、工具类以及公用的业务逻辑代码等。通过打包发布到 npm 中央仓库或者私有仓库，来进行维护和托管代码，方便公用的代码的使用，如果涉及到不方便公开的代码组件可以发布到私有创库。
+私有 npm 组件库的优势
+
+私有 npm 包只对公司内部局域网开放；
+速度比直接在 npm 下载包更快，也比使用淘宝镜像快，毕竟是在公司内部局域网；
+对于发布和下载 npm 包可以配置权限管理
+
+发布 npm 到私有仓库
+
+发布 npm 包之前必须先注册账号
+123npm adduser --registry https://npmjs-dev.maycur.com/```    输入 npm 账号用户名、密码和邮箱，完成注册
+
+发布 npm 包到私有仓库
+1234567891011121314# 各环境 maycur-business 发布执行以下命令即可# 发布 devnpm run publish:prerelease:dev# 发布 sitnpm run publish:prerelease:sit# 发布 uatnpm run p...
+            
+            <span class="read-more"><a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+            
+            十二月 03, 2021
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" title="前端大文件上传技术方案" class="posttitle">前端大文件上传技术方案</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        15k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        13 mins.
+                    </span>
+                
+                
+            </p>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                整体思路
+前端使用 Blob 的 slice 方法来对某个大文件进行切割，切成多个切片。
+通过 Http 可并发性，把一个大文件 变成 同时上传多个小的文件切片。
+并发的传输 传到服务器可能发生变化，所以要给切片记录顺序。
+服务端接收切片，那什么时候合并切片、如何合并切片（后端工作，前端如果是 node 使用 nodejs 的 读写流将所有的切片的流写到最终文件的流里面。）？
+
+什么时候合并切片需要前端配合，请求信息里面要告诉后端有多少切片。
+方案一 是后端通过接收到数量阈值后、自己自动合并
+方案二 前端发一个额外的请求 主动通知合并
+上传切片
+对文件进行切片
+将切片传输给服务端
+
+12345678910111213141516171819202122232425262728293031323334// 生成文件切片createFileChunk(file, size = SIZE) &#123;    const fileChunkList = [];    let cur = 0;    while (cur &lt; file.size) &#123;        fil...
+            
+            <span class="read-more"><a href="/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
 <div class="post" id="post">
     <div class="post-cover animated fadeIn" style="
             background-image:
@@ -585,107 +702,9 @@ tsk_md5：项目登录密码使用 MD5 加密
 </div>
 
 
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
     </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
-            
-            三月 08, 2017
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2017/03/08/Set%20%E6%96%B0%E7%94%A8%E6%B3%95/" title="全新 Set 用法" class="posttitle">全新 Set 用法</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        4k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        4 mins.
-                    </span>
-                
-                
-            </p>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                
-Set.prototype.intersection(other)：返回两个集合的交集。
-Set.prototype.union(other)：返回两个集合的并集。
-Set.prototype.difference(other)：返回第一个集合与第二个集合的差集。
-Set.prototype.symmetricDifference(other)：返回两个集合的对称差。
-Set.prototype.isSubsetOf(other)：判断第一个集合是否是第二个集合的子集。
-Set.prototype.isSupersetOf(other)：判断第一个集合是否是第二个集合的超集。
-Set.prototype.isDisjointFrom(other)：判断两个集合是否不相交。
-
-123456789101112131415161718192021222324// 创建两个Set实例const setA = new Set([1, 2, 3, 4]);const setB = new Set([3, 4, 5, 6]);// 交集: 返回两个集合的公共元素const intersect...
-            
-            <span class="read-more"><a href="/2017/03/08/Set%20%E6%96%B0%E7%94%A8%E6%B3%95/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
-            
-            三月 08, 2017
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2017/03/08/cookie%20%E3%80%81localStorage%20%E3%80%81sessionStorage%20%E4%BB%A5%E5%8F%8A%20H5%20%E7%BC%93%E5%AD%98/" title="cookie 、localStorage 、sessionStorage 以及 H5 缓存" class="posttitle">cookie 、localStorage 、sessionStorage 以及 H5 缓存</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        6.4k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        6 mins.
-                    </span>
-                
-                
-            </p>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                cookie 详解存储 cookie 是浏览器的功能，浏览器下有一个 cookie 文件夹专门存放各个域下设置的 cookie，cookie 是存储在浏览器的纯文本
-当网页要发 http 请求时，浏览器会先检查是否有相应的 cookie，有则自动添加在 request header 中的 cookie 字段中。这些是浏览器自动帮我们做的，而且每一次 http 请求浏览器都会自动帮我们做
-cookie 的格式
-document.cookie原生 js 获取 cookie 的方法，得到一个字符串，但这个字符串是有格式的，由键值对 key&#x3D;value 构成，键值对之间由一个分号和一个空格隔开。
-
-“key&#x3D;value; key&#x3D;value”cookie 属性选项包括：expires、domain、path、secure、HttpOnly，
-在设置任一个 cookie 时都可以设置相关的这些属性，当然也可以不设置，这时会使用这些属性的默认值。在设置这些属性时，属性之间由一个分号和一个空格隔开。如下：
-“key&#x3D;name; expires&#x3D;...
-            
-            <span class="read-more"><a href="/2017/03/08/cookie%20%E3%80%81localStorage%20%E3%80%81sessionStorage%20%E4%BB%A5%E5%8F%8A%20H5%20%E7%BC%93%E5%AD%98/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-    </div>
+    
+    <div id="pager"><a href="/page/3/" class="more" data-loading="加载中..." data-load-more="加载更多">加载更多</a></div>
     
 </div>
 <div id="preview"></div>

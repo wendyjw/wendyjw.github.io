@@ -130,22 +130,22 @@
             
             <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
             
-            九月 29, 2022
+            九月 01, 2025
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" title="安卓自适应应用图标" class="posttitle">安卓自适应应用图标</a></h3>
+            <a href="/2025/09/01/Service%20Worker%20%E5%A6%82%E4%BD%95%E7%BC%93%E5%AD%98%20http%20%E8%AF%B7%E6%B1%82%E8%B5%84%E6%BA%90/" title="安卓自适应应用图标" class="posttitle">安卓自适应应用图标</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                3k
+                24k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                3 mins.
+                22 mins.
             </span>
             
             
@@ -154,9 +154,14 @@
         
         <div class="md-content animated fadeIn">
             
-            问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边背景：IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。在 Android 上，应用图标可以是方形、圆形、圆角矩形、或者是其他任意不规则图形。但由于 Android 操作系统是开源的，国内一些手机厂商在定制操作系统的时候就把这一特性给改了。比如小米手机，就选择了向苹果靠拢，...
+            核心思想：一个可编程的网络代理可以将 Service Worker 想象成一个安装在浏览器和网络之间的 “可编程的中间人” 或 “网络代理”。
+一旦安装成功，您网站的所有网络请求（HTTP 请求）都会先经过这个 SW。这时，您就可以在 SW 的 JavaScript 代码里决定如何处理这个请求：
+
+是直接让它去访问网络？
+还是从我们预先准备的“储藏室”（缓存）里拿一份旧的资源直接返回？
+还是...
             
-            <span class="read-more"><a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" title="查看全文" class="posttitle">查看全文</a>
+            <span class="read-more"><a href="/2025/09/01/Service%20Worker%20%E5%A6%82%E4%BD%95%E7%BC%93%E5%AD%98%20http%20%E8%AF%B7%E6%B1%82%E8%B5%84%E6%BA%90/" title="查看全文" class="posttitle">查看全文</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -177,6 +182,143 @@
 
     <div id="primary">
         
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+            
+            一月 29, 2025
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2025/01/29/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E4%B8%AD%20memory%20cache%20%E5%92%8C%20Disk%20cache%20%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/" title="安卓自适应应用图标" class="posttitle">安卓自适应应用图标</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        4.6k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        4 mins.
+                    </span>
+                
+                
+            </p>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                快速对比表
+
+
+特性
+Memory Cache (内存缓存)
+Disk Cache (磁盘缓存)
+
+
+
+存储位置
+RAM (内存)
+硬盘 &#x2F; SSD
+
+
+访问速度
+极快 (纳秒级)
+快 (毫秒级，但比内存慢几个数量级)
+
+
+生命周期
+短暂 (临时性)
+长久 (持久性)
+
+
+关闭标签页后
+缓存会消失
+缓存仍然存在
+
+
+容量
+较小
+较大
+
+
+开发者控制
+间接控制，主要由浏览器决定
+直接控制 (通过 HTTP 缓存头)
+
+
+
+详细解析1. Memory Cache (内存缓存)
+是什么？ 它是将资源直接存储在计算机的 RAM (内存) 中的缓存。内存的读写速度远超硬盘，所以这是最快的缓存。
+
+生命周期 (关键特征)：它是临时性的，与当前页面的生命周期紧密相关。一旦你关闭了浏览器标签页或关闭了整个浏览器，这部分缓存就会被释放，数据会消失。
+
+它缓存什么？浏览器会倾向于将一些资源，特别是那些当前页面正在使用或刚刚使用过的资源放入内存缓存。这包括：
+
+预加载的资源 (preload)。
+已经解码的图片、解析后的脚本和样式表等，这些是“随时可用”的状态，无需再次处理。
+
+
+何时触发？...
+            
+            <span class="read-more"><a href="/2025/01/29/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E4%B8%AD%20memory%20cache%20%E5%92%8C%20Disk%20cache%20%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+            
+            九月 29, 2022
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" title="安卓自适应应用图标" class="posttitle">安卓自适应应用图标</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        3k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        3 mins.
+                    </span>
+                
+                
+            </p>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                问题: 上架时发现部分安卓手机，“每科档案” APP 的应用图标左右过于贴边背景：IOS 所有应用程序的图标都使用了圆角矩形图标，即使是第三方应用也被强制要求使用圆角矩形图标。在 Android 上，应用图标可以是方形、圆形、圆角矩形、或者是其他任意不规则图形。但由于 Android 操作系统是开源的，国内一些手机厂商在定制操作系统的时候就把这一特性给改了。比如小米手机，就选择了向苹果靠拢，强制要求应用图标圆角化。终于在 Android 8.0 系统中，Google 下定决心要好好整治一下 Android 应用图标的规范性。
+1. Android 8.0 应用图标适配从 Android 8.0 系统开始，应用程序的图标被分为了两层：前景层和背景层。也就是说，我们在设计应用图标的时候，需要将前景和背景部分分离，前景用来展示应用图标的 Logo，背景用来衬托应用图标的 Logo。需要注意的是，背景层在设计的时候只允许定义颜色和纹理，但是不能定义形状。
+那么应用图标的形状由谁来定义呢？Google 将这个权利就交给手机厂商了。不是有些手机厂商喜欢学习苹果的圆角图标吗？没问题，由于应用图...
+            
+            <span class="read-more"><a href="/2022/09/29/%E5%AE%89%E5%8D%93%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
 <div class="post" id="post">
     <div class="post-cover animated fadeIn" style="
             background-image:
@@ -529,117 +671,6 @@ String
 支持强制设...
             
             <span class="read-more"><a href="/2022/01/16/%E6%94%B9%E8%BF%9B%E7%89%88%E7%A6%BB%E7%BA%BF%E5%AD%98%E5%82%A8%E4%B9%8B%20localForage/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
-            
-            一月 03, 2022
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="私有 npm 仓库使用手册" class="posttitle">私有 npm 仓库使用手册</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        4.5k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        4 mins.
-                    </span>
-                
-                
-            </p>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                需求背景
-平时在项目工作中可能会用到很多通用性的代码，比如，框架类、工具类以及公用的业务逻辑代码等。通过打包发布到 npm 中央仓库或者私有仓库，来进行维护和托管代码，方便公用的代码的使用，如果涉及到不方便公开的代码组件可以发布到私有创库。
-私有 npm 组件库的优势
-
-私有 npm 包只对公司内部局域网开放；
-速度比直接在 npm 下载包更快，也比使用淘宝镜像快，毕竟是在公司内部局域网；
-对于发布和下载 npm 包可以配置权限管理
-
-发布 npm 到私有仓库
-
-发布 npm 包之前必须先注册账号
-123npm adduser --registry https://npmjs-dev.maycur.com/```    输入 npm 账号用户名、密码和邮箱，完成注册
-
-发布 npm 包到私有仓库
-1234567891011121314# 各环境 maycur-business 发布执行以下命令即可# 发布 devnpm run publish:prerelease:dev# 发布 sitnpm run publish:prerelease:sit# 发布 uatnpm run p...
-            
-            <span class="read-more"><a href="/2022/01/03/%E7%A7%81%E6%9C%89%20npm%20%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
-            
-            十二月 03, 2021
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" title="前端大文件上传技术方案" class="posttitle">前端大文件上传技术方案</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        15k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        13 mins.
-                    </span>
-                
-                
-            </p>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                整体思路
-前端使用 Blob 的 slice 方法来对某个大文件进行切割，切成多个切片。
-通过 Http 可并发性，把一个大文件 变成 同时上传多个小的文件切片。
-并发的传输 传到服务器可能发生变化，所以要给切片记录顺序。
-服务端接收切片，那什么时候合并切片、如何合并切片（后端工作，前端如果是 node 使用 nodejs 的 读写流将所有的切片的流写到最终文件的流里面。）？
-
-什么时候合并切片需要前端配合，请求信息里面要告诉后端有多少切片。
-方案一 是后端通过接收到数量阈值后、自己自动合并
-方案二 前端发一个额外的请求 主动通知合并
-上传切片
-对文件进行切片
-将切片传输给服务端
-
-12345678910111213141516171819202122232425262728293031323334// 生成文件切片createFileChunk(file, size = SIZE) &#123;    const fileChunkList = [];    let cur = 0;    while (cur &lt; file.size) &#123;        fil...
-            
-            <span class="read-more"><a href="/2021/12/03/%E5%89%8D%E7%AB%AF%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>
