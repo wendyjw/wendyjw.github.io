@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NodeJs 模仿 SIP 话机注册.md - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="本项目需要对应的后端接口、信令环境才能正常运行，本文章只涉及前端内容。
+项目地址：https://github.com/wendyjw/SIP-register-with-NodeJs
+项目依赖模块,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">NodeJs 模仿 SIP 话机注册.md</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                六月 21, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/06/21/NodeJS%20%E6%A8%A1%E6%8B%9F%E6%B3%A8%E5%86%8C%E8%AF%9D%E6%9C%BA/" title="NodeJs 模仿 SIP 话机注册.md" class="">NodeJs 模仿 SIP 话机注册.md</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    25k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    23 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p>本项目需要对应的后端接口、信令环境才能正常运行，本文章只涉及前端内容。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/wendyjw/SIP-register-with-NodeJs">https://github.com/wendyjw/SIP-register-with-NodeJs</a></p>
+<h3 id="项目依赖模块："><a href="#项目依赖模块：" class="headerlink" title="项目依赖模块："></a>项目依赖模块：</h3><ul>
+<li>NodeJs</li>
+<li>readline：命令行输入</li>
+<li>ws：与服务端建立 websocket 连接</li>
+<li>superagent：与服务端建立请求连接，效果类似 ajax 请求</li>
+<li>tsk_md5：项目登录密码使用 MD5 加密</li>
+</ul>
+<h3 id="项目需求"><a href="#项目需求" class="headerlink" title="项目需求"></a>项目需求</h3><p>模拟 SIP 话机频繁向服务器发起注册请求，以得到服务器最大 SIP 注册数</p>
+<h3 id="项目实现概述"><a href="#项目实现概述" class="headerlink" title="项目实现概述"></a>项目实现概述</h3><ol>
+<li>终端输入连续注册分机的开始分机号和结束分机号</li>
+<li>终端输入统一的 SIP 注册密码</li>
+<li>终端输入服务器地址</li>
+<li>先进行用户登录鉴权，用户登录鉴权通过后再发起 SIP 注册</li>
+</ol>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><blockquote>
+<p>引入项目所需模块</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">WebSocket</span> = <span class="built_in">require</span>(<span class="string">&quot;ws&quot;</span>),</span><br><span class="line">  superagent = <span class="built_in">require</span>(<span class="string">&quot;superagent&quot;</span>),</span><br><span class="line">  tskMD5 = <span class="built_in">require</span>(<span class="string">&quot;./tsk_md5&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> readline = <span class="built_in">require</span>(<span class="string">&quot;readline&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>创建 readline 接口实例</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rl = readline.<span class="title function_">createInterface</span>(&#123;</span><br><span class="line">  <span class="attr">input</span>: process.<span class="property">stdin</span>,</span><br><span class="line">  <span class="attr">output</span>: process.<span class="property">stdout</span>,</span><br><span class="line">  <span class="attr">prompt</span>: <span class="string">&quot;OHAI&gt; &quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>定义所需变量</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;,</span><br><span class="line">  httpHeader = &#123;&#125;,</span><br><span class="line">  baseUrl = <span class="string">&quot;&quot;</span>,</span><br><span class="line">  pass = <span class="string">&quot;&quot;</span>,</span><br><span class="line">  ip = <span class="string">&quot;&quot;</span>,</span><br><span class="line">  websocketUrl = <span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> keepWsAlive, readyState;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>读取 readline 输入信息函数</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getReadline</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> lines = []; <span class="comment">// 用于保存所有输入信息。</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Please input the range of extensions(eg: 1001,1010):\n&quot;</span>);</span><br><span class="line">  rl.<span class="title function_">on</span>(<span class="string">&quot;line&quot;</span>, <span class="keyword">function</span> (<span class="params">line</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (line === <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;The input is empty, please input again:\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      lines.<span class="title function_">push</span>(line);</span><br><span class="line">      <span class="keyword">if</span> (lines.<span class="property">length</span> === <span class="number">1</span>) &#123;</span><br><span class="line">        obj.<span class="property">extensionsArr</span> = line.<span class="title function_">split</span>(<span class="string">&quot;,&quot;</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Please input the password(eg:1234aa):\n&quot;</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (lines.<span class="property">length</span> === <span class="number">2</span>) &#123;</span><br><span class="line">        obj.<span class="property">password</span> = line;</span><br><span class="line">        pass = line;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Please input the ip(eg:192.168.124.125):\n&quot;</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (lines.<span class="property">length</span> === <span class="number">3</span>) &#123;</span><br><span class="line">        websocketUrl = <span class="string">&quot;ws://&quot;</span> + line + <span class="string">&quot;:8089/ws&quot;</span>;</span><br><span class="line">        obj.<span class="property">websocketUrl</span> = websocketUrl;</span><br><span class="line">        obj.<span class="property">ip</span> = line;</span><br><span class="line">        ip = line;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Starting register...\n&quot;</span>);</span><br><span class="line">        <span class="comment">// 开始注册事件</span></span><br><span class="line">        <span class="title function_">loopRegister</span>(obj);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// close事件监听</span></span><br><span class="line">  rl.<span class="title function_">on</span>(<span class="string">&quot;close&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 结束程序</span></span><br><span class="line">    process.<span class="title function_">exit</span>(<span class="number">0</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-51b0c98cdcf453f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="readline"></p>
+<blockquote>
+<p>注册事件中包含几个动作</p>
+</blockquote>
+<ol>
+<li><p>设置 httpHeader：浏览器与服务器 ajax 请求有固定的请求头信息，此处模拟浏览器的请求头信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">setHttpHeader</span>(<span class="params">username</span>) &#123;</span><br><span class="line">  httpHeader = &#123;</span><br><span class="line">    <span class="title class_">Accept</span>: <span class="string">&quot;application/json, text/javascript, */*; q=0.01&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept-Encoding&quot;</span>: <span class="string">&quot;gzip, deflate&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept-Language&quot;</span>: <span class="string">&quot;zh-CN,zh;q=0.9,en;q=0.8,pt;q=0.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Cache-Control&quot;</span>: <span class="string">&quot;no-cache&quot;</span>,</span><br><span class="line">    <span class="title class_">Connection</span>: <span class="string">&quot;keep-alive&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/x-www-form-urlencoded; charset=UTF-8&quot;</span>,</span><br><span class="line">    <span class="title class_">Cookie</span>:</span><br><span class="line">      <span class="string">&quot;TRACKID=&quot;</span> +</span><br><span class="line">      trackid +</span><br><span class="line">      <span class="string">&quot;; session-identify=sid121076289-1520217430; username=admin; user_id=0&quot;</span>,</span><br><span class="line">    <span class="title class_">Host</span>: ip + <span class="string">&quot;:8089&quot;</span>,</span><br><span class="line">    <span class="title class_">Origin</span>: <span class="string">&quot;http://&quot;</span> + ip + <span class="string">&quot;:8089&quot;</span>,</span><br><span class="line">    <span class="title class_">Pragma</span>: <span class="string">&quot;no-cache&quot;</span>,</span><br><span class="line">    <span class="title class_">Referer</span>: <span class="string">&quot;http://&quot;</span> + ip + <span class="string">&quot;:8089/gswave/&quot;</span>,</span><br><span class="line">    <span class="string">&quot;User-Agent&quot;</span>:</span><br><span class="line">      <span class="string">&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36 SE 2.X MetaSr 1.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;X-Requested-With&quot;</span>: <span class="string">&quot;XMLHttpRequest&quot;</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">var</span> accountData = &#123;</span><br><span class="line">    <span class="attr">action</span>: <span class="string">&quot;challenge&quot;</span>,</span><br><span class="line">    <span class="attr">user</span>: username,</span><br><span class="line">  &#125;;</span><br><span class="line">  baseUrl = <span class="string">&quot;http://&quot;</span> + ip + <span class="string">&quot;:8089/webrtccgi?&quot;</span>;</span><br><span class="line">  <span class="title function_">getChanllenge</span>(accountData, username); <span class="comment">// 用户鉴权函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用户登录鉴权(本项目中与服务器交互需要使用，具体使用看服务器端设置)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getChanllenge</span>(<span class="params">accountData, username</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;start getChangllenge&quot;</span>);</span><br><span class="line">  <span class="keyword">var</span> challenge = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="comment">//获取 challenge</span></span><br><span class="line">  superagent</span><br><span class="line">    .<span class="title function_">post</span>(baseUrl)</span><br><span class="line">    .<span class="title function_">set</span>(httpHeader)</span><br><span class="line">    .<span class="title function_">type</span>(<span class="string">&quot;form&quot;</span>)</span><br><span class="line">    .<span class="title function_">send</span>(accountData)</span><br><span class="line">    .<span class="title function_">redirects</span>(<span class="number">0</span>)</span><br><span class="line">    .<span class="title function_">end</span>(<span class="keyword">function</span> (<span class="params">err, result</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> result == <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;get challenge is error, result is undefined&quot;</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> responce = result.<span class="property">body</span>;</span><br><span class="line">        <span class="keyword">if</span> (responce &amp;&amp; responce.<span class="property">status</span> === <span class="number">0</span>) &#123;</span><br><span class="line">          challenge = responce.<span class="property">response</span>.<span class="property">challenge</span>;</span><br><span class="line">          <span class="title function_">getCookie</span>(challenge, username);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">            <span class="string">&quot;get challenge is error, result.body.status is not 0&quot;</span></span><br><span class="line">          );</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getCookie</span>(<span class="params">challenge, username</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> md5key = tskMD5.<span class="property">MD5</span>.<span class="title function_">hexdigest</span>(challenge + pass); <span class="comment">// MD5 加密用户登录密码</span></span><br><span class="line">  <span class="keyword">var</span> subData = &#123;</span><br><span class="line">    <span class="attr">token</span>: md5key,</span><br><span class="line">    <span class="attr">action</span>: <span class="string">&quot;login&quot;</span>,</span><br><span class="line">    <span class="attr">user</span>: username,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 开始请求进行用户登录密码鉴权，类似 ajax 请求</span></span><br><span class="line">  superagent</span><br><span class="line">    .<span class="title function_">post</span>(baseUrl)</span><br><span class="line">    .<span class="title function_">set</span>(httpHeader)</span><br><span class="line">    .<span class="title function_">type</span>(<span class="string">&quot;form&quot;</span>)</span><br><span class="line">    .<span class="title function_">send</span>(subData)</span><br><span class="line">    .<span class="title function_">redirects</span>(<span class="number">0</span>)</span><br><span class="line">    .<span class="title function_">end</span>(<span class="keyword">function</span> (<span class="params">err, res</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> res == <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;get cookie is error, result is undefined&quot;</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> responce = res.<span class="property">body</span>;</span><br><span class="line">        <span class="keyword">if</span> (responce &amp;&amp; responce.<span class="property">status</span> === <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="comment">// 登录鉴权通过，开始执行 SIP 注册</span></span><br><span class="line">          <span class="keyword">var</span> cookie = responce.<span class="property">response</span>.<span class="property">cookie</span>;</span><br><span class="line">          <span class="comment">// 注册函数</span></span><br><span class="line">          <span class="title function_">startSocket</span>(username);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;get cookie is error, result.body.status is not 0&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>与服务器建立 websocket 连接</p>
+<p>项目中信令交互信息均通过 websocket 发送</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ws = <span class="keyword">new</span> <span class="title class_">WebSocket</span>(websocketUrl, <span class="string">&quot;sip&quot;</span>); <span class="comment">// 注意建立的是 sip 类型的 websocket</span></span><br><span class="line"></span><br><span class="line">ws.<span class="title function_">on</span>(<span class="string">&quot;open&quot;</span>, <span class="keyword">function</span> <span class="title function_">open</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;ws open message1&quot;</span> + message1);</span><br><span class="line">  readyState = <span class="title class_">WebSocket</span>.<span class="property">OPEN</span>;</span><br><span class="line">  <span class="comment">// 发送相关信息</span></span><br><span class="line">  ws.<span class="title function_">send</span>(message);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.<span class="title function_">on</span>(<span class="string">&quot;message&quot;</span>, <span class="keyword">function</span> <span class="title function_">incoming</span>(<span class="params">data</span>) &#123;</span><br><span class="line">  a++;</span><br><span class="line">  <span class="keyword">var</span> dataArr = data.<span class="title function_">split</span>(<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (dataArr[<span class="number">0</span>].<span class="title function_">indexOf</span>(<span class="string">&quot;401&quot;</span>) &gt; -<span class="number">1</span> &amp;&amp; a === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="comment">// 发送注册信令函数（其中发送信令信息，均参考浏览器的发送头进行拼接）</span></span><br><span class="line">    <span class="title function_">startRegister</span>(ws, dataArr, username);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (dataArr[<span class="number">0</span>].<span class="title function_">indexOf</span>(<span class="string">&quot;200&quot;</span>)) &#123;</span><br><span class="line">    <span class="comment">// ws.close()</span></span><br><span class="line">    <span class="comment">// console.log(&#x27;register sucess...&#x27;)</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>项目效果图</p>
+<p>表格第一列 status 为 Idle, 验证注册分机成功，注册 IP 为本地电脑 IP</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4946810-f7a9892131857713.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="register result"></p>
+<h3 id="注意项"><a href="#注意项" class="headerlink" title="注意项"></a>注意项</h3><ol>
+<li>本项目使用自主拼接的接口和信令信息均只对与之对应的接口，信令环境生效。</li>
+<li>建立 websocket 必须指定 sip 类型，否则信息交互不成功</li>
+<li>项目中需要 websocket 保活（ping&#x2F;pong）机制,防止长时间没有信息交互会自动关闭 websocket 连接</li>
+</ol>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">7 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96%E6%A8%A1%E5%9D%97%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">项目依赖模块：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E9%9C%80%E6%B1%82"><span class="toc-number">2.</span> <span class="toc-text">项目需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E5%AE%9E%E7%8E%B0%E6%A6%82%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">项目实现概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">代码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E9%A1%B9"><span class="toc-number">5.</span> <span class="toc-text">注意项</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

@@ -1,0 +1,548 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>cookie 、localStorage 、sessionStorage 以及 H5 缓存 - 吴文君的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="cookie 详解存储 cookie 是浏览器的功能，浏览器下有一个 cookie 文件夹专门存放各个域下设置的 cookie，cookie 是存储在浏览器的纯文本
+当网页要发 http 请求时，浏,"> 
+    <meta name="author" content="wuwenjun"> 
+    <link rel="alternative" href="atom.xml" title="吴文君的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = ""</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">吴文君的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://wendyjw.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">cookie 、localStorage 、sessionStorage 以及 H5 缓存</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('/img/cover.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
+                
+                三月 08, 2017
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2017/03/08/cookie%20%E3%80%81localStorage%20%E3%80%81sessionStorage%20%E4%BB%A5%E5%8F%8A%20H5%20%E7%BC%93%E5%AD%98/" title="cookie 、localStorage 、sessionStorage 以及 H5 缓存" class="">cookie 、localStorage 、sessionStorage 以及 H5 缓存</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    6.4k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    6 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h2 id="cookie-详解"><a href="#cookie-详解" class="headerlink" title="cookie 详解"></a>cookie 详解</h2><p>存储 cookie 是浏览器的功能，浏览器下有一个 cookie 文件夹专门存放各个域下设置的 cookie，cookie 是存储在浏览器的纯文本</p>
+<p>当网页要发 http 请求时，浏览器会先检查是否有相应的 cookie，有则自动添加在 request header 中的 cookie 字段中。这些是浏览器自动帮我们做的，而且每一次 http 请求浏览器都会自动帮我们做</p>
+<h3 id="cookie-的格式"><a href="#cookie-的格式" class="headerlink" title="cookie 的格式"></a>cookie 的格式</h3><ol>
+<li>document.cookie<br>原生 js 获取 cookie 的方法，得到一个字符串，但这个字符串是有格式的，由键值对 key&#x3D;value 构成，键值对之间由一个分号和一个空格隔开。</li>
+</ol>
+<p>“key&#x3D;value; key&#x3D;value”<br>cookie 属性选项<br>包括：expires、domain、path、secure、HttpOnly，</p>
+<p>在设置任一个 cookie 时都可以设置相关的这些属性，当然也可以不设置，这时会使用这些属性的默认值。在设置这些属性时，属性之间由一个分号和一个空格隔开。如下：</p>
+<p>“key&#x3D;name; expires&#x3D;Thu, 25 Feb 2016 04:18:00 GMT;domain&#x3D;ppsc.sankuai.com; path&#x3D;&#x2F;; secure; HttpOnly”<br>expires<br>expires 选项用来设置“cookie 什么时间内有效”。expires 其实是 cookie 失效日期，expires 必须是 GMT 格式的时间（可以通过 new Date().toGMTString()或者 new Date().toUTCString()来获得）。</p>
+<p>expires 的值是一个时间点（cookie 失效时刻&#x3D; expires）; 如 expires&#x3D;Thu, 25 Feb 2016 04:18:00 GMT 表示 cookie 讲在 2016 年 2 月 25 日 4:18 分之后失效，对于失效的 cookie 浏览器会清空。如果没有设置该选项，则默认有效期为 session，即会话 cookie。这种 cookie 在浏览器关闭后就没有了。</p>
+<p>http&#x2F;1.0 协议，cookie 被 max-age 代替，max-age 的值是一个以秒为单位时间段（cookie 失效时刻&#x3D; 创建时刻+ max-age）。</p>
+<ol start="2">
+<li><p>domain 和 path<br>domain 是域名，path 是路径，两者加起来就构成了 URL，domain 和 path 一起来限制 cookie 能被哪些 URL 访问。</p>
+</li>
+<li><p>secure<br>secure 选项用来设置 cookie 只在确保安全的请求中才会发送。当请求是 HTTPS 或者其他安全协议时，包含 secure 选项的 cookie 才能被发送至服务器。</p>
+</li>
+</ol>
+<p>默认情况下，cookie 不会带 secure 选项(即为空)。所以默认情况下，不管是 HTTPS 协议还是 HTTP 协议的请求，cookie 都会被发送至服务端。但要注意一点，secure 选项只是限定了在安全情况下才可以传输给服务端，但并不代表你不能看到这个 cookie。</p>
+<p>document.cookie&#x3D;”name&#x3D;king; secure”<br>如果想在客户端即网页中通过 js 去设置 secure 类型的 cookie，必须保证网页是 https 协议的。在 http 协议的网页中是无法设置 secure 类型 cookie 的。</p>
+<ol start="4">
+<li>httpOnly<br>这个选项用来设置 cookie 是否能通过 js 去访问。默认情况下，cookie 不会带 httpOnly 选项(即为空)，所以默认情况下，客户端是可以通过 js 代码去访问（包括读取、修改、删除等）这个 cookie 的。当 cookie 带 httpOnly 选项时，客户端则无法通过 js 代码去访问（包括读取、修改、删除等）这个 cookie。</li>
+</ol>
+<p>在客户端是不能通过 js 代码去设置一个 httpOnly 类型的 cookie 的，这种类型的 cookie 只能通过服务端来设置。</p>
+<h3 id="如何设置-cookie"><a href="#如何设置-cookie" class="headerlink" title="如何设置 cookie"></a>如何设置 cookie</h3><h4 id="服务端客户端均可设置-cookie"><a href="#服务端客户端均可设置-cookie" class="headerlink" title="服务端客户端均可设置 cookie"></a>服务端客户端均可设置 cookie</h4><ol>
+<li>服务端<br>不管你是请求一个资源文件（如 html&#x2F;js&#x2F;css&#x2F;图片），还是发送一个 ajax 请求，服务端都会返回 response。而 response header 中有一项叫 set-cookie，是服务端专门用来设置 cookie 的。如下图所示，服务端返回的 response header 中有 5 个 set-cookie 字段，每个字段对应一个 cookie（注意不能将多个 cookie 放在一个 set-cookie 字段中），set-cookie 字段的值就是普通的字符串，每个 cookie 还设置了相关属性选项。</li>
+</ol>
+<p>一个 set-Cookie 字段只能设置一个 cookie，当你要想设置多个 cookie，需要添加同样多的 set-Cookie 字段。</p>
+<p>服务端可以设置 cookie 的所有选项：expires、domain、path、secure、HttpOnly</p>
+<ol start="2">
+<li>客户端设置 cookie<br>js 代码实现：<br><code>document.cookie=&quot;xxx=yyy&quot;</code><br>客户端可以设置 cookie 的下列选项：expires、domain、path、secure（有条件：只有在 https 协议的网页中，客户端设置 secure 类型的 cookie 才能成功），但无法设置 HttpOnly 选项</li>
+</ol>
+<p>js 设置多个 cookie，一次只能设置一次成功。所以重复执行</p>
+<pre><code>document.cookie=&quot;key=value&quot;：
+
+document.cookie = &quot;name=Jonh&quot;;
+
+document.cookie = &quot;age=12&quot;;
+
+document.cookie = &quot;class=111&quot;;
+</code></pre>
+<h4 id="修改、删除-cookie"><a href="#修改、删除-cookie" class="headerlink" title="修改、删除 cookie"></a>修改、删除 cookie</h4><ol>
+<li><p>修改：<br>要想修改一个 cookie，只需要重新赋值就行，旧的值会被新的值覆盖。但要注意一点，在设置新 cookie 时，path&#x2F;domain 这几个选项一定要旧 cookie 保持一样。否则不会修改旧值，而是添加了一个新的 cookie。</p>
+</li>
+<li><p>删除：<br>删除一个 cookie 也是重新赋值，只要将这个新 cookie 的 expires 选项设置为一个过去的时间点就行了。但同样要注意，path&#x2F;domain&#x2F;这几个选项一定要旧 cookie 保持一样。</p>
+</li>
+</ol>
+<h4 id="cookie-编码"><a href="#cookie-编码" class="headerlink" title="cookie 编码"></a>cookie 编码</h4><p>cookie 其实是个字符串，但这个字符串中逗号、分号、空格被当做了特殊符号。所以当 cookie 的 key 和 value 中含有这 3 个特殊字符时，需要对其进行额外编码，一般会用 escape 进行编码，读取时用 unescape 进行解码；</p>
+<pre><code>var key = (&quot;name;value&quot;);
+
+var value = escape(&quot;this is a value contain , and ;&quot;);
+
+document.cookie= key + &quot;=&quot; + value + &quot;; expires=Thu, 26 Feb 2116 11:50:25 GMT; domain=sankuai.com; path=/&quot;;
+一个小例子，页面加载时显示上次保存的信息
+
+function getCookie(c_name) &#123;
+  if (document.cookie.length &gt; 0) &#123;
+    c_start = document.cookie.indexOf(c_name + &quot;=&quot;)
+    if (c_start != -1) &#123;
+      c_start = c_start + c_name.length + 1
+      c_end = document.cookie.indexOf(&quot;;&quot;, c_start)
+    if (c_end == -1) c_end = document.cookie.length
+      return unescape(document.cookie.substring(c_start, c_end))
+    &#125;
+  &#125;
+  return &quot;&quot;
+&#125;
+function setCookie(c_name, value, expiredays) &#123;
+    var exdate = new Date()
+    exdate.setDate(exdate.getDate() + expiredays)
+    document.cookie = c_name + &quot;=&quot; + escape(value) +
+    ((expiredays == null) ? &quot;&quot; : &quot;;expires=&quot; + exdate.toGMTString())
+    &#125;
+    function checkCookie() &#123;
+      username = getCookie(&#39;username&#39;)
+      if (username != null &amp;&amp; username != &quot;&quot;) &#123;
+        alert(&#39;Welcome again &#39; + username + &#39;!&#39;)
+      &#125;
+      else &#123;
+        username = prompt(&#39;Please enter your name:&#39;, &quot;&quot;)
+        if (username != null &amp;&amp; username != &quot;&quot;) &#123;
+          setCookie(&#39;username&#39;, username, 365)
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="localStorage-sessionStorage"><a href="#localStorage-sessionStorage" class="headerlink" title="localStorage sessionStorage"></a>localStorage sessionStorage</h2><h3 id="localStorage"><a href="#localStorage" class="headerlink" title="localStorage"></a>localStorage</h3><p>方法存储的数据没有时间限制。</p>
+<p>localStorage.lastname&#x3D;”Smith”;</p>
+<h3 id="sessionStorage"><a href="#sessionStorage" class="headerlink" title="sessionStorage"></a>sessionStorage</h3><p>方法针对一个 session 进行数据存储。当用户关闭浏览器窗口后，数据会被删除。</p>
+<p>sessionStorage.firsrname&#x3D;’king’</p>
+<h2 id="H5-应用程序缓存"><a href="#H5-应用程序缓存" class="headerlink" title="H5 应用程序缓存"></a>H5 应用程序缓存</h2><p>HTML5 引入了应用程序缓存，这意味着 web 应用可进行缓存，并可在没有因特网连接时进行访问。</p>
+<p>Cache Manifest<br>如需启用应用程序缓存，请在文档的 标签中包含 manifest 属性：</p>
+<p>manifest 文件<br>CACHE MANIFEST- 在此标题下列出的文件将在首次下载后进行缓存</p>
+<p>NETWORK- 在此标题下列出的文件需要与服务器的连接，且不会被缓存</p>
+<p>FALLBACK- 在此标题下列出的文件规定当页面无法访问时的回退页面（比如 404 页面）</p>
+<p>一个完整的 manifest 文件<br>CACHE MANIFEST</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s2.ax1x.com/2019/09/19/nLtSiD.png" height=300 width=300></img>
+                    <p>wuwenjun</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        
+                            
+                            
+                            
+                        
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">7 <p>文章</p></a></li>
+                    <li><a href="/categories">0 <p>分类</p></a></li>
+                    <li><a href="/tags">0 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie-%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">cookie 详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cookie-%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">cookie 的格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE-cookie"><span class="toc-number">1.2.</span> <span class="toc-text">如何设置 cookie</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#localStorage-sessionStorage"><span class="toc-number">2.</span> <span class="toc-text">localStorage sessionStorage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#localStorage"><span class="toc-number">2.1.</span> <span class="toc-text">localStorage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sessionStorage"><span class="toc-number">2.2.</span> <span class="toc-text">sessionStorage</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#H5-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%BC%93%E5%AD%98"><span class="toc-number">3.</span> <span class="toc-text">H5 应用程序缓存</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2025
+        <span class="gradient-text">
+            wuwenjun
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.4" target="_blank" rel="noopener">v1.4.9.4</a></small>
+        
+        </br>
+        
+        <span class="gradient-text">
+            <a href="https://beian.miit.gov.cn/" title="beian.miit.gov.cn" target="_blank" rel="noopener">beian.miit.gov.cn</a>
+        </span>
+        
+        
+        </br>
+        <span style="display: inline-block;"> <img src=/null></span>
+        
+        <span class="gradient-text">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602009049" title="www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049" target="_blank" rel="noopener">www.beian.gov.cn&#x2F;portal&#x2F;registerSystemInfo?recordcode&#x3D;44010602009049</a>
+        </span>
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', '艺术家思维去思考问题，工匠创造精神去开发'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>
